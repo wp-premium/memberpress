@@ -66,8 +66,6 @@ echo PHP_EOL;
 
 echo PHP_EOL;
 
-echo '::endgroup::', PHP_EOL;
-
 /**
  * Request info.
  */
@@ -99,6 +97,8 @@ echo PHP_EOL;
 );
 
 echo PHP_EOL;
+
+echo '::endgroup::', PHP_EOL;
 
 /**
  * GitHub CLI.
@@ -134,6 +134,8 @@ if ( ! is_dir( $git_dir ) ) {
 /**
  * Download ZIP.
  */
+echo '::group::Download MemberPress', PHP_EOL;
+
 $zip_file = $archives_dir . '/memberpress-' . $result->version . '.zip';
 
 $curl_download_command = \sprintf(
@@ -145,6 +147,8 @@ $curl_download_command = \sprintf(
 echo $curl_download_command, PHP_EOL;
 
 \system( $curl_download_command );
+
+echo '::endgroup::', PHP_EOL;
 
 /**
  * Plugin directory.
@@ -161,6 +165,8 @@ $rm_plugin_command = \sprintf(
 /**
  * Unzip.
  */
+echo '::group::UNZIP MemberPress', PHP_EOL;
+
 $unzip_command = \sprintf(
 	'unzip %s -d %s',
 	\escapeshellarg( $zip_file ),
@@ -171,12 +177,16 @@ echo $unzip_command, PHP_EOL;
 
 \system( $unzip_command );
 
+echo '::endgroup::', PHP_EOL;
+
 /**
  * Synchronize.
  * 
  * @link http://stackoverflow.com/a/14789400
  * @link http://askubuntu.com/a/476048
  */
+echo '::group::Synchronize', PHP_EOL;
+
 $rsync_command = \sprintf(
 	'rsync --archive --delete-before --exclude=%s --verbose %s %s',
 	\escapeshellarg( '.git' ),
@@ -187,6 +197,8 @@ $rsync_command = \sprintf(
 echo $rsync_command, PHP_EOL;
 
 \system( $rsync_command );
+
+echo '::endgroup::', PHP_EOL;
 
 /**
  * Plugin `composer.json`.
