@@ -116,6 +116,7 @@ echo PHP_EOL;
 /**
  * Git.
  */
+$git_url = 'https://github.com/wp-premium/memberpress.git';
 $git_dir = $repositories_dir . '/memberpress';
 
 \printf(
@@ -126,8 +127,8 @@ $git_dir = $repositories_dir . '/memberpress';
 echo PHP_EOL;
 
 $clone_command = \sprintf(
-	'gh repo clone %s %s',
-	\escapeshellarg( 'wp-premium/memberpress' ),
+	'git clone %s %s',
+	\escapeshellarg( $git_url ),
 	\escapeshellarg( $git_dir )
 );
 
