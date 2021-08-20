@@ -85,30 +85,13 @@ $result = $response->json();
 	$result->version
 );
 
+$memberpress_version = $result->version;
+
 echo PHP_EOL;
 
 \printf(
 	'MemberPress ZIP URL: %s',
 	$result->url
-);
-
-echo PHP_EOL;
-
-/**
- * Plugin `composer.json`.
- */
-$memberpress_composer = (object) array(
-	'name' => 'wp-premium/memberpress',
-	'autoload' => (object) array(
-		'classmap' => array(
-			'app/',
-		),
-	),
-);
-
-\printf(
-	'MemberPress `composer.json`: %s',
-	\wp_json_encode( $memberpress_composer, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES )
 );
 
 echo PHP_EOL;
@@ -180,3 +163,73 @@ $unzip_command = \sprintf(
 echo $unzip_command, PHP_EOL;
 
 \system( $unzip_command );
+
+/**
+ * Synchronize.
+ * 
+ * @link http://stackoverflow.com/a/14789400
+ * @link http://askubuntu.com/a/476048
+ */
+$rsync_command = \sprintf(
+	'rsync --archive --delete-before --exclude=%s --verbose %s %s',
+	\escapeshellarg( '.git' ),
+	\escapeshellarg( $plugin_dir . '/' ),
+	\escapeshellarg( $git_dir . '/' )
+);
+
+echo $rsync_command, PHP_EOL;
+
+\system( $rsync_command );
+
+/**
+ * Plugin `composer.json`.
+ */
+$composer_object = (object) array(
+	'name' => 'wp-premium/memberpress',
+	'autoload' => (object) array(
+		'classmap' => array(
+			'app/',
+		),
+	),
+);
+
+$composer_string = \wp_json_encode( $composer_object, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES );
+
+$composer_file = $git_dir . '/composer.json';
+
+\printf(
+	'MemberPress `composer.json`: %s',
+	$composer_string
+);
+
+$result = \file_put_contents( $composer_file, $composer_string );
+
+if ( false === $result ) {
+	\printf(
+		'Unable to write: %s',
+		$composer_file
+	);
+
+	exit( 1 );
+}
+
+echo PHP_EOL;
+
+/**
+ * Git commit.
+ * 
+ * @link https://git-scm.com/docs/git-commit
+ */
+$git_commit_message = \sprintf(
+	'Updates to %s',
+	$memberpress_version
+);
+
+$git_commit_command = \sprintf(
+	'git commit --all -m %s',
+	\escapeshellarg( $git_commit_message )
+);
+
+echo $git_commit_command, PHP_EOL;
+
+\system( $git_commit_command );
