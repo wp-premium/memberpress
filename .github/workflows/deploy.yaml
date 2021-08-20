@@ -7,7 +7,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout Deployer
+      uses: actions/checkout@v2
+
+    - name: Checkout MemberPress
+      uses: actions/checkout@v2
+      with:
+        path: repositories/memberpress
+
     - uses: php-actions/composer@v6
 
     - name: deploy

@@ -108,28 +108,24 @@ echo PHP_EOL;
  */
 $git_repository = 'wp-premium/memberpress';
 
-$git_url = \sprintf(
-	'https://%s@github.com/%s.git',
-	\getenv( 'GITHUB_TOKEN' ),
-	$git_repository
-);
-
 $git_dir = $repositories_dir . '/memberpress';
 
-\printf(
-	'Git directory: %s',
-	$git_dir
-);
+if ( ! is_dir( $git_dir ) ) {
+	\printf(
+		'Git directory: %s',
+		$git_dir
+	);
 
-echo PHP_EOL;
+	echo PHP_EOL;
 
-$clone_command = \sprintf(
-	'gh repo clone %s %s',
-	\escapeshellarg( $git_url ),
-	\escapeshellarg( $git_dir )
-);
+	$clone_command = \sprintf(
+		'gh repo clone %s %s',
+		\escapeshellarg( $git_repository ),
+		\escapeshellarg( $git_dir )
+	);
 
-\system( $clone_command );
+	\system( $clone_command );
+}
 
 /**
  * Download ZIP.
