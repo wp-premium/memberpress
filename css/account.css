@@ -1,0 +1,42 @@
+/* mepr custom styles */
+
+.mepr-white-popup {
+  position: relative;
+  background: #FFF;
+  padding: 20px;
+  width: auto;
+  max-width: 500px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.mepr-white-popup .mepr-btn {
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  border-radius: 5px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 14px;
+  background: #3498db;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mepr-white-popup .mepr-btn:hover {
+  background: #3cb0fd;
+  text-decoration: none;
+}
+
+.mepr-white-popup .mepr-cancel-sub-text {
+  padding-bottom: 20px;
+}
+
+.mepr-popup-leftalign {
+  text-align: left;
+}
+
+/* Fix dropdown select field */
+.mepr-upgrade-dropdown {
+  width: 100%;
+}

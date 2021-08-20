@@ -1,0 +1,212 @@
+.mepr-addons, .mepr-addons * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.wrap .add-new-h2.mepr-addons-refresh {
+  margin-left: 20px;
+}
+
+#mepr-addons-search {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-shadow: none;
+  color: #333;
+  vertical-align: middle;
+  padding: 8px 12px;
+  margin: -4px 10px 0 0;
+  min-height: 30px;
+  line-height: 1.5;
+  width: 200px;
+  float: right;
+}
+
+#mepr-addons-search:focus {
+  border-color: #bbb;
+}
+
+#mepr-admin-addons h4 {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.mepr-addons {
+  margin: 30px -20px 0 -20px;
+}
+
+.mepr-addon {
+  padding: 0 20px;
+  float: left;
+  width: 33.333333%;
+}
+
+.mepr-addon-inner {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 0 0 40px 0;
+}
+
+.mepr-addon-details {
+  padding: 30px 20px;
+}
+
+.mepr-addon-details img {
+  border: 1px solid #eee;
+  float: left;
+  max-width: 75px;
+}
+
+.mepr-addon-details h5 {
+  margin: 0 0 10px 100px;
+  font-size: 16px;
+}
+
+.mepr-addon-details p {
+  margin: 0 0 0 100px;
+}
+
+.mepr-addon-actions {
+  background-color: #f7f7f7;
+  border-top: 1px solid #ddd;
+  padding: 20px;
+  position: relative;
+}
+
+.mepr-addon-action {
+  float: right;
+}
+
+.mepr-addon-status {
+  float: left;
+  padding-top: 8px;
+}
+
+.mepr-addon-status-download .mepr-addon-status-label {
+  color: #666;
+}
+
+.mepr-addon .mepr-addon-action button .mp-icon {
+  font-size: 13px;
+  margin-right: 8px;
+  color: #999;
+}
+
+.mepr-addon-status-active .mepr-addon-status-label,
+.mepr-addon-status-active .mepr-addon-action button .mp-icon {
+  color: #2a9b39;
+}
+
+.mepr-addon-status-inactive .mepr-addon-status-label,
+.mepr-addon-status-inactive .mepr-addon-action button .mp-icon {
+  color: #f00;
+}
+
+.mepr-addon-action button {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-shadow: none;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: center;
+  padding: 8px 15px;
+  font-size: 13px;
+  line-height: 1.30769230769;
+}
+
+.mepr-addon-action button:hover,
+.mepr-addon-action button.mepr-loading {
+  background-color: #e9e9e9;
+}
+
+.mepr-addon .mepr-addon-action button .mp-icon.mp-icon-spinner {
+  color: #999;
+  margin-right: 0;
+}
+
+.mepr-addon-action button .mp-icon {
+  font-size: 13px;
+  margin-right: 8px;
+  color: #999;
+}
+
+.mepr-addon .mepr-addon-actions .mepr-addon-message {
+  background-color: #f7f7f7;
+  position: absolute;
+  text-align: center;
+  font-weight: 600;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 99;
+  padding: 20px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.mepr-addon .mepr-addon-actions .mepr-addon-message.mepr-addon-message-success {
+  color: #2a9b39;
+}
+
+.mepr-addon .mepr-addon-actions .mepr-addon-message.mepr-addon-message-error {
+  color: red;
+}
+
+.mepr-addon-action-upgrade {
+  text-align: center;
+  float: none;
+}
+
+.mepr-addon-action-upgrade a {
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0;
+  text-decoration: none;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  box-shadow: none;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  color: #666;
+  font-size: 13px;
+  line-height: 1.30769230769;
+  font-weight: 600;
+  padding: 8px 28px;
+}
+
+@media (max-width: 1249px) {
+  .mepr-addon {
+    width: 50%;
+  }
+}
+
+@media (max-width: 767px) {
+  #mepr-addons-search {
+    width: 100%;
+    float: none;
+    display: block;
+    margin: 30px 0 0 0;
+  }
+
+  .mepr-addon {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .mepr-addon-inner {
+    margin: 0;
+  }
+}

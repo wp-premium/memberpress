@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bundle name="MemberPress">
+  <domain name="memberpress">
+    <project name="MemberPress" slug="memberpress">
+      <source>
+        <directory>.</directory>
+      </source>
+      <target>
+        <directory base="WP_PLUGIN_DIR">mepr-i18n</directory>
+        <directory>i18n</directory>
+      </target>
+      <template locked="true">
+        <file>i18n/memberpress.pot</file>
+      </template>
+    </project>
+  </domain>
+  <exclude>
+    <directory>vendor</directory>
+    <directory>tests</directory>
+    <directory>test_legacy</directory>
+    <directory>script</directory>
+    <directory>phpunit_legacy</directory>
+  </exclude>
+</bundle>

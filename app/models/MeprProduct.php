@@ -1,0 +1,1012 @@
+<?php
+if(!defined('ABSPATH')) {die('You are not allowed to call this page directly.');}
+
+class MeprProduct extends MeprCptModel implements MeprProductInterface {
+  public static $price_str                      = '_mepr_product_price';
+  public static $period_str                     = '_mepr_product_period';
+  public static $period_type_str                = '_mepr_product_period_type';
+  public static $signup_button_text_str         = '_mepr_product_signup_button_text';
+  public static $limit_cycles_str               = '_mepr_product_limit_cycles';
+  public static $limit_cycles_num_str           = '_mepr_product_limit_cycles_num';
+  public static $limit_cycles_action_str        = '_mepr_product_limit_cycles_action';
+  public static $limit_cycles_expires_after_str = '_mepr_product_limit_cycles_expires_after';
+  public static $limit_cycles_expires_type_str  = '_mepr_product_limit_cycles_expires_type';
+  public static $trial_str                      = '_mepr_product_trial';
+  public static $trial_days_str                 = '_mepr_product_trial_days';
+  public static $trial_amount_str               = '_mepr_product_trial_amount';
+  public static $trial_once_str                 = '_mepr_product_trial_once';
+  public static $group_id_str                   = '_mepr_group_id'; // Only one group at a time dude
+  public static $group_order_str                = '_mepr_group_order'; // Position in group
+  public static $is_highlighted_str             = '_mepr_product_is_highlighted';
+  public static $who_can_purchase_str           = '_mepr_product_who_can_purchase';
+  public static $have_or_had_str                = '_mepr_product_purchase';
+  public static $pricing_title_str              = '_mepr_product_pricing_title';
+  public static $pricing_display_str            = '_mepr_product_pricing_display';
+  public static $pricing_show_price_str         = '_mepr_product_pricing_show_price';
+  public static $custom_price_str               = '_mepr_product_custom_price';
+  public static $pricing_heading_txt_str        = '_mepr_product_pricing_heading_text';
+  public static $pricing_footer_txt_str         = '_mepr_product_pricing_footer_text';
+  public static $pricing_button_txt_str         = '_mepr_product_pricing_button_text';
+  public static $pricing_button_position_str    = '_mepr_product_pricing_button_position';
+  public static $pricing_benefits_str           = '_mepr_product_pricing_benefits';
+  public static $register_price_action_str      = '_mepr_register_price_action';
+  public static $register_price_str             = '_mepr_register_price';
+  public static $thank_you_page_enabled_str     = '_mepr_thank_you_page_enabled';
+  public static $thank_you_page_type_str        = '_mepr_thank_you_page_type';
+  public static $thank_you_message_str          = '_mepr_product_thank_you_message';
+  public static $thank_you_page_id_str          = '_mepr_product_thank_you_page_id';
+  public static $simultaneous_subscriptions_str = '_mepr_allow_simultaneous_subscriptions';
+  public static $use_custom_template_str        = '_mepr_use_custom_template';
+  public static $custom_template_str            = '_mepr_custom_template';
+  public static $customize_payment_methods_str  = '_mepr_customize_payment_methods';
+  public static $custom_payment_methods_str     = '_mepr_custom_payment_methods';
+  public static $customize_profile_fields_str   = '_mepr_customize_profile_fields';
+  public static $custom_profile_fields_str      = '_mepr_custom_profile_fields';
+  public static $custom_login_urls_enabled_str  = '_mepr_custom_login_urls_enabled';
+  public static $custom_login_urls_default_str  = '_mepr_custom_login_urls_default';
+  public static $custom_login_urls_str          = '_mepr_custom_login_urls';
+  public static $expire_type_str                = '_mepr_expire_type';
+  public static $expire_after_str               = '_mepr_expire_after';
+  public static $expire_unit_str                = '_mepr_expire_unit';
+  public static $expire_fixed_str               = '_mepr_expire_fixed';
+  public static $tax_exempt_str                 = '_mepr_tax_exempt';
+  public static $tax_class_str                  = '_mepr_tax_class';
+  public static $allow_renewal_str              = '_mepr_allow_renewal';
+  public static $access_url_str                 = '_mepr_access_url';
+  public static $emails_str                     = '_mepr_emails';
+  public static $disable_address_fields_str     = '_mepr_disable_address_fields'; //For free products mostly
+  public static $cannot_purchase_message_str    = '_mepr_cannot_purchase_message';
+  public static $plan_code_str                  = '_mepr_plan_code';
+  public static $nonce_str                      = 'mepr_products_nonce';
+  public static $last_run_str                   = 'mepr_products_db_cleanup_last_run';
+
+  public static $cpt                            = 'memberpressproduct';
+
+  public $period_types, $limit_cycles_actions, $expire_units,
+         $register_price_actions, $pricing_displays, $expire_types;
+
+  public function __construct($obj = null) {
+    $this->load_cpt(
+      $obj, self::$cpt,
+      array(
+        'price' => 0.00,
+        'period' => 1,
+        'period_type' => 'lifetime', //Default to lifetime to simplify new membership form
+        'signup_button_text' => __('Sign Up','memberpress'),
+        'limit_cycles' => false,
+        'limit_cycles_num' => 2,
+        'limit_cycles_action' => 'expire',
+        'limit_cycles_expires_after' => 1,
+        'limit_cycles_expires_type' => 'days',
+        'trial' => false,
+        'trial_days' => 0,
+        'trial_amount' => 0.00,
+        'trial_once' => true,
+        'group_id' => 0,
+        'group_order' => 0,
+        'is_highlighted' => false,
+        'plan_code' => '',
+        //who_can_purchase should be an array of OBJECTS
+        'who_can_purchase' => array(),
+        'pricing_title' => '',
+        'pricing_show_price' => true,
+        'pricing_display' => '',
+        'custom_price' => '',
+        'pricing_heading_txt' => '',
+        'pricing_footer_txt' => '',
+        'pricing_button_txt' => '',
+        'pricing_button_position' => 'footer',
+        //Pricing benefits should be an array of strings
+        'pricing_benefits' => array(),
+        'register_price_action' => 'default',
+        'register_price' => '',
+        'thank_you_page_enabled' => false,
+        'thank_you_page_type' => '',
+        'thank_you_message' => '',
+        'thank_you_page_id' => 0,
+        'custom_login_urls_enabled' => false,
+        'custom_login_urls_default' => '',
+        //An array of objects ->url and ->count
+        'custom_login_urls' => array(),
+        'expire_type' => 'none',
+        'expire_after' => 1,
+        'expire_unit' => 'days',
+        'expire_fixed' => '',
+        'tax_exempt' => false,
+        'tax_class' => 'standard',
+        'allow_renewal' => false,
+        'access_url' => '',
+        'emails' => array(),
+        'disable_address_fields' => false, //Mostly for free products
+        'simultaneous_subscriptions' => false,
+        'use_custom_template' => false,
+        'custom_template' => '',
+        'customize_payment_methods' => false,
+        'custom_payment_methods' => array(),
+        'customize_profile_fields' => false,
+        'custom_profile_fields' => array(),
+        'cannot_purchase_message' => _x('You don\'t have access to purchase this item.', 'ui', 'memberpress')
+      )
+    );
+
+    $this->period_types = array('weeks','months','years','lifetime');
+    $this->limit_cycles_actions = array('expire','lifetime', 'expires_after');
+    $this->register_price_actions = array('default', 'hidden', 'custom');
+    $this->expire_types = array('none','delay','fixed');
+    $this->expire_units = array('days','weeks','months','years');
+    $this->pricing_displays = array('auto','custom','none');
+
+    if(empty($this->pricing_display) && isset($this->pricing_show_price)) {
+      $this->pricing_display = $this->pricing_show_price ? 'auto' : 'none';
+    }
+  }
+
+  public function validate() {
+    $this->validate_not_empty($this->post_title, 'title');
+    $this->validate_is_currency($this->price, 0.00, null, 'price');
+    $this->validate_is_numeric($this->period, 1, 12, 'period');
+    $this->validate_is_in_array($this->period_type, $this->period_types, 'period_type');
+    $this->validate_not_empty($this->signup_button_text, 'signup_button_text');
+
+    $this->validate_is_bool($this->limit_cycles, 'limit_cycles');
+    if($this->limit_cycles) {
+      $this->validate_is_numeric($this->limit_cycles_num, 1, null, 'limit_cycles_num');
+      $this->validate_is_in_array($this->limit_cycles_action, $this->limit_cycles_actions, 'limit_cycles_action');
+    }
+
+    $this->validate_is_bool($this->trial, 'trial');
+    if($this->trial) {
+      $this->validate_is_numeric($this->trial_days, 0.00, null, 'trial_days');
+      $this->validate_is_currency($this->trial_amount, 0.00, null, 'trial_amount');
+      $this->validate_is_bool($this->trial_once, 'trial_once');
+    }
+
+    $this->validate_is_numeric($this->group_id, 0, null, 'group_id');
+    $this->validate_is_numeric($this->group_order, 0, null, 'group_order');
+
+    $this->validate_is_bool($this->is_highlighted, 'is_highlighted');
+    $this->validate_is_array($this->who_can_purchase, 'who_can_purchase');
+    //$this->validate_is_bool($this->pricing_show_price, 'pricing_show_price');
+    $this->validate_is_in_array($this->pricing_display, $this->pricing_displays, 'pricing_display');
+
+    // No need to validate these at this time
+    //'pricing_title' => '',
+    //'pricing_heading_txt' => '',
+    //'pricing_footer_txt' => '',
+    //'pricing_button_txt' => '',
+    //$this->validate_is_array($this->pricing_benefits, 'pricing_benefits');
+
+    $this->validate_is_in_array($this->register_price_action, $this->register_price_actions, 'register_price_action');
+    //if($this->register_price_action) { $this->validate_not_empty($this->register_price, 'register_price'); }
+    $this->validate_is_bool($this->thank_you_page_enabled, 'thank_you_page_enabled');
+
+    // No need to validate
+    // 'thank_you_message' => '',
+
+    $this->validate_is_bool($this->custom_login_urls_enabled, 'custom_login_urls_enabled');
+
+    // No need to validate
+    // 'custom_login_urls_default' => '',
+
+    if($this->custom_login_urls_enabled) { $this->validate_is_array($this->custom_login_urls,'custom_login_urls'); }
+
+    $this->validate_is_in_array($this->expire_type, $this->expire_types, 'expire_type');
+    if($this->expire_type=='delay') {
+      $this->validate_is_numeric($this->expire_after, 1, null, 'expire_after');
+      $this->validate_is_in_array($this->expire_unit, $this->expire_units, 'expire_unit');
+    }
+    else if($this->expire_type=='fixed') {
+      $this->validate_is_date($this->expire_fixed, 'expire_fixed');
+    }
+
+    $this->validate_is_bool($this->tax_exempt, 'tax_exempt');
+    $this->validate_is_bool($this->allow_renewal, 'allow_renewal');
+
+    if(!empty($this->access_url)) { $this->validate_is_url($this->access_url, 'access_url'); }
+
+    $this->validate_is_array($this->emails, 'emails');
+
+    $this->validate_is_bool($this->simultaneous_subscriptions, 'simultaneous_subscriptions');
+
+    $this->validate_is_bool($this->use_custom_template, 'use_custom_template');
+    if($this->use_custom_template) { $this->validate_not_empty($this->custom_template, 'custom_template'); }
+
+    $this->validate_is_bool($this->customize_payment_methods, 'customize_payment_methods');
+    if($this->customize_payment_methods) { $this->validate_is_array($this->custom_payment_methods, 'custom_payment_methods'); }
+
+    $this->validate_is_bool($this->customize_profile_fields, 'customize_profile_fields');
+    if($this->customize_profile_fields) { $this->validate_is_array($this->custom_profile_fields, 'custom_profile_fields'); }
+  }
+
+  public function store_meta() {
+    $id = $this->ID;
+
+    update_post_meta($id, self::$price_str, MeprUtils::format_float($this->price));
+    update_post_meta($id, self::$period_str, $this->period);
+    update_post_meta($id, self::$period_type_str, $this->period_type);
+    update_post_meta($id, self::$signup_button_text_str, $this->signup_button_text);
+    update_post_meta($id, self::$limit_cycles_str, $this->limit_cycles);
+    update_post_meta($id, self::$limit_cycles_num_str, $this->limit_cycles_num);
+    update_post_meta($id, self::$limit_cycles_action_str, $this->limit_cycles_action);
+    update_post_meta($id, self::$limit_cycles_expires_after_str, $this->limit_cycles_expires_after);
+    update_post_meta($id, self::$limit_cycles_expires_type_str, $this->limit_cycles_expires_type);
+    update_post_meta($id, self::$trial_str, $this->trial);
+    update_post_meta($id, self::$trial_days_str, $this->trial_days);
+    update_post_meta($id, self::$trial_amount_str, $this->trial_amount);
+    update_post_meta($id, self::$trial_once_str, $this->trial_once);
+    update_post_meta($id, self::$group_id_str, $this->group_id);
+    update_post_meta($id, self::$group_order_str, $this->group_order);
+    update_post_meta($id, self::$who_can_purchase_str, $this->who_can_purchase);
+    update_post_meta($id, self::$is_highlighted_str, $this->is_highlighted);
+    update_post_meta($id, self::$pricing_title_str, $this->pricing_title);
+    update_post_meta($id, self::$pricing_display_str, $this->pricing_display);
+    update_post_meta($id, self::$custom_price_str, $this->custom_price);
+    update_post_meta($id, self::$pricing_heading_txt_str, $this->pricing_heading_txt);
+    update_post_meta($id, self::$pricing_footer_txt_str, $this->pricing_footer_txt);
+    update_post_meta($id, self::$pricing_button_txt_str, $this->pricing_button_txt);
+    update_post_meta($id, self::$pricing_button_position_str, $this->pricing_button_position);
+    update_post_meta($id, self::$pricing_benefits_str, $this->pricing_benefits);
+    update_post_meta($id, self::$register_price_action_str, $this->register_price_action);
+    update_post_meta($id, self::$register_price_str, $this->register_price);
+    update_post_meta($id, self::$thank_you_page_enabled_str, $this->thank_you_page_enabled);
+    update_post_meta($id, self::$thank_you_page_type_str, $this->thank_you_page_type);
+    update_post_meta($id, self::$thank_you_message_str, $this->thank_you_message);
+    update_post_meta($id, self::$thank_you_page_id_str, $this->thank_you_page_id);
+    update_post_meta($id, self::$custom_login_urls_enabled_str, $this->custom_login_urls_enabled);
+    update_post_meta($id, self::$custom_login_urls_default_str, $this->custom_login_urls_default);
+    update_post_meta($id, self::$custom_login_urls_str, $this->custom_login_urls);
+    update_post_meta($id, self::$expire_type_str, $this->expire_type);
+    update_post_meta($id, self::$expire_after_str, $this->expire_after);
+    update_post_meta($id, self::$expire_unit_str, $this->expire_unit);
+    update_post_meta($id, self::$expire_fixed_str, $this->expire_fixed);
+    update_post_meta($id, self::$tax_exempt_str, $this->tax_exempt);
+    update_post_meta($id, self::$tax_class_str, $this->tax_class);
+    update_post_meta($id, self::$allow_renewal_str, $this->allow_renewal);
+    update_post_meta($id, self::$access_url_str, $this->access_url);
+    update_post_meta($id, self::$emails_str, $this->emails);
+    update_post_meta($id, self::$disable_address_fields_str, $this->disable_address_fields); //mostly for free products
+    update_post_meta($id, self::$simultaneous_subscriptions_str, $this->simultaneous_subscriptions);
+    update_post_meta($id, self::$use_custom_template_str, $this->use_custom_template);
+    update_post_meta($id, self::$custom_template_str, $this->custom_template);
+    update_post_meta($id, self::$customize_payment_methods_str, $this->customize_payment_methods);
+    update_post_meta($id, self::$customize_profile_fields_str, $this->customize_profile_fields);
+    update_post_meta($id, self::$cannot_purchase_message_str, $this->cannot_purchase_message);
+    update_post_meta($id, self::$plan_code_str, $this->plan_code);
+
+    if($this->customize_payment_methods)
+      update_post_meta($id, self::$custom_payment_methods_str, $this->custom_payment_methods);
+    else
+      delete_post_meta($id, self::$custom_payment_methods_str);
+
+    if($this->customize_profile_fields)
+      update_post_meta($id, self::$custom_profile_fields_str, $this->custom_profile_fields);
+    else
+      delete_post_meta($id, self::$custom_profile_fields_str);
+  }
+
+  public function is_prorated() {
+    $mepr_options = MeprOptions::fetch();
+    return($mepr_options->pro_rated_upgrades and $this->is_upgrade_or_downgrade());
+  }
+
+  /**
+   * Whether this product is tax exempt
+   *
+   * @return boolean
+   */
+  public function is_tax_exempt() {
+    return (boolean) $this->tax_exempt;
+  }
+
+  public static function get_one($id) {
+    $post = get_post($id);
+
+    if(is_null($post))
+      return false;
+    else
+      return new MeprProduct($post->ID);
+  }
+
+  public static function get_all() {
+    global $wpdb;
+
+    $q = $wpdb->prepare("
+        SELECT ID
+          FROM {$wpdb->posts}
+         WHERE post_type=%s
+           AND post_status=%s
+      ",
+      self::$cpt,
+      'publish'
+    );
+
+    $ids = $wpdb->get_col($q);
+
+    $memberships = array();
+    foreach($ids as $id) {
+      $memberships[] = new MeprProduct($id);
+    }
+
+    return $memberships;
+  }
+
+  /**
+   * Get the total number of published products
+   *
+   * @return int
+   */
+  public static function count() {
+    global $wpdb;
+
+    $query = $wpdb->prepare(
+      "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s AND post_status = 'publish'",
+      self::$cpt
+    );
+
+    return (int) $wpdb->get_var($query);
+  }
+
+  /** This presents the price as a float, based on the information contained in
+    * $this, the user_id and $coupon_code passed to it.
+    *
+    * If a user_id and a coupon code is present just adjust the price based on
+    * the user first (if any) and then apply the coupon to the remaining price.
+    *
+    * Coupon code needs to be validated using MeprCoupon::is_valid_coupon_code()
+    * before passing a code to this method
+    */
+  public function adjusted_price($coupon_code = null) {
+    $current_user = MeprUtils::get_currentuserinfo();
+    $product_price = $this->price;
+    $mepr_options = MeprOptions::fetch();
+
+    //Note to future self, we do not want to validate the coupon
+    //here as it causes major issues if the coupon has expired
+    //or has reached its usage count max. See notes above this method.
+    if(!empty($coupon_code)) {
+      $coupon = MeprCoupon::get_one_from_code($coupon_code);
+
+      if($coupon !== false) {
+        $product_price = $coupon->apply_discount($product_price, $this->is_one_time_payment(), $this);
+      }
+    }
+
+    if(!empty($_REQUEST['ca']) || !empty($_REQUEST['mpca_corporate_account_id'])) {
+      // Signup is a Corporate Account validated in validate_ca_signup and associate_sub_account.
+      $product_price = 0.00;
+    }
+    elseif($this->is_one_time_payment() && $this->is_prorated()) {
+      $grp = $this->group();
+
+      //Calculate days in this new period
+      $days_in_new_period = $this->days_in_my_period();
+
+      if(($old_sub = $current_user->subscription_in_group($grp->ID))) {
+        $lt = $old_sub->latest_txn();
+
+        if($lt != false && $lt instanceof MeprTransaction && $lt->id > 0) {
+          $r = MeprUtils::calculate_proration(
+            $lt->amount,
+            $product_price,
+            $old_sub->days_in_this_period(),
+            $days_in_new_period,
+            $old_sub->days_till_expiration(),
+            $grp->upgrade_path_reset_period,
+            $old_sub
+          );
+
+          //Don't update this below if the latest payment was for 0.00
+          if(MeprUtils::format_float($lt->amount) > 0.00) {
+            $product_price = $r->proration;
+          }
+        }
+      }
+      //Don't update this below if the latest payment was for 0.00
+      elseif(($txn = $current_user->lifetime_subscription_in_group($grp->ID)) && MeprUtils::format_float($txn->amount) > 0.00) {
+        $r = MeprUtils::calculate_proration(
+          $txn->amount,
+          $product_price,
+          $txn->days_in_this_period(),
+          $days_in_new_period,
+          $txn->days_till_expiration(),
+          $grp->upgrade_path_reset_period
+        );
+
+        $product_price = $r->proration;
+      }
+    }
+
+    $product_price = MeprHooks::apply_filters('mepr_adjusted_price', $product_price, $coupon_code, $this);
+
+    return MeprUtils::format_float($product_price);
+  }
+
+  public function days_in_my_period($default = 'lifetime') {
+    $now                = time();
+    $new_expires_at     = $this->get_expires_at($now);
+
+    if(is_null($new_expires_at)) { return $default; }
+
+    $future_date  = new DateTime(gmdate('Y-m-d', $new_expires_at));
+    $current_date = new DateTime(gmdate('Y-m-d', $now));
+    $timediff     = $current_date->diff($future_date);
+
+    return $timediff->days; //# of days difference
+  }
+
+  /** Gets the value for 'expires_at' for the given created_at time for this membership. */
+  public function get_expires_at($created_at = null)
+  {
+    $mepr_options = MeprOptions::fetch();
+
+    if(is_null($created_at)) { $created_at = time(); }
+
+    $user = MeprUtils::get_currentuserinfo();
+    $expires_at = $created_at;
+    $period = $this->period;
+
+    switch($this->period_type)
+    {
+      case 'days':
+          $expires_at += MeprUtils::days($period) + MeprUtils::days($mepr_options->grace_expire_days);
+          break;
+      case 'weeks':
+          $expires_at += MeprUtils::weeks($period) + MeprUtils::days($mepr_options->grace_expire_days);
+          break;
+      case 'months':
+          $expires_at += MeprUtils::months($period, $created_at) + MeprUtils::days($mepr_options->grace_expire_days);
+          break;
+      case 'years':
+          $expires_at += MeprUtils::years($period, $created_at) + MeprUtils::days($mepr_options->grace_expire_days);
+          break;
+      default: // one-time payment
+          if($this->expire_type=='delay') {
+            if(MeprUtils::is_user_logged_in()) {
+              //Handle renewals
+              if($this->is_renewal() && ($last_txn = $this->get_last_active_txn($user->ID))) {
+                $expires_at = $created_at = strtotime($last_txn->expires_at);
+              }
+            }
+
+            switch($this->expire_unit) {
+              case 'days':
+                $expires_at += MeprUtils::days($this->expire_after);
+                break;
+              case 'weeks':
+                $expires_at += MeprUtils::weeks($this->expire_after);
+                break;
+              case 'months':
+                $expires_at += MeprUtils::months($this->expire_after, $created_at);
+                break;
+              case 'years':
+                $expires_at += MeprUtils::years($this->expire_after, $created_at);
+            }
+          }
+          elseif($this->expire_type=='fixed') {
+            $expires_at = strtotime( $this->expire_fixed );
+            $now = time();
+            //Make sure we adjust the year if the membership is a renewable type and the user forgot to bump up the year
+            if($this->allow_renewal) {
+              while($now > $expires_at) {
+                $expires_at += MeprUtils::years(1);
+              }
+            }
+            //Actually handle renewals
+            if($this->is_renewal() && ($last_txn = $this->get_last_active_txn($user->ID))) {
+              $expires_at = strtotime($last_txn->expires_at) + MeprUtils::years(1);
+            }
+          }
+          else { // lifetime
+            $expires_at = null;
+          }
+    }
+
+    return $expires_at;
+  }
+
+  public static function get_pricing_page_product_ids()
+  {
+    global $wpdb;
+
+    $q = "SELECT p.ID, p.menu_order
+            FROM {$wpdb->postmeta} AS m INNER JOIN {$wpdb->posts} AS p
+              ON p.ID = m.post_id
+            WHERE m.meta_key = %s
+              AND m.meta_value = 1
+          ORDER BY p.menu_order, p.ID";
+
+    return $wpdb->get_col($wpdb->prepare($q, self::$show_on_pricing_str));
+  }
+
+  public function is_one_time_payment() {
+    return ($this->period_type == 'lifetime' || $this->price == 0.00);
+  }
+
+  //Just for checking if the membership type is a renewable type
+  //Not to be used when is_renewal() should be used instead
+  public function is_renewable() {
+    return (($this->expire_type=='delay' || $this->expire_type=='fixed') && $this->allow_renewal);
+  }
+
+  public function is_renewal() {
+    global $user_ID;
+
+    if(MeprUtils::is_user_logged_in()) {
+      $user = new MeprUser($user_ID);
+    }
+
+    return (MeprUtils::is_user_logged_in() &&
+            $user->is_already_subscribed_to($this->ID) &&
+            ($this->expire_type=='delay' || $this->expire_type=='fixed') &&
+            $this->allow_renewal);
+  }
+
+  public function can_you_buy_me() {
+    global $user_ID;
+
+    if( ! is_null( ( $override = MeprHooks::apply_filters( 'mepr-can-you-buy-me-override', null, $this ) ) ) ) {
+      return $override;
+    }
+
+    // Admins can see & purchase anything
+    if(MeprUtils::is_logged_in_and_an_admin()) {
+      return true;
+    }
+
+    if(MeprUtils::is_user_logged_in()) {
+      $user = new MeprUser($user_ID);
+    }
+
+    //Make sure user hasn't already subscribed to this membership first
+    if(MeprUtils::is_user_logged_in() &&
+       $user->is_already_subscribed_to($this->ID) &&
+       !$this->simultaneous_subscriptions &&
+       !$this->allow_renewal) {
+      return false;
+    }
+
+    if(empty($this->who_can_purchase)) {
+      return true; //No rules exist so everyone can purchase
+    }
+
+    foreach($this->who_can_purchase as $who) {
+      //Give Developers a chance to hook in here
+      //Return true or false if you run your own custom handling here
+      //Otherwise return string 'no_custom' if MemberPress should handle the processing
+      if(($custom = MeprHooks::apply_filters('mepr-who-can-purchase-custom-check', 'no_custom', $who, $this)) !==  'no_custom' && is_bool($custom)) {
+        return $custom;
+      }
+
+      if($who->user_type == 'disabled') {
+        return false;
+      }
+
+      if($who->user_type == 'everyone') {
+        return true;
+      }
+
+      if($who->user_type == 'guests' && !MeprUtils::is_user_logged_in()) {
+        return true; //If not a logged in member they can purchase
+      }
+
+      if($who->user_type == 'members' && MeprUtils::is_user_logged_in()) {
+        if($user->can_user_purchase($who, $this->ID)) {
+          return true;
+        }
+      }
+    }
+
+    return false; //If we make it here, nothing applied so let's return false
+  }
+
+  // This is really only used for annual renewals currently
+  // It has some special code for fallback transactions (Downgrade Path feature of Groups)
+  // So be careful when using this function if you need to includ fallback transactions
+  public function get_last_active_txn($user_id) {
+    global $wpdb;
+    $mepr_db = new MeprDb();
+
+    $q  = "SELECT tr.id AS id
+            FROM {$mepr_db->transactions} AS tr
+           WHERE tr.user_id=%d
+             AND tr.product_id=%d
+             AND tr.status=%s
+             AND tr.expires_at > %s
+           ORDER BY tr.created_at DESC
+           LIMIT 1";
+
+    $lq = "SELECT tr.id AS id
+            FROM {$mepr_db->transactions} AS tr
+           WHERE tr.user_id=%d
+             AND tr.product_id=%d
+             AND tr.status=%s
+             AND tr.expires_at=%s
+             AND tr.txn_type <> %s
+           ORDER BY tr.created_at DESC
+           LIMIT 1";
+
+    $q  = $wpdb->prepare($q, $user_id, $this->ID, MeprTransaction::$complete_str, MeprUtils::db_now());
+    $lq = $wpdb->prepare($lq, $user_id, $this->ID, MeprTransaction::$complete_str, MeprUtils::db_lifetime(), MeprTransaction::$fallback_str);
+
+    if(($txn_id = $wpdb->get_var($lq))) { // Try for lifetimes
+      return new MeprTransaction($txn_id);
+    }
+    else if(($txn_id = $wpdb->get_var($q))) { // Try for expiring
+      return new MeprTransaction($txn_id);
+    }
+    else {
+      // TODO: Maybe throw an exception here at some point
+      return false;
+    }
+  }
+
+  public function group() {
+    //Don't do static caching stuff here
+    if(!isset($this->group_id) or empty($this->group_id)) { return false; }
+
+    return new MeprGroup($this->group_id);
+  }
+
+  public function group_url() {
+    if( $grp = $this->group() and
+        !$grp->pricing_page_disabled ) {
+      return $grp->url();
+    }
+    else {
+      return $this->url();
+    }
+  }
+
+  // Determines if this is a membership upgrade
+  public function is_upgrade()
+  {
+    return $this->is_upgrade_or_downgrade('upgrade');
+  }
+
+  // Determines if this is a membership downgrade
+  public function is_downgrade() {
+    return $this->is_upgrade_or_downgrade('downgrade');
+  }
+
+  // Determines if this is a membership upgrade for a certain user
+  public function is_upgrade_for($user_id) {
+    return $this->is_upgrade_or_downgrade_for($user_id, 'upgrade');
+  }
+
+  // Determines if this is a membership downgrade for a certain user
+  public function is_downgrade_for($user_id) {
+    return $this->is_upgrade_or_downgrade_for($user_id, 'downgrade');
+  }
+
+  public function is_upgrade_or_downgrade($type=false, $usr=false) {
+    if($usr === false) {
+      $usr = MeprUtils::get_currentuserinfo();
+    }
+    return ($usr && $this->is_upgrade_or_downgrade_for($usr->ID, $type)); // Must be an upgrade/downgrade for the user
+  }
+
+  // Determines if this is a membership upgrade
+  public function is_upgrade_or_downgrade_for($user_id, $type = false) {
+    $usr = new MeprUser($user_id);
+    $grp = $this->group();
+
+    // not part of a group ... not an upgrade
+    if(!$grp) { return false; }
+
+    // no upgrade path here ... not an upgrade
+    if(!$grp->is_upgrade_path) { return false; }
+
+    $prds = $usr->active_product_subscriptions('products', true);
+
+    if(!empty($prds)) {
+      foreach($prds as $p) {
+        if( $g = $p->group() and $g instanceof MeprGroup and
+            $g->ID == $grp->ID and $this->ID != $p->ID ) {
+          if( $type===false )
+            return true;
+          else if( $type == 'upgrade' )
+            return $this->group_order > $p->group_order;
+          else if( $type == 'downgrade' )
+            return $this->group_order < $p->group_order;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  public static function cleanup_db()
+  {
+    global $wpdb;
+    $date = time();
+    $last_run = get_option(self::$last_run_str, 0); //Prevents all this code from executing on every page load
+
+    if(($date - $last_run) > 86400) //Runs once at most once a day
+    {
+      update_option(self::$last_run_str, $date);
+      $sq1 = "SELECT ID
+                FROM {$wpdb->posts}
+                WHERE post_type = '".self::$cpt."' AND
+                      post_status = 'auto-draft'";
+      $sq1_res = $wpdb->get_col($sq1);
+      if(!empty($sq1_res)) {
+        $post_ids = implode(',', $sq1_res);
+        $q1 = "DELETE
+                  FROM {$wpdb->postmeta}
+                  WHERE post_id IN ({$post_ids})";
+        $q2 = "DELETE
+                  FROM {$wpdb->posts}
+                  WHERE post_type = '".self::$cpt."' AND
+                        post_status = 'auto-draft'";
+
+        $wpdb->query($q1);
+        $wpdb->query($q2);
+      }
+    }
+  }
+
+  public function get_page_template()
+  {
+    if($this->use_custom_template)
+      return locate_template($this->custom_template);
+    else
+      return locate_template(self::template_search_path());
+  }
+
+  public static function template_search_path()
+  {
+    return array( 'page_memberpressproduct.php',
+                  'single-memberpressproduct.php',
+                  'page.php',
+                  'custom_template.php',
+                  'single.php',
+                  'index.php' );
+  }
+
+  public function payment_methods() {
+    $mepr_options = MeprOptions::fetch();
+
+    $pms = $mepr_options->payment_methods();
+
+    unset($pms['free']);
+    unset($pms['manual']);
+
+    $pmkeys = array_keys($pms);
+
+    if( isset($this->custom_payment_methods) and
+        !is_null($this->custom_payment_methods) and
+        is_array($this->custom_payment_methods) ) {
+      return array_intersect($this->custom_payment_methods, $pmkeys);
+    }
+
+    return $pmkeys;
+  }
+
+  public function edit_url($args = '') {
+    if(isset($this->ID) && $this->post_type==self::$cpt) {
+      return get_edit_post_link($this->ID);
+    }
+    else {
+      return '';
+    }
+  }
+
+  public function url($args = '', $modify_if_https = false) {
+    if(isset($this->ID)) {
+      $url = MeprUtils::get_permalink($this->ID).$args;
+
+      if(MeprUtils::is_ssl() && $modify_if_https) {
+        $url = preg_replace('!^http:!','https:',$url);
+      }
+      $url = MeprHooks::apply_filters('mepr-product-url', $url, $this, $args, $modify_if_https);
+
+      return $url;
+    }
+    else {
+      return '';
+    }
+  }
+
+  public function manual_append_signup() {
+    return preg_match('~\[\s*mepr-(product|membership)-registration-form\s*\]~',$this->post_content);
+  }
+
+  public function custom_profile_fields() {
+    $mepr_options = MeprOptions::fetch();
+    $fields = array();
+
+    if(!$this->customize_profile_fields)
+      return $mepr_options->custom_fields;
+
+    foreach($mepr_options->custom_fields as $row)
+      if(in_array($row->field_key, $this->custom_profile_fields))
+        $fields[] = $row;
+
+    return $fields;
+  }
+
+  /** This function is to be used to determine if a trial should be allowed.
+   *  The current idea here is that if the user has
+   */
+  public function trial_is_expired() {
+    global $wpdb;
+
+    $mepr_db = MeprDb::fetch();
+
+    if($this->trial && MeprUtils::is_user_logged_in() &&
+       ($current_user = MeprUtils::get_currentuserinfo())) {
+      $q = $wpdb->prepare("
+          SELECT COUNT(*)
+            FROM {$mepr_db->transactions} AS t
+           WHERE t.user_id=%d
+             AND t.product_id=%d
+             AND t.txn_type IN (%s,%s)
+             AND t.status IN (%s,%s,%s)
+        ",
+        $current_user->ID,
+        $this->ID,
+        MeprTransaction::$subscription_confirmation_str,
+        MeprTransaction::$payment_str,
+        MeprTransaction::$complete_str,
+        MeprTransaction::$refunded_str,
+        MeprTransaction::$confirmed_str
+      );
+
+      $already_trialled = $wpdb->get_var($q);
+
+      return ($already_trialled > 0);
+    }
+
+    return false;
+  }
+
+  public static function is_product_page($post) {
+    $return = false;
+
+    if( is_object($post) &&
+        ( ( property_exists( $post, 'post_type' ) &&
+            $post->post_type == MeprProduct::$cpt &&
+            $prd = new MeprProduct($post->ID) ) ||
+          ( preg_match( '~\[mepr-(product|membership)-registration-form\s+(product_)?id=[\"\\\'](\d+)[\"\\\']~',
+                        $post->post_content, $m ) &&
+            isset($m[1]) && $prd = new MeprProduct( $m[1] ) ) ) ) {
+      $return = $prd;
+    }
+
+    return MeprHooks::apply_filters( 'mepr-is-product-page', $return, $post );
+  }
+
+  public static function get_highest_menu_order_active_membership_by_user( $user_id ) {
+    global $wpdb;
+
+    $user = new MeprUser( $user_id );
+
+    if( (int)$user->ID === 0 ) { return false; }
+
+    $active_memberships = array_unique( $user->active_product_subscriptions( 'ids' ), true );
+
+    if( empty( $active_memberships ) ) { return false; }
+
+    $in = '%d';
+    if( count( $active_memberships ) > 1 ) {
+      $placeholders = array_fill( 0, count( $active_memberships ), '%d' );
+      $in = implode( ',', $placeholders ); // Convert to comma separated string if > 1
+    }
+
+    $q = $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE ID IN({$in}) ORDER BY menu_order DESC, ID DESC LIMIT 1", $active_memberships );
+
+    $result = $wpdb->get_var( $q );
+
+    return ( ! is_null( $result ) ) ? $result : false;
+  }
+
+  /**
+   * Get the Stripe Product ID
+   *
+   * @param  string       $gateway_id The gateway ID
+   * @return string|false
+   */
+  public function get_stripe_product_id($gateway_id) {
+    return get_post_meta($this->ID, '_mepr_stripe_product_id_' . $gateway_id, true);
+  }
+
+  /**
+   * Set the Stripe Product ID
+   *
+   * @param string $gateway_id The gateway ID
+   * @param string $product_id The Stripe Product ID
+   */
+  public function set_stripe_product_id($gateway_id, $product_id) {
+    update_post_meta($this->ID, '_mepr_stripe_product_id_' . $gateway_id, $product_id);
+  }
+
+  /**
+   * Get the Stripe Plan ID for this product's current payment terms
+   *
+   * @param  string       $gateway_id The gateway ID
+   * @param  string       $amount     The payment amount (excluding tax)
+   * @return string|false
+   */
+  public function get_stripe_plan_id($gateway_id, $amount) {
+    $meta_key = sprintf('_mepr_stripe_plan_id_%s_%s', $gateway_id, $this->terms_hash($amount));
+
+    $plan_id = get_post_meta($this->ID, $meta_key, true);
+
+    return MeprHooks::apply_filters('mepr-product-get-stripe-plan-id', $plan_id, $this, $gateway_id, $amount);
+  }
+
+  /**
+   * Set the Stripe Plan ID for this product's current payment terms
+   *
+   * @param string $gateway_id The gateway ID
+   * @param string $amount     The payment amount (excluding tax)
+   * @param string $plan_id    The Stripe Plan ID
+   */
+  public function set_stripe_plan_id($gateway_id, $amount, $plan_id) {
+    $meta_key = sprintf('_mepr_stripe_plan_id_%s_%s', $gateway_id, $this->terms_hash($amount));
+
+    update_post_meta($this->ID, $meta_key, $plan_id);
+  }
+
+  /**
+   * Get the hash of the payment terms
+   *
+   * If this hash changes then a different Stripe Plan will be created.
+   *
+   * @param  string $amount
+   * @return string
+   */
+  private function terms_hash($amount) {
+    $mepr_options = MeprOptions::fetch();
+
+    $terms = [
+      'currency' => $mepr_options->currency_code,
+      'amount' => $amount,
+      'period' => $this->period,
+      'period_type' => $this->period_type
+    ];
+
+    return md5(serialize($terms));
+  }
+
+  /**
+   * Delete the Stripe Product ID
+   *
+   * @param string $gateway_id The gateway ID
+   * @param string $product_id The Stripe Product ID
+   */
+  public static function delete_stripe_product_id($gateway_id, $product_id) {
+    if(is_string($product_id) && $product_id !== '') {
+      delete_metadata('post', null, '_mepr_stripe_product_id_' . $gateway_id, $product_id, true);
+    }
+  }
+
+  /**
+   * Delete the Stripe Plan ID
+   *
+   * @param string $gateway_id The gateway ID
+   * @param string $plan_id    The Stripe Plan ID
+   */
+  public static function delete_stripe_plan_id($gateway_id, $plan_id) {
+    if(!is_string($plan_id) || $plan_id === '') {
+      return;
+    }
+
+    global $wpdb;
+
+    $query = $wpdb->prepare(
+      "SELECT meta_id FROM {$wpdb->postmeta} WHERE meta_key LIKE %s AND meta_value = %s",
+      $wpdb->esc_like('_mepr_stripe_plan_id_' . $gateway_id) . '%',
+      $plan_id
+    );
+
+    $meta_ids = $wpdb->get_col($query);
+
+    if(is_array($meta_ids) && count($meta_ids)) {
+      foreach($meta_ids as $meta_id) {
+        delete_metadata_by_mid('post', $meta_id);
+      }
+    }
+  }
+
+} //End class

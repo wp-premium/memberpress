@@ -1,0 +1,96 @@
+.mepr-deactivation-survey-popup, .mepr-deactivation-survey-popup * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.mepr-deactivation-survey-popup {
+  display: none;
+  font-size: 14px;
+}
+.mepr-deactivation-survey-popup-content {
+  position: fixed;
+  z-index: 100005;
+  width: 640px;
+  right: 50%;
+  top: 20%;
+  margin-right: -320px;
+  background: #fff;
+  overflow: auto;
+  max-height: 70%;
+  max-width: 100%;
+  padding: 40px;
+}
+.mepr-deactivation-survey-popup-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+.mepr-deactivation-survey-popup-overlay {
+  position: fixed;
+  z-index: 100004;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000;
+  opacity: 0.8;
+}
+.mepr-deactivation-survey-title {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px solid #ddd;
+  padding: 0 0 18px 0;
+  margin: 0 0 18px 0;
+}
+.mepr-deactivation-survey-title i {
+  color: #999;
+  margin-right: 10px;
+}
+.mepr-deactivation-survey-description {
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+.mepr-deactivation-survey-option {
+  margin-bottom: 10px;
+}
+input[type="radio"].mepr-deactivation-survey-option-radio {
+  margin-top: 2px;
+}
+.mepr-deactivation-survey-option-details {
+  display: none;
+  width: 90%;
+  margin: 10px 0 0 23px;
+}
+.mepr-deactivation-survey-error {
+  color: red;
+  margin-bottom: 10px;
+}
+.mepr-deactivation-survey-buttons a {
+  cursor: pointer;
+  float: right;
+  margin-top: 1px;
+  padding: 5px;
+  font-size: 13px;
+  color: #ccc;
+  text-decoration: none;
+}
+.mepr-deactivation-survey-buttons {
+  margin-top: 28px;
+}
+@media (max-width: 782px) {
+  .mepr-deactivation-survey-option-details {
+    margin-left: 32px;
+  }
+}
+@media (max-width: 700px) {
+  .mepr-deactivation-survey-popup-content {
+    left: 20px;
+    right: 20px;
+    width: auto;
+    margin-right: 0;
+  }
+}
+

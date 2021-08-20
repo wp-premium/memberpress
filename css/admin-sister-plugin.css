@@ -1,0 +1,195 @@
+.mepr-sister-plugin {
+  width: 700px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.mepr-sister-plugin-image {
+  text-align: center;
+  margin: 30px 0;
+}
+.mepr-sister-plugin-image img {
+  width: 300px;
+  height: auto;
+  max-width: 100%;
+}
+.mepr-sister-plugin-title {
+  text-align: center;
+  font-size: 25px;
+  line-height: 1.5;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+.mepr-sister-plugin-description {
+  text-align: center;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #777;
+  margin-bottom: 40px;
+}
+.mepr-sister-plugin-info .mp-icon {
+  font-weight: bold;
+  margin-right: 5px;
+}
+.mepr-sister-plugin-wp-mail-smtp .mepr-sister-plugin-info .mp-icon {
+  color: #f18500;
+}
+.mepr-sister-plugin-monsterinsights .mepr-sister-plugin-info .mp-icon {
+  color: #53c1a5;
+}
+.mepr-sister-plugin-info > div {
+  float: left;
+  width: 50%;
+  padding: 12px;
+  box-sizing: border-box;
+}
+.mepr-sister-plugin-info-image div {
+  background-color: #fff;
+  border-radius: 3px;
+  padding: 5px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+.mepr-sister-plugin-info-image img {
+  display: block;
+  width: 100%;
+}
+.mepr-sister-plugin-info-features ul {
+  margin: 0;
+}
+.mepr-sister-plugin-info-features ul li {
+  font-size: 15px;
+  line-height: 1.4;
+  color: #777;
+  margin-bottom: 14px;
+}
+.mepr-sister-plugin-info-features ul li:last-child {
+  margin-bottom: 0;
+}
+.mepr-sister-plugin-info {
+  margin-bottom: 40px;
+}
+.mepr-sister-plugin-step {
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  padding: 30px;
+  margin-bottom: 40px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  position: relative;
+  opacity: 0.5;
+}
+.mepr-sister-plugin-step-current {
+  opacity: 1;
+}
+.mepr-sister-plugin-step-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 110px;
+  background-color: #fafafa;
+  border-right: 1px solid #eee;
+}
+.mepr-sister-plugin-step-number {
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  margin-top: -25px;
+  background-color: #ccc;
+  border-radius: 50%;
+  padding: 10px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  font-size: 24px;
+  line-height: 1.14;
+  font-weight: bold;
+  color: #fff;
+}
+.mepr-sister-plugin-step-detail {
+  margin-left: 110px;
+}
+.mepr-sister-plugin-step-title {
+  font-size: 23px;
+  line-height: 1.5;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+.mepr-sister-plugin-step-description {
+  font-size: 15px;
+  line-height: 1.4;
+  color: #777;
+  margin-bottom: 20px;
+}
+.mepr-sister-plugin-message {
+  background-color: #fff;
+  position: absolute;
+  text-align: center;
+  font-weight: 600;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 99;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.mepr-sister-plugin-message.mepr-sister-plugin-message-success {
+  color: #2a9b39;
+}
+.mepr-sister-plugin-message.mepr-sister-plugin-message-error {
+  color: red;
+}
+.mepr-sister-plugin-step-pro {
+  color: #ccc;
+}
+.mepr-courses-action-notice {
+  display: none;
+}
+.mepr-sister-plugin-step-no-number .mepr-sister-plugin-step-detail  {
+  margin-left: 0;
+  text-align: center;
+}
+.mp-courses-image img {
+  width: 400px;
+}
+body[data-mepr-chosen-tab="courses"] p.submit {
+  display: none;
+}
+@media (max-width: 782px) {
+  .mepr-sister-plugin-info > div {
+    float: none;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+.mepr-sister-plugin-easy-affiliate .mepr-sister-plugin-info > .mepr-sister-plugin-info-image {
+  padding: 0;
+}
+.mepr-sister-plugin-easy-affiliate .mepr-sister-plugin-info > .mepr-sister-plugin-info-features {
+  padding-left: 35px;
+}
+.mepr-sister-plugin-easy-affiliate .mepr-sister-plugin-info-image div {
+  background-color: transparent;
+  box-shadow: none;
+}
+.mepr-sister-plugin-easy-affiliate .mepr-sister-plugin-info-features ul li {
+  position: relative;
+  padding-left: 30px;
+}
+.mepr-sister-plugin-easy-affiliate .mepr-sister-plugin-info-features svg {
+  width: 19px;
+  height: auto;
+  position: absolute;
+  left: 0;
+  top: 4px;
+}
+.mepr-sister-plugin-easy-affiliate .mepr-sister-plugin-info-features svg path {
+  fill: #609D62;
+}

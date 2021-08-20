@@ -1,0 +1,49 @@
+.mp-hide-pw {
+  position: relative;
+}
+
+.button.mp-hide-pw {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  width: auto;
+  height: 100%;
+  align-items: center;
+  background: 0 0;
+  color: #85929E;
+  text-decoration: none;
+  padding: 1em 1.4em;
+  border: none !important;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.button.mp-hide-pw:hover {
+  background: 0 0;
+  color: #5D6D7E;
+  text-decoration: none;
+  padding: 1em 1.4em;
+  border: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.button.mp-hide-pw:active {
+  background: 0 0;
+  color: #5D6D7E;
+  text-decoration: none;
+  padding: 1em 1.4em;
+  border: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.button.mp-hide-pw .dashicons {
+  width: 1.25rem;
+  height: 1.25rem;
+  position: relative;
+}

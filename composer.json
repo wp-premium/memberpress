@@ -1,0 +1,8 @@
+{
+    "name": "wp-premium/memberpress",
+    "autoload": {
+        "classmap": [
+            "app/"
+        ]
+    }
+}
