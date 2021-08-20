@@ -1,5 +1,6 @@
 {
     "name": "wp-premium/memberpress",
+    "description": "The membership plugin that makes it easy to accept payments for access to your content and digital products.",
     "autoload": {
         "classmap": [
             "app/"
