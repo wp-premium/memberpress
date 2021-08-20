@@ -1,6 +1,11 @@
 name: MemberPress Deployer
 
-on: push
+on:
+  push:
+    branches:
+      - deployer
+  schedule:
+    - cron: '0 10 * * *'
 
 jobs:
   deploy:
