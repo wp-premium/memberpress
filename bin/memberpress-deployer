@@ -165,7 +165,7 @@ $rm_plugin_command = \sprintf(
 /**
  * Unzip.
  */
-echo '::group::UNZIP MemberPress', PHP_EOL;
+echo '::group::Unzip MemberPress', PHP_EOL;
 
 $unzip_command = \sprintf(
 	'unzip %s -d %s',
@@ -185,7 +185,7 @@ echo '::endgroup::', PHP_EOL;
  * @link http://stackoverflow.com/a/14789400
  * @link http://askubuntu.com/a/476048
  */
-echo '::group::Synchronize', PHP_EOL;
+echo '::group::Synchronize MemberPress', PHP_EOL;
 
 $rsync_command = \sprintf(
 	'rsync --archive --delete-before --exclude=%s --verbose %s %s',
