@@ -50,6 +50,8 @@ if ( empty( $memberpress_license_domain ) ) {
 /**
  * Display info.
  */
+echo '::group::MemberPress', PHP_EOL;
+
 \printf(
 	'MemberPress License Key: %s',
 	$memberpress_license_key
@@ -63,6 +65,8 @@ echo PHP_EOL;
 );
 
 echo PHP_EOL;
+
+echo '::endgroup::', PHP_EOL
 
 /**
  * Request info.
