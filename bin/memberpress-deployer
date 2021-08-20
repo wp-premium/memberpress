@@ -1,0 +1,154 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+\WorDBless\Load::load();
+
+echo 'MemberPress Deployer', PHP_EOL;
+
+$archives_dir     = __DIR__ . '/../archives';
+$plugins_dir      = __DIR__ . '/../plugins';
+$repositories_dir = __DIR__ . '/../repositories';
+
+$directories = array(
+	$archives_dir,
+	$plugins_dir,
+	$repositories_dir,
+);
+
+foreach ( $directories as $directory ) {
+	if ( ! is_dir( $directory ) ) {
+		$result = \mkdir( $directory );
+
+		if ( false === $result ) {
+			\printf(
+				'Unable to create directory: %s.',
+				$directory
+			);
+
+			exit( 1 );
+		}
+	}
+}
+
+$memberpress_license_key    = \getenv( 'MEMBERPRESS_LICENSE_KEY' );
+$memberpress_license_domain = \getenv( 'MEMBERPRESS_LICENSE_DOMAIN' );
+
+if ( empty( $memberpress_license_key ) ) {
+	echo 'MemberPress license key not defined in `MEMBERPRESS_LICENSE_KEY` environment variable.';
+
+	exit( 1 );
+}
+
+if ( empty( $memberpress_license_domain ) ) {
+	echo 'MemberPress license key not defined in `MEMBERPRESS_LICENSE_DOMAIN` environment variable.';
+
+	exit( 1 );
+}
+
+/**
+ * Display info.
+ */
+printf(
+	'MemberPress License Key: %s',
+	$memberpress_license_key
+);
+
+echo PHP_EOL;
+
+printf(
+	'MemberPress License Domain: %s',
+	$memberpress_license_domain
+);
+
+echo PHP_EOL;
+
+/**
+ * Request info.
+ */
+$url = \sprintf(
+	'https://mothership.caseproof.com/versions/info/%s',
+	$memberpress_license_key
+);
+
+$response = Pronamic\WordPress\Http\Facades\Http::post( $url, array(
+	'body' => array(
+		'domain' => $memberpress_license_domain,
+	)
+) );
+
+$result = $response->json();
+
+printf(
+	'MemberPress Version: %s',
+	$result->version
+);
+
+echo PHP_EOL;
+
+printf(
+	'MemberPress ZIP URL: %s',
+	$result->url
+);
+
+echo PHP_EOL;
+
+/**
+ * Plugin `composer.json`.
+ */
+$memberpress_composer = (object) array(
+	'name' => 'wp-premium/memberpress',
+	'autoload' => (object) array(
+		'classmap' => array(
+			'app/',
+		),
+	),
+);
+
+printf(
+	'MemberPress `composer.json`: %s',
+	\wp_json_encode( $memberpress_composer, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES )
+);
+
+echo PHP_EOL;
+
+/**
+ * Download ZIP.
+ */
+$zip_file = $archives_dir . '/memberpress-' . $result->version . '.zip';
+
+$curl_download_command = \sprintf(
+	'curl %s --output %s',
+	\escapeshellarg( $result->url ),
+	$zip_file
+);
+
+echo $curl_download_command, PHP_EOL;
+
+\system( $curl_download_command );
+
+/**
+ * Plugin directory.
+ */
+$plugin_dir  = $plugins_dir . '/memberpress';
+
+$rm_plugin_command = \sprintf(
+	'rm -f -R %s',
+	\escapeshellarg( $plugin_dir )
+);
+
+\system( $rm_plugin_command );
+
+/**
+ * Unzip.
+ */
+$unzip_command = \sprintf(
+	'unzip %s -d %s',
+	\escapeshellarg( $zip_file ),
+	\escapeshellarg( $plugins_dir )
+);
+
+echo $unzip_command, PHP_EOL;
+
+\system( $unzip_command );

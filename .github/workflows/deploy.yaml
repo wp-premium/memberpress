@@ -1,0 +1,14 @@
+name: MemberPress Deployer
+
+on: push
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: php-actions/composer@v6
+
+    - name: deploy
+      run: echo "Deploy."

@@ -1,0 +1,10 @@
+# Composer
+/vendor/
+
+# WordPress
+/wordpress/
+
+# Deployer
+/archives/
+/plugins/
+/repositories/
