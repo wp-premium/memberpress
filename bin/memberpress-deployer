@@ -134,7 +134,7 @@ $git_dir = $repositories_dir . '/memberpress';
 echo PHP_EOL;
 
 $clone_command = \sprintf(
-	'git clone %s %s',
+	'gh repo clone %s %s',
 	\escapeshellarg( $git_url ),
 	\escapeshellarg( $git_dir )
 );
