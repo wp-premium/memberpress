@@ -11,4 +11,7 @@ jobs:
     - uses: php-actions/composer@v6
 
     - name: deploy
+      env:
+        MEMBERPRESS_LICENSE_KEY: ${{ secrets.MEMBERPRESS_LICENSE_KEY }}
+        MEMBERPRESS_LICENSE_DOMAIN: ${{ secrets.MEMBERPRESS_LICENSE_DOMAIN }}
       run: bin/memberpress-deployer
