@@ -114,6 +114,13 @@ $memberpress_composer = (object) array(
 echo PHP_EOL;
 
 /**
+ * GitHub CLI.
+ * 
+ * @link https://github.blog/2021-03-11-scripting-with-github-cli/
+ */
+\system( 'gh auth status' );
+
+/**
  * Git.
  */
 $git_url = 'https://github.com/wp-premium/memberpress.git';
