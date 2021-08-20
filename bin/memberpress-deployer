@@ -228,7 +228,7 @@ $git_user_email_command = \sprintf(
 
 echo $git_user_email_command, PHP_EOL;
 
-\system( $git_user_email_command );
+// \system( $git_user_email_command );
 
 echo PHP_EOL;
 
@@ -239,7 +239,7 @@ $git_user_name_command = \sprintf(
 
 echo $git_user_name_command, PHP_EOL;
 
-\system( $git_user_name_command );
+// \system( $git_user_name_command );
 
 echo PHP_EOL;
 
