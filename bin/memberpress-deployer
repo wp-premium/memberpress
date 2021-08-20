@@ -220,6 +220,16 @@ echo PHP_EOL;
  * 
  * @link https://git-scm.com/docs/git-commit
  */
+\chdir( $git_dir );
+
+$git_add_command = 'git add --all';
+
+echo $git_add_command, PHP_EOL;
+
+\system( $git_add_command );
+
+echo PHP_EOL;
+
 $git_commit_message = \sprintf(
 	'Updates to %s',
 	$memberpress_version
@@ -233,3 +243,30 @@ $git_commit_command = \sprintf(
 echo $git_commit_command, PHP_EOL;
 
 \system( $git_commit_command );
+
+echo PHP_EOL;
+
+$git_push_command = 'git push origin main';
+
+echo $git_push_command, PHP_EOL;
+
+\system( $git_push_command );
+
+echo PHP_EOL;
+
+/**
+ * GitHub release.
+ * 
+ * @link https://cli.github.com/manual/gh_release_create
+ */
+$gh_release_command = \sprintf(
+	'gh release create %s %s',
+	$memberpress_version,
+	$zip_file
+);
+
+echo $gh_release_command, PHP_EOL;
+
+\system( $gh_release_command );
+
+echo PHP_EOL;
