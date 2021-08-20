@@ -11,4 +11,4 @@ jobs:
     - uses: php-actions/composer@v6
 
     - name: deploy
-      run: echo "Deploy."
+      run: bin/memberpress-deployer
