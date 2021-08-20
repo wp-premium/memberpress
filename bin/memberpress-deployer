@@ -216,6 +216,33 @@ if ( false === $result ) {
 echo PHP_EOL;
 
 /**
+ * Git user.
+ * 
+ * @link https://github.com/roots/wordpress/blob/13ba8c17c80f5c832f29cf4c2960b11489949d5f/bin/update-repo.php#L62-L67
+ */
+$git_user_email_command = \sprintf(
+	'git config --global user.email %s',
+	\escapeshellarg( 'info@memberpress.com' )
+);
+
+echo $git_user_email_command, PHP_EOL;
+
+\system( $git_user_email_command );
+
+echo PHP_EOL;
+
+$git_user_name_command = \sprintf(
+	'git config --global user.name %s',
+	\escapeshellarg( 'MemberPress' )
+);
+
+echo $git_user_name_command, PHP_EOL;
+
+\system( $git_user_name_command );
+
+echo PHP_EOL;
+
+/**
  * Git commit.
  * 
  * @link https://git-scm.com/docs/git-commit
