@@ -125,6 +125,14 @@ $git_dir = $repositories_dir . '/memberpress';
 
 echo PHP_EOL;
 
+$clone_command = \sprintf(
+	'gh repo clone %s %s',
+	\escapeshellarg( 'wp-premium/memberpress' ),
+	\escapeshellarg( $git_dir )
+);
+
+\system( $clone_command );
+
 /**
  * Download ZIP.
  */
