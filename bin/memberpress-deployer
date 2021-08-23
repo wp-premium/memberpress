@@ -123,7 +123,7 @@ echo PHP_EOL;
 
 if ( ! is_dir( $git_dir ) ) {
 	$clone_command = \sprintf(
-		'gh repo clone %s %s --branch main',
+		'gh repo clone %s %s -- --branch=main',
 		\escapeshellarg( $git_repository ),
 		\escapeshellarg( $git_dir )
 	);
