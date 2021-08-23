@@ -1,4 +1,5 @@
 {
+    "name": "wp-premium/memberpress",
     "require-dev": {
         "pronamic/wp-http": "^1.1",
         "roots/wordpress": "^5.8",
