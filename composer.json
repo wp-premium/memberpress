@@ -1,5 +1,6 @@
 {
     "name": "wp-premium/memberpress",
+    "license": "GPL-2.0-or-later",
     "require-dev": {
         "pronamic/wp-http": "^1.1",
         "roots/wordpress": "^5.8",
