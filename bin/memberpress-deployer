@@ -123,7 +123,7 @@ echo PHP_EOL;
 
 if ( ! is_dir( $git_dir ) ) {
 	$clone_command = \sprintf(
-		'gh repo clone %s %s',
+		'gh repo clone %s %s --branch main',
 		\escapeshellarg( $git_repository ),
 		\escapeshellarg( $git_dir )
 	);
@@ -203,32 +203,10 @@ echo '::endgroup::', PHP_EOL;
 /**
  * Plugin `composer.json`.
  */
-$composer_object = (object) array(
-	'name'        => 'wp-premium/memberpress',
-	'description' => 'The membership plugin that makes it easy to accept payments for access to your content and digital products.',
-	'autoload'    => (object) array(
-		'classmap' => array(
-			'app/',
-		),
-	),
-);
-
-$composer_string = \wp_json_encode( $composer_object, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES );
-
-$composer_file = $git_dir . '/composer.json';
-
-\printf(
-	'MemberPress `composer.json`: %s',
-	$composer_string
-);
-
-$result = \file_put_contents( $composer_file, $composer_string );
+$result = \copy( __DIR__ . '/../memberpress-composer.json', $git_dir . '/composer.json' );
 
 if ( false === $result ) {
-	\printf(
-		'Unable to write: %s',
-		$composer_file
-	);
+	echo 'Unable to copy `composer.json`.';
 
 	exit( 1 );
 }
