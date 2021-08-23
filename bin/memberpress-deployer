@@ -284,18 +284,34 @@ echo $git_push_command, PHP_EOL;
 echo PHP_EOL;
 
 /**
+ * GitHub release view.
+ */
+$gh_release_view_command = \sprintf(
+	'gh release view %s',
+	$memberpress_version
+);
+
+echo $gh_release_view_command, PHP_EOL;
+
+\system( $gh_release_view_command, $result_code );
+
+$release_not_found = ( 1 === $result_code );
+
+/**
  * GitHub release.
  * 
  * @link https://cli.github.com/manual/gh_release_create
  */
-$gh_release_command = \sprintf(
-	'gh release create %s %s',
-	$memberpress_version,
-	$zip_file
-);
+if ( $release_not_found ) {
+	$gh_release_command = \sprintf(
+		'gh release create %s %s',
+		$memberpress_version,
+		$zip_file
+	);
 
-echo $gh_release_command, PHP_EOL;
+	echo $gh_release_command, PHP_EOL;
 
-\system( $gh_release_command );
+	\system( $gh_release_command );
 
-echo PHP_EOL;
+	echo PHP_EOL;
+}
