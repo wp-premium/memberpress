@@ -3,6 +3,7 @@
     "description": "The membership plugin that makes it easy to accept payments for access to your content and digital products.",
     "type": "wordpress-plugin",
     "homepage": "https://memberpress.com/",
+    "license": "GPL-2.0-or-later",
     "autoload": {
         "classmap": [
             "app/"
