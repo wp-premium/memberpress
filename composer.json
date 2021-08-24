@@ -1,12 +1,4 @@
 {
     "name": "wp-premium/memberpress",
-    "license": "GPL-2.0-or-later",
-    "require-dev": {
-        "pronamic/wp-http": "^1.1",
-        "roots/wordpress": "^5.8",
-        "automattic/wordbless": "^0.3.1"
-    },
-    "scripts": {
-        "post-autoload-dump": "php -r \"copy('vendor/automattic/wordbless/src/dbless-wpdb.php', 'wordpress/wp-content/db.php');\""
-    }
+    "license": "GPL-2.0-or-later"
 }

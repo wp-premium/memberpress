@@ -21,8 +21,6 @@ jobs:
         ref: main
         path: repositories/memberpress
 
-    - uses: php-actions/composer@v6
-
     - name: deploy
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
