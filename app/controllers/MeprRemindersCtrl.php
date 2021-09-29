@@ -417,9 +417,25 @@ class MeprRemindersCtrl extends MeprCptCtrl {
             }
           }
           else { //Handle when the reminder should go out after
-            //Don't send to folks if they have an active txn on this subscription already yo
-            if(in_array($txn->product_id, $usr->active_product_subscriptions('ids'), false)) {
-              $disable_email = true;
+            //Don't send to folks if they have an active txn on this subscription (OR one in the
+            //products group) already yo
+            $active_subs = $usr->active_product_subscriptions('ids');
+            $product = new MeprProduct($txn->product_id);
+            $grp = new MeprGroup($product->group_id);
+
+            //If product is in a group with an upgrade path check for all memberships in that group
+            if($product->group_id && $product->group_id > 0 && $grp->is_upgrade_path) {
+              foreach ($grp->products('ids') as $prd_id) {
+                if(in_array($prd_id, $active_subs, false)) {
+                  $disable_email = true;
+                  break; //Breack out of the loop once we find one.
+                }
+              }
+            } else {
+              //Just check this product
+              if(in_array($txn->product_id, $active_subs, false)) {
+                $disable_email = true;
+              }
             }
           }
 
@@ -458,7 +474,7 @@ class MeprRemindersCtrl extends MeprCptCtrl {
 
       $args = array(array('reminder_id'=>$event->args));
 
-      $disable_email = MeprHooks::apply_filters("mepr-{$reminder->trigger_event}-reminder-disable", $disable_email, $reminder, $usr, $prd);
+      $disable_email = MeprHooks::apply_filters("mepr-{$reminder->trigger_event}-reminder-disable", $disable_email, $reminder, $usr, $prd, $event);
       if(!$disable_email) {
         $this->send_emails($usr, $uclass, $aclass, $params, $args);
       }
@@ -483,7 +499,7 @@ class MeprRemindersCtrl extends MeprCptCtrl {
 
       $args = array(array('reminder_id'=>$reminder->ID));
 
-      $disable_email = MeprHooks::apply_filters("mepr-{$reminder->trigger_event}-reminder-disable", $disable_email, $reminder, $usr, $prd);
+      $disable_email = MeprHooks::apply_filters("mepr-{$reminder->trigger_event}-reminder-disable", $disable_email, $reminder, $usr, $prd, $event);
       if(!$disable_email) {
         $this->send_emails($usr, $uclass, $aclass, $params, $args);
       }

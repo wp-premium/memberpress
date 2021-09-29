@@ -59,6 +59,7 @@
         <?php endif; ?>
         <th><?php _ex('Total', 'ui', 'memberpress'); ?></th>
         <th class="mp-currency-cell"><?php echo MeprAppHelper::format_currency($total, true, false); ?></th>
+        <input type="hidden" name="mepr_stripe_txn_amount" value="<?php echo MeprUtils::format_stripe_currency($total); ?>"/>
       </tr>
     </tfoot>
   </table>

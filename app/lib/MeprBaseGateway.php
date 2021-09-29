@@ -408,8 +408,15 @@ abstract class MeprBaseGateway {
         <?php elseif( $mepr_options->allow_suspend_subs and
                       $this->can('suspend-subscriptions') and
                       $subscription->status==MeprSubscription::$suspended_str ): ?>
+          <div id="mepr-resume-sub-<?php echo $subscription->id; ?>" class="mepr-white-popup mfp-hide">
+            <div class="mepr-resume-sub-text">
+              <?php _e('Are you sure you want to resume this subscription?', 'memberpress'); ?>
+            </div>
+            <button class="mepr-btn mepr-left-margin mepr-confirm-yes" data-url="<?php echo "{$account_url}{$account_delim}action=resume&sub={$subscription->id}"; ?>"><?php _e('Yes', 'memberpress'); ?></button>
+            <button class="mepr-btn mepr-confirm-no"><?php _e('No', 'memberpress'); ?></button>
+          </div>
           <?php ob_start(); ?>
-            <a href="<?php echo "{$account_url}{$account_delim}action=resume&sub={$subscription->id}"; ?>" class="mepr-account-row-action mepr-account-resume"><?php _e('Resume', 'memberpress'); ?></a>
+            <a href="#mepr-resume-sub-<?php echo $subscription->id; ?>" class="mepr-open-resume-confirm mepr-account-row-action mepr-account-resume"><?php _e('Resume', 'memberpress'); ?></a>
           <?php echo MeprHooks::apply_filters('mepr_custom_resume_link', ob_get_clean(), $subscription); ?>
         <?php endif; ?>
 

@@ -134,7 +134,7 @@ class MeprPayPalGateway extends MeprBasePayPalGateway {
   }
 
   public function maybe_catch_initamt() {
-    if(isset($_POST['initial_payment_amount']) && $_POST['initial_payment_amount'] >= 0.00 && strtolower($_POST['initial_payment_status']) == 'completed') {
+    if(isset($_POST['initial_payment_amount'], $_POST['initial_payment_status']) && $_POST['initial_payment_amount'] >= 0.00 && strtolower($_POST['initial_payment_status']) == 'completed') {
       if(isset($_POST['subscr_id']) && !empty($_POST['subscr_id'])) {
         $sub = MeprSubscription::get_one_by_subscr_id($_POST['subscr_id']);
       }

@@ -174,13 +174,17 @@ class MeprProductsHelper {
       if(empty($coupon_code)) { //We've already validated the coupon before including signup_form.php
         if($product->register_price_action == 'custom') {
           echo stripslashes($product->register_price);
+          echo "<input type='hidden' name='mepr_stripe_txn_amount' value='". MeprUtils::format_stripe_currency($product->price) ."' />";
         }
         else {
           echo MeprAppHelper::format_price_string($tmp_txn, $tmp_txn->amount, true, $coupon_code, true, $payment_required);
+          echo "<input type='hidden' name='mepr_stripe_txn_amount' value='". MeprUtils::format_stripe_currency($tmp_txn->total) ."' />";
         }
       }
       else {
         echo MeprAppHelper::format_price_string($tmp_txn, $tmp_txn->amount, true, $coupon_code, true, $payment_required);
+
+        echo "<input type='hidden' name='mepr_stripe_txn_amount' value='". MeprUtils::format_stripe_currency($tmp_txn->total) ."' />";
       }
 
       echo self::renewal_str($product); // possibly print out the renewal string
@@ -201,8 +205,11 @@ class MeprProductsHelper {
 
       if($product->register_price_action == 'custom' && empty($coupon_code) && !$tmp_sub->prorated_trial) {
         echo stripslashes($product->register_price);
+
+        echo "<input type='hidden' name='mepr_stripe_txn_amount' value='". MeprUtils::format_stripe_currency($product->price) ."' />";
       }
       else {
+        echo "<input type='hidden' name='mepr_stripe_txn_amount' value='". MeprUtils::format_stripe_currency($tmp_sub->total) ."' />";
         echo MeprAppHelper::format_price_string($tmp_sub, $tmp_sub->price, true, $coupon_code, true, $payment_required);
       }
     }

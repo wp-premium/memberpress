@@ -24,10 +24,113 @@
     this.isSpc = this.$form.hasClass('mepr-signup-form');
     this.paymentMethods = [];
     this.selectedPaymentMethod = null;
+    this.paymentRequest = null;
     this.submitting = false;
+    this.validatingPaymentRequestButton = false;
+    this.processingPaymentRequestButton = false;
 
     this.initPaymentMethods();
+    this.initPaymentRequestButtons();
     this.$form.on('submit', $.proxy(this.handleSubmit, this));
+    this.$form.on('meprAfterPriceStringUpdated', $.proxy(this.updateStripePaymentRequestPrice, this));
+  }
+
+  MeprStripeForm.prototype.updateStripePaymentRequestPrice = function (e) {
+    console.log(e)
+    if (this.isSpc) {
+      var stripeAmount = this.$form.find('input[name=mepr_stripe_txn_amount]').
+          attr('value');
+    } else {
+      var stripeAmount = $('.mp_invoice input[name=mepr_stripe_txn_amount]').attr('value');
+    }
+    stripeAmount = parseInt(stripeAmount);
+    if (this.paymentRequest !== null) {
+      this.paymentRequest.update({
+        total: {
+          label: 'Total',
+          amount: stripeAmount,
+        },
+      });
+    }
+  }
+
+  MeprStripeForm.prototype.initPaymentRequestButtons = function () {
+    var self = this;
+    $('input[name="card-name"]').on('mepr-validate-field', function(e) {
+      if (self.validatingPaymentRequestButton) {
+        $(this).removeClass('invalid').addClass('valid');
+        $(this).prev('.mp-form-label').find('.cc-error').toggle(false);
+      }
+    });
+    self.$form.find('.mepr-stripe-payment-request-element').each(function () {
+      var paymentRequestElement = $(this);
+      var countryCode = paymentRequestElement.data('locale-code');
+      var stripe = Stripe(paymentRequestElement.data('stripe-public-key'), { locale: countryCode });
+
+      if (self.isSpc) {
+        var stripeAmount = self.$form.find(
+            'input[name=mepr_stripe_txn_amount]').attr('value');
+      } else {
+        var stripeAmount = $('.mp_invoice input[name=mepr_stripe_txn_amount]').attr('value');
+      }
+
+      stripeAmount = parseInt(stripeAmount);
+      try {
+        self.paymentRequest = stripe.paymentRequest({
+          country: countryCode,
+          currency: paymentRequestElement.data('currency-code').toLowerCase(),
+          total: {
+            label: paymentRequestElement.data('total-text'),
+            amount: stripeAmount, // Placeholder, will be updated later
+          },
+          requestPayerName: true,
+          requestPayerEmail: true,
+        });
+      } catch (e) {
+        $('.mepr-stripe-payment-request-wrapper').hide();
+        return;
+      }
+
+      var elements = stripe.elements();
+      var prButton = elements.create('paymentRequestButton', {
+        paymentRequest: self.paymentRequest,
+      });
+
+      prButton.on('click', function(event) {
+        self.validatingPaymentRequestButton = true;
+        self.$form.find('.mepr-submit').trigger('click');
+        self.allowResubmission();
+
+        if (self.$form.find('.cc-error').filter(function() {
+              return $(this).css('display') != 'none';
+            }).length > 0) {
+          event.preventDefault();
+          return;
+        } else {
+          self.$form.find('.mepr-form-has-errors').hide();
+        }
+      });
+
+// Check the availability of the Payment Request API first.
+      self.paymentRequest.canMakePayment().then(function(result) {
+        if (result) {
+          prButton.mount(paymentRequestElement.get(0));
+        } else {
+          $('.mepr-stripe-payment-request-wrapper').hide();
+        }
+      });
+      self.paymentRequest.on('paymentmethod', function (ev) {
+        self.processingPaymentRequestButton = true;
+        self.$form.find('.mepr-submit').prop('disabled', true);
+        self.$form.find('.mepr-loading-gif').show();
+        self.selectedPaymentMethod = self.getSelectedPaymentMethod();
+
+        var extraData = {};
+        extraData.payment_method_id = ev.paymentMethod.id;
+        self.confirmPayment(extraData);
+        ev.complete('success');
+      });
+    });
   }
 
   /**
@@ -35,20 +138,18 @@
    */
   MeprStripeForm.prototype.initPaymentMethods = function () {
     var self = this;
-
     self.$form.find('.mepr-stripe-card-element').each(function () {
       var $cardElement = $(this);
-      console.log($cardElement.data('locale-code').toLowerCase());
       var $cardErrors = $cardElement.closest('.mp-form-row').find('.mepr-stripe-card-errors'),
-        stripe = Stripe($cardElement.data('stripe-public-key'), { locale: $cardElement.data('locale-code').toLowerCase() }),
-        elements = stripe.elements(),
-        card = elements.create('card', {
-          style: MeprStripeGateway.style,
-          hidePostalCode: MeprStripeGateway.hide_postal_code === '1' ? true : false
-        }),
-        paymentMethodId = $cardElement.data('payment-method-id'),
-        wrapperSelector = self.isSpc ? '.mepr-payment-method' : '.mp_payment_form_wrapper',
-        $wrapper = $cardElement.closest(wrapperSelector);
+          stripe = Stripe($cardElement.data('stripe-public-key'), { locale: $cardElement.data('locale-code').toLowerCase() }),
+          elements = stripe.elements(),
+          card = elements.create('card', {
+            style: MeprStripeGateway.style,
+            hidePostalCode: MeprStripeGateway.hide_postal_code === '1' ? true : false
+          }),
+          paymentMethodId = $cardElement.data('payment-method-id'),
+          wrapperSelector = self.isSpc ? '.mepr-payment-method' : '.mp_payment_form_wrapper',
+          $wrapper = $cardElement.closest(wrapperSelector);
 
       card.mount($cardElement[0]);
 
@@ -77,6 +178,11 @@
 
     e.preventDefault();
 
+    if (self.validatingPaymentRequestButton) {
+      self.validatingPaymentRequestButton = false;
+      return;
+    }
+
     if (self.submitting) {
       return;
     }
@@ -96,10 +202,10 @@
 
     if (self.selectedPaymentMethod) {
       var $recaptcha = self.$form.find('[name="g-recaptcha-response"]'),
-        extraData = {},
-        cardData = {
-          billing_details: self.getBillingDetails(self.selectedPaymentMethod)
-        };
+          extraData = {},
+          cardData = {
+            billing_details: self.getBillingDetails(self.selectedPaymentMethod)
+          };
 
       if ($recaptcha.length) {
         extraData['g-recaptcha-response'] = $recaptcha.val();
@@ -121,10 +227,10 @@
 
       const paymentMethodId = self.$form.find('input[name="mepr_payment_method"]:checked').data('payment-method-type');
       if (
-        isStripeCheckoutPageMode == '1' && (
-          paymentMethodId == 'Stripe' &&
-          self.$form.find('[name=mepr_stripe_is_checkout]').val() == '1'
-        )
+          isStripeCheckoutPageMode == '1' && (
+              paymentMethodId == 'Stripe' &&
+              self.$form.find('[name=mepr_stripe_is_checkout]').val() == '1'
+          )
       ) {
         self.redirectToStripeCheckout(e);
         return;
@@ -175,20 +281,20 @@
    */
   MeprStripeForm.prototype.getBillingDetails = function (selectedPaymentMethod) {
     var self = this,
-      name = selectedPaymentMethod.$wrapper.find('input[name="card-name"]').val(),
-      keys = {
-        line1: 'mepr-address-one',
-        line2: 'mepr-address-two',
-        city: 'mepr-address-city',
-        country: 'mepr-address-country',
-        state: 'mepr-address-state',
-        postal_code: 'mepr-address-zip'
-      },
-      address = {},
-      addressFieldsPresent = false,
-      details = {
-        address: {}
-      };
+        name = selectedPaymentMethod.$wrapper.find('input[name="card-name"]').val(),
+        keys = {
+          line1: 'mepr-address-one',
+          line2: 'mepr-address-two',
+          city: 'mepr-address-city',
+          country: 'mepr-address-country',
+          state: 'mepr-address-state',
+          postal_code: 'mepr-address-zip'
+        },
+        address = {},
+        addressFieldsPresent = false,
+        details = {
+          address: {}
+        };
 
     if (typeof name == 'string' && name.length) {
       details.name = name;
@@ -213,7 +319,7 @@
     } else {
       $.each(keys, function (key, value) {
         var cardAddressKey = value.replace('mepr-', 'card-'),
-          $field = selectedPaymentMethod.$wrapper.find('input[name="' + cardAddressKey + '"]');
+            $field = selectedPaymentMethod.$wrapper.find('input[name="' + cardAddressKey + '"]');
 
         if ($field.length) {
           var val = $field.val();
@@ -253,7 +359,7 @@
     for (var key in errors) {
       if (errors.hasOwnProperty(key)) {
         var $field = this.$form.find('[name="' + key + '"]').first(),
-          $label = $field.closest('.mp-form-row').find('.mp-form-label');
+            $label = $field.closest('.mp-form-row').find('.mp-form-label');
 
         if ($.isNumeric(key) || !$label.length) {
           topErrors.push(errors[key]);
@@ -267,7 +373,7 @@
 
     if (topErrors.length) {
       var $list = $('<ul>'),
-        $wrap = $('<div class="mepr-top-error mepr_error">');
+          $wrap = $('<div class="mepr-top-error mepr_error">');
 
       for (var i = 0; i < topErrors.length; i++) {
         $list.append($('<li>').html(MeprStripeGateway.top_error.replace('%s', topErrors[i])));
@@ -341,9 +447,9 @@
    */
   MeprStripeForm.prototype.handleAction = function (response) {
     var self = this,
-      stripe = this.selectedPaymentMethod.stripe,
-      card = this.selectedPaymentMethod.card,
-      data;
+        stripe = this.selectedPaymentMethod.stripe,
+        card = this.selectedPaymentMethod.card,
+        data;
 
     if (response.action === 'confirmCardSetup') {
       data = {
@@ -353,13 +459,26 @@
         }
       };
 
-      stripe.confirmCardSetup(response.client_secret, data).then(function (result) {
-        if (result.error) {
-          self.handlePaymentError(result.error.message);
-        } else {
-          self.confirmPayment();
-        }
-      });
+      if (self.processingPaymentRequestButton == true) {
+        stripe.confirmCardSetup(response.client_secret).
+            then(function(result) {
+              if (result.error) {
+                self.handlePaymentError(result.error.message);
+              } else {
+                self.confirmPayment();
+              }
+            });
+        self.processingPaymentRequestButton = false;
+      } else {
+        stripe.confirmCardSetup(response.client_secret, data).
+            then(function(result) {
+              if (result.error) {
+                self.handlePaymentError(result.error.message);
+              } else {
+                self.confirmPayment();
+              }
+            });
+      }
     } else if (response.action === 'confirmCardPayment') {
       data = {
         payment_method: {
@@ -368,13 +487,26 @@
         }
       };
 
-      stripe.confirmCardPayment(response.client_secret, data).then(function (result) {
-        if (result.error) {
-          self.handlePaymentError(result.error.message);
-        } else {
-          self.confirmPayment();
-        }
-      });
+      if (self.processingPaymentRequestButton == true) {
+        stripe.confirmCardPayment(response.client_secret).then(function (result) {
+          if (result.error) {
+            self.handlePaymentError(result.error.message);
+          } else {
+            self.confirmPayment();
+          }
+        });
+
+        self.processingPaymentRequestButton = false;
+      } else {
+        stripe.confirmCardPayment(response.client_secret, data).
+            then(function(result) {
+              if (result.error) {
+                self.handlePaymentError(result.error.message);
+              } else {
+                self.confirmPayment();
+              }
+            });
+      }
     } else {
       stripe.handleCardAction(response.client_secret).then(function (result) {
         if (result.error) {
@@ -467,7 +599,7 @@
    */
   MeprStripeForm.prototype.confirmPayment = function (extraData) {
     var self = this,
-      data = self.getFormData();
+        data = self.getFormData();
 
     $.extend(data, extraData || {}, {
       action: 'mepr_stripe_confirm_payment',

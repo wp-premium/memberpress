@@ -163,3 +163,8 @@
   margin: 0;
   padding: 0;
 }
+
+.mepr-stripe-payment-request-wrapper .mepr-stripe-payment-request-option {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}

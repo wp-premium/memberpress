@@ -6,6 +6,19 @@ class MeprTwoFactorIntegration {
     add_action('mepr_account_nav_content', [$this, 'add_two_factor_nav_content']);
     add_action('mepr_account_nav', [$this, 'add_two_factor_nav']);
     add_action('mepr_buddypress_integration_setup_menus', [$this, 'add_two_factor_nav_buddypress']);
+    add_action('init', [$this, 'two_factor_totp_delete'], 11);
+  }
+
+  public function two_factor_totp_delete() {
+    if(isset($_GET['two_factor_action']) && $_GET['two_factor_action'] == 'totp-delete') {
+      $mepr_options = MeprOptions::fetch();
+      $account_url = $mepr_options->account_page_url();
+      $delim = MeprAppCtrl::get_param_delimiter_char($account_url);
+
+      //Delete the usermeta for the secret key, then redirect to the account page page
+      delete_user_meta( get_current_user_id(), Two_Factor_Totp::SECRET_META_KEY );
+      \MeprUtils::wp_redirect($account_url . $delim . 'action=2fa');
+    }
   }
 
   public function enqueue_twofactor_scripts() {
@@ -129,6 +142,11 @@ class MeprTwoFactorIntegration {
       $new_provider = isset( $_POST[ Two_Factor_Core::PROVIDER_USER_META_KEY ] ) ? $_POST[ Two_Factor_Core::PROVIDER_USER_META_KEY ] : '';
       if ( ! empty( $new_provider ) && in_array( $new_provider, $enabled_providers, true ) ) {
         update_user_meta( $user_id, Two_Factor_Core::PROVIDER_USER_META_KEY, $new_provider );
+
+        if ($new_provider == Two_Factor_Totp::class) { //This class has a seperate update function that we need to call, none of the other providers appear to
+          $totp = Two_Factor_Core::get_providers()[Two_Factor_Totp::class];
+          $totp->user_two_factor_options_update($user_id);
+        }
       }
     }
   }

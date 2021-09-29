@@ -1,5 +1,5 @@
 jQuery(document).ready(function ($) {
-  $('.mepr-open-cancel-confirm').magnificPopup({
+  $('.mepr-open-resume-confirm, .mepr-open-cancel-confirm').magnificPopup({
     type: 'inline',
     closeBtnInside: false
   });

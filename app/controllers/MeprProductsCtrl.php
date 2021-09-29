@@ -635,15 +635,23 @@ class MeprProductsCtrl extends MeprCptCtrl {
   }
 
   public static function maybe_get_thank_you_page_message() {
-    if(!isset($_REQUEST['trans_num'])) { return ''; }
+    if (isset($_REQUEST['membership_id'])) {
+      $product = new MeprProduct(intval($_REQUEST['membership_id']));
+  } else {
+      if ( ! isset( $_REQUEST['trans_num'] ) ) {
+        return '';
+      }
 
-    $txn = new MeprTransaction();
-    $data = MeprTransaction::get_one_by_trans_num($_REQUEST['trans_num']);
-    $txn->load_data($data);
+      $txn  = new MeprTransaction();
+      $data = MeprTransaction::get_one_by_trans_num( $_REQUEST['trans_num'] );
+      $txn->load_data( $data );
 
-    if(!$txn->id || !$txn->product_id) { return ''; }
+      if ( ! $txn->id || ! $txn->product_id ) {
+        return '';
+      }
 
-    $product = $txn->product();
+      $product = $txn->product();
+    }
 
     if($product->ID === null || !$product->thank_you_page_enabled || empty($product->thank_you_message)) {
       return '';
@@ -658,7 +666,9 @@ class MeprProductsCtrl extends MeprCptCtrl {
     $message = do_shortcode($message);
     $message = MeprHooks::apply_filters('mepr_custom_thankyou_message', $message);
 
-    MeprHooks::do_action('mepr-thank-you-page', $txn);
+    if (isset($txn)) {
+      MeprHooks::do_action( 'mepr-thank-you-page', $txn );
+    }
 
     return '<div id="mepr-thank-you-page-message">'.$message.'</div>';
   }

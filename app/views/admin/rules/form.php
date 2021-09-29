@@ -33,7 +33,7 @@ $products = MeprCptModel::all('MeprProduct');
           __('Access Conditions', 'memberpress'),
           sprintf(__('If %1$sany%2$s of these conditions match for a logged-in user then he / she will be granted access to the protected content for this rule -- otherwise he / she will be denied.', 'memberpress'), '<strong>','</strong>')); ?>
       </h3>
-      <h4><?php _e('Grant access to the protected content above if a logged-in user matches any of the following condtions:', 'memberpress') ?></h4>
+      <h4><?php _e('Grant access to the protected content above if a logged-in user matches any of the following conditions:', 'memberpress') ?></h4>
       <div id="mepr-access-rows">
         <?php
           if(empty($rule_access_conditions)) {

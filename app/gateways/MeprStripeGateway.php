@@ -1125,15 +1125,18 @@ class MeprStripeGateway extends MeprBaseRealGateway {
 
     if ($stripe_subscription->status == 'active' or $stripe_subscription->status == 'trialing') {
       $memberpress_subscription = new MeprSubscription($memberpress_subscription_id);
-      $memberpress_subscription->subscr_id = $stripe_subscription->id;
-      $first_txn = $memberpress_subscription->first_txn();
 
-      if ($first_txn instanceof MeprTransaction) {
-        $this->activate_subscription($first_txn, $memberpress_subscription);
-        MeprHooks::do_action('mepr-signup', $first_txn);
+      if ($memberpress_subscription->gateway && $memberpress_subscription->gateway == $this->id) {
+        $memberpress_subscription->subscr_id = $stripe_subscription->id;
+        $first_txn = $memberpress_subscription->first_txn();
+
+        if ($first_txn instanceof MeprTransaction) {
+          $this->activate_subscription($first_txn, $memberpress_subscription);
+          MeprHooks::do_action('mepr-signup', $first_txn);
+        }
+
+        $memberpress_subscription->store();
       }
-
-      $memberpress_subscription->store();
     }
   }
 
@@ -1600,16 +1603,6 @@ class MeprStripeGateway extends MeprBaseRealGateway {
       $args = array_merge(['default_payment_method' => $customer->invoice_settings['default_payment_method']['id']], $args);
     }
 
-    $coupon = $sub->coupon();
-
-    if($coupon instanceof MeprCoupon) {
-      $discount_amount = $this->get_coupon_discount_amount($coupon, $prd, $sub->tax_rate);
-
-      if($discount_amount > 0) {
-        $args = array_merge(['coupon' => $this->get_coupon_id($coupon, $discount_amount)], $args);
-      }
-    }
-
     if($sub->trial) {
       $args = array_merge(['trial_period_days' => $sub->trial_days], $args);
     }
@@ -1926,6 +1919,13 @@ class MeprStripeGateway extends MeprBaseRealGateway {
           </div>
           <div class="mepr-stripe-card-element" data-stripe-public-key="<?php echo esc_attr($this->settings->public_key); ?>" data-payment-method-id="<?php echo esc_attr($this->settings->id); ?>" data-locale-code="<?php echo $mepr_options->language_code; ?>">
             <!-- a Stripe Element will be inserted here. -->
+          </div>
+
+          <div class="mepr-stripe-payment-request-wrapper">
+            <p class="mepr-stripe-payment-request-option"><?php echo esc_html(__('Or', 'memberpress')); ?></p>
+            <div id="mepr-stripe-payment-request-element" style="max-width: 300px" class="mepr-stripe-payment-request-element" data-stripe-public-key="<?php echo esc_attr($this->settings->public_key); ?>" data-payment-method-id="<?php echo esc_attr($this->settings->id); ?>" data-locale-code="<?php echo $mepr_options->language_code; ?>" data-currency-code="<?php echo $mepr_options->currency_code; ?>" data-total-text="<?php echo esc_attr(__('Total', 'memberpress')); ?>">
+              <!-- a Stripe Payment Request Element will be inserted here. -->
+            </div>
           </div>
         </div>
 

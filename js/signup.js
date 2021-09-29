@@ -165,6 +165,8 @@
               meprValidateInput(this);
             });
           }
+
+          form.trigger('meprAfterPriceStringUpdated', [response]);
         }
       });
 

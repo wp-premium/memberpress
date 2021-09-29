@@ -11,6 +11,13 @@ class MeprUtils {
     return '';
   }
 
+  public static function format_stripe_currency($amount) {
+    // Handle zero decimal currencies in Stripe
+    $amount = (MeprStripeGateway::is_zero_decimal_currency())?MeprUtils::format_float($amount, 0):MeprUtils::format_float(($amount * 100), 0);
+
+    return $amount;
+  }
+
   /**
    * Determines whether the user is on a MemberPress admin page.
    *
