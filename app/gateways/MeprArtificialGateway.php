@@ -137,11 +137,10 @@ class MeprArtificialGateway extends MeprBaseRealGateway {
       }
       else if (!$usr->signup_notice_sent) {
         MeprUtils::send_notices($txn, null, 'MeprAdminSignupEmail');
+        MeprUtils::send_notices($txn, null, 'MeprAdminNewOneOffEmail');
         $usr->signup_notice_sent = true;
         $usr->store();
       }
-
-      MeprUtils::send_notices($txn, null, 'MeprAdminNewOneOffEmail');
 
       MeprEvent::record('member-signup-completed', $usr, (object)$txn->rec);
     }

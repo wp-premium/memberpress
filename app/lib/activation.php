@@ -17,6 +17,7 @@ if(!$mepr_options->setup_complete) {
   }
 
   $mepr_options->setup_complete = 1;
+  $mepr_options->activated_timestamp = time();
   $mepr_options->store(false);
 }
 

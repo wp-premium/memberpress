@@ -137,4 +137,13 @@ jQuery(document).ready(function($) {
       }
     })
   });
+
+  $('#mepAdminHeaderNotifications').on('click', function(e) {
+    e.preventDefault();
+    $('#mepr-notifications').toggleClass('visible');
+  });
+  $('#meprNotificationsClose').on('click', function(e) {
+    e.preventDefault();
+    $('#mepr-notifications').removeClass('visible');
+  });
 });

@@ -887,6 +887,9 @@ class MeprStripeGateway extends MeprBaseRealGateway {
 
           $txn->store();
 
+          // Reload the subscription in case it was modified while storing the transaction
+          $sub = new MeprSubscription($sub->id);
+
           //If first payment fails, Stripe will not set up the subscription, so we need to mark it as cancelled in MP
           if($sub->txn_count == 0 && !($sub->trial && $sub->trial_amount == 0.00)) {
             $sub->status = MeprSubscription::$cancelled_str;

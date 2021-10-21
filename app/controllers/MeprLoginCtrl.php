@@ -159,7 +159,7 @@ class MeprLoginCtrl extends MeprBaseCtrl {
       MeprUser::validate_login($_POST, array())
     );
 
-    $login = sanitize_text_field( $_POST['log'] );
+    $login = stripcslashes(sanitize_text_field( $_POST['log'] )); //Have to do this for apostrophes in emails, cuz apparently that is a thing.
 
     if(is_email($login)) {
       $user = get_user_by('email', $login);

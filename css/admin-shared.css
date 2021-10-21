@@ -568,8 +568,26 @@ table.mepr-addons-table tr th {
   height: 36px;
 }
 
-#wpcontent #mp-admin-header a.mp-support-button {
+#wpcontent #mp-admin-header .mp-admin-header-actions {
+  display: flex;
   float: right;
+}
+
+#wpcontent #mp-admin-header a.mp-support-button {
+  margin-right: 10px;
+}
+
+.mepr-notifications-button {
+  position: relative;
+}
+
+.mepr-notifications-button:hover {
+  cursor: pointer;
+}
+
+.mepr-notifications-button .mepr-notifications-count {
+  top: -10px;
+  right: -10px;
 }
 
 .mepr-account-connected {

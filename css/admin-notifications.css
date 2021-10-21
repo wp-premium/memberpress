@@ -1,0 +1,257 @@
+#mepr-notifications {
+  position: fixed;
+  min-height: 48px;
+  margin: 0 0 14px 0;
+  top: 0;
+  width: 100%;
+  max-width: 440px;
+  max-height: 100vh;
+  overflow-y: scroll;
+  background: #FFFFFF;
+  box-shadow: 0px 5px 15px #0000000D;
+  transform: translate3d(100%, 0, 0);
+  transition: transform .3s ease-in-out;
+  z-index: -9;
+  visibility: hidden;
+  right: -9999999999px;
+}
+
+#mepr-notifications.visible {
+  transform: translate3d(0, 0, 0);
+  z-index: 9999;
+  visibility: visible;
+  right: 0;
+}
+
+.admin-bar #mepr-notifications {
+  top: 32px;
+  max-height: calc( 100vh - 32px );
+}
+
+#mepr-notifications * {
+  box-sizing: border-box;
+}
+
+#mepr-notifications .mepr-notifications-top-title {
+  background-color: #2679c1;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+#mepr-notifications .mepr-notifications-top-title h3 {
+  color: #fff;
+}
+
+#mepr-notifications .mepr-notifications-top-title > div {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#mepr-notifications .mepr-notifications-top-title svg {
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+#mepr-notifications .mepr-notifications-top-title .actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#mepr-notifications .mepr-notifications-top-title .actions a {
+  color: #fff;
+  margin-right: 10px;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+#mepr-notifications .mepr-notifications-top-title .actions a.close {
+  text-decoration: none;
+  margin-right: 0;
+}
+
+#mepr-notifications .mepr-notifications-top-title .actions a.close svg {
+  margin-right: 0;
+}
+
+#mepr-notifications .mepr-notification-icon-title {
+  display: flex;
+  align-items: center;
+}
+
+#mepr-notifications .mepr-notification-icon-title img {
+  margin-right: 10px;
+  max-width: 32px;
+}
+
+#mepr-notifications .mepr-notification-icon-title time {
+  margin-left: auto;
+  font-size: 13px;
+  color: #7f899f;
+  min-width: 100px;
+  text-align: right;
+}
+
+#mepr-notifications .mepr-notifications-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(204, 208, 212, 0.5);
+}
+
+#mepr-notifications .dismiss-all {
+  text-decoration: underline;
+  color: #99a1b3;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+#mepr-notifications .mepr-notifications-header-bell {
+  display: flex;
+  align-items: center;
+}
+
+#mepr-notifications .mepr-notifications-header .mepr-notifications-bell {
+  position: relative;
+  top: 2px;
+  margin-right: 10px;
+}
+
+#mepr-notifications .mepr-notifications-header .mepr-notifications-bell svg {
+  max-width: 30px;
+}
+
+#mepr-notifications .mepr-notifications-header .mepr-notifications-title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #23282D;
+}
+
+.mepr-notifications-count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #eb5757;
+  color: #fff;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 10px;
+}
+
+#mepr-notifications .dismissed-messages,
+#mepr-notifications #viewActive {
+  display: none;
+}
+
+#mepr-notifications .dismissed-messages .mepr-notice-dismiss {
+  display: none;
+}
+
+#mepr-notifications .mepr-notifications-header.single-digit .mepr-notifications-count {
+  font-size: 12px;
+}
+
+#mepr-notifications .mepr-notifications-body {
+  position: relative;
+  padding: 16px;
+}
+
+#mepr-notifications .mepr-notifications-messages {
+
+}
+
+#mepr-notifications .mepr-notifications-messages .mepr-notifications-message {
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  position: relative;
+  border-bottom: 1px solid rgba(204, 208, 212, 0.5);
+}
+
+#mepr-notifications .mepr-notifications-messages .active-messages .mepr-notifications-message:last-of-type,
+#mepr-notifications .mepr-notifications-messages .dismissed-messages .mepr-notifications-message:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+#mepr-notifications .mepr-notifications-messages .mepr-notifications-title {
+  font-weight: bold;
+  font-size: 17px;
+  line-height: 17px;
+  margin: 0;
+  color: #444;
+}
+
+#mepr-notifications .mepr-notifications-messages .mepr-notifications-content {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  margin: 8px 0 41px 0;
+  color: #777777;
+}
+
+#mepr-notifications .mepr-notifications-messages .mepr-notifications-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+#mepr-notifications .mepr-notifications-messages .mepr-notifications-buttons {
+  margin: -30px 80px 0 0;
+  display: flex;
+  align-items: center;
+}
+
+#mepr-notifications .mepr-notifications-messages .mepr-notifications-buttons a {
+  margin: 0 10px 0 0;
+  min-height: unset;
+}
+
+.mepr-notifications-buttons button.mepr-notice-dismiss {
+  font-size: 13px;
+  color: #7f899f;
+  background: none;
+  padding: 0;
+  border: 0;
+}
+
+#mepr-notifications .mepr-notifications-messages .mepr-notifications-buttons button.mepr-notice-dismiss:hover {
+  cursor: pointer;
+}
+
+#mepr-notifications .mepr-notifications-messages .mepr-notifications-buttons button.mepr-notice-dismiss[disabled] {
+  cursor: not-allowed;
+}
+
+@media screen and (max-width: 768px) {
+  #mepr-notifications .mepr-notifications-messages {
+    padding: 15px 50px 20px 16px;
+  }
+  #mepr-notifications .mepr-notifications-messages .mepr-notifications-message .mepr-notifications-title {
+    margin: 0 30px 0 0;
+    line-height: 22px;
+  }
+  #mepr-notifications .mepr-notifications-messages .mepr-notifications-message .mepr-notifications-content {
+    font-size: 16px;
+    line-height: 22px;
+  }
+  #mepr-notifications .mepr-notifications-messages .mepr-notifications-message .mepr-notifications-buttons {
+    margin: -30px 80px 0 0;
+  }
+  #mepr-notifications .mepr-notifications-messages .mepr-notifications-message .mepr-notifications-buttons a {
+    margin: 0;
+    display: table;
+  }
+  #mepr-notifications .mepr-notifications-messages .mepr-notifications-message .mepr-notifications-buttons .button-secondary {
+    margin-top: 6px;
+  }
+}

@@ -171,6 +171,10 @@ class MeprOptions {
     else
       $this->setup_complete = 1;
 
+    if( !isset($this->activated_timestamp) ) {
+      $this->activated_timestamp = time();
+    }
+
     if(!isset($this->currency_code))
       $this->currency_code = 'USD';
 

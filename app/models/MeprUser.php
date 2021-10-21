@@ -954,6 +954,7 @@ class MeprUser extends MeprBaseModel {
 
   public static function validate_login($params, $errors) {
     extract($params);
+    $log = stripcslashes($log); //necessary to allow apostrophes in email addresses. Yeah, I didn't know that was a thing either.
 
     if(empty($log)) {
       $errors[] = __('Username must not be blank', 'memberpress');
@@ -2548,11 +2549,6 @@ class MeprUser extends MeprBaseModel {
                )
           FROM {$mepr_db->transactions} AS t
          WHERE t.user_id = u.ID
-           AND (
-             t.expires_at > %s
-             OR t.expires_at = %s
-             OR t.expires_at IS NULL
-           )
            AND ( (
                 t.txn_type IN (%s,%s,%s,%s)
                 AND t.status=%s
@@ -2562,8 +2558,6 @@ class MeprUser extends MeprBaseModel {
              )
            )
       )",
-      MeprUtils::db_now(),
-      MeprUtils::db_lifetime(),
       MeprTransaction::$payment_str,
       MeprTransaction::$sub_account_str,
       MeprTransaction::$woo_txn_str,

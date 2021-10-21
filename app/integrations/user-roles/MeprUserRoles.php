@@ -7,6 +7,7 @@ class MeprUserRoles  {
   public function __construct() {
     add_action('mepr-txn-store',                array($this, 'process_status_changes'));
     add_action('mepr-txn-expired',              array($this, 'process_status_changes'), 10, 2);
+    add_action('mepr-account-is-active',        array($this, 'process_status_changes'));
     add_action('mepr_post_delete_transaction',  array($this, 'process_destroy_txn'), 10, 3);
     add_action('mepr-product-advanced-metabox', array($this, 'display_product_override'));
     add_action('mepr-product-save-meta',        array($this, 'save_product_override'));

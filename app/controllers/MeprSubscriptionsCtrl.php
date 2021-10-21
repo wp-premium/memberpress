@@ -582,7 +582,9 @@ class MeprSubscriptionsCtrl extends MeprBaseCtrl
       $status = (isset($_REQUEST['status'])?$_REQUEST['status']:'all');
       $gateway = (isset($_REQUEST['gateway'])?$_REQUEST['gateway']:'all');
 
-      $prds = MeprCptModel::all('MeprProduct');
+      $args = array('orderby' => 'title',
+                    'order'   => 'ASC' );
+      $prds = MeprCptModel::all('MeprProduct', false, $args);
       $gateways = $mepr_options->payment_methods();
 
       MeprView::render('/admin/subscriptions/search_box', compact('membership','status','prds','gateways','gateway'));
