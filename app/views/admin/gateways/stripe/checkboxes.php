@@ -16,6 +16,13 @@ if ( ! isset( $_GET['display-keys'] ) && ! isset( $_COOKIE['mepr_stripe_display_
       <td><input class="mepr-stripe-testmode" data-integration="<?php echo $id; ?>" type="checkbox" name="<?php echo $test_mode_str; ?>"<?php echo checked($test_mode); ?> <?php disabled((defined('MEMBERPRESS_STRIPE_TESTING') && MEMBERPRESS_STRIPE_TESTING == true));?> /></td>
       </td>
     </tr>
+    <tr valign="top">
+      <th scope="row"><label for="<?php echo $stripe_wallet_enabled_str ?>"><?php _e('Enable Google Pay and Apple Pay', 'memberpress'); ?></label></th>
+      <td>
+          <input class="mepr-stripe-no-wallet" data-integration="<?php echo $id; ?>" type="checkbox" name="<?php echo $stripe_wallet_enabled_str; ?>"<?php echo checked($stripe_wallet_enabled); ?> />
+      </td>
+      </td>
+    </tr>
   <?php } ?>
     <tr valign="top" <?php echo MeprStripeGateway::is_stripe_connect( $id ) || empty( $live_public_key ) ? 'style="display:none;"' : ''; ?>>
       <th scope="row"><label for="<?php echo $force_ssl_str; ?>"><?php _e('Force SSL', 'memberpress'); ?></label></th>

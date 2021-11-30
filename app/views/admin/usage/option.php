@@ -15,6 +15,18 @@
         <input type="checkbox" name="mepr_disable_senddata" id="mepr_disable_senddata" <?php checked($disable_senddata); ?> />
       </td>
     </tr>
+    <tr valign="top">
+      <th scope="row">
+        <label for="mepr_hide_announcements"><?php _e('Hide Announcements', 'memberpress'); ?></label>
+        <?php MeprAppHelper::info_tooltip(
+          'mepr-announcements',
+          __('Hide Announcements', 'memberpress'),
+          __('Enabling this option will hide announcements/notifications from MemberPress.', 'memberpress')); ?>
+      </th>
+      <td>
+        <input type="checkbox" name="mepr_hide_announcements" id="mepr_hide_announcements" <?php checked($hide_announcements); ?>>
+      </td>
+    </tr>
   </tbody>
 </table>
 

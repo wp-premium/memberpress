@@ -60,7 +60,7 @@ class MeprAppCtrl extends MeprBaseCtrl {
           <a class="mp-support-button button button-primary" href="<?php echo admin_url('admin.php?page=memberpress-support'); ?>"><?php _e('Support', 'memberpress')?></a>
           <button id="mepAdminHeaderNotifications" class="mepr-notifications-button">
             <svg width="22" height="14" viewBox="0 0 22 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.6944 6.5625C21.8981 6.85417 22 7.18229 22 7.54687V12.25C22 12.7361 21.8218 13.1493 21.4653 13.4896C21.1088 13.8299 20.6759 14 20.1667 14H1.83333C1.32407 14 0.891204 13.8299 0.534722 13.4896C0.178241 13.1493 0 12.7361 0 12.25V7.54687C0 7.18229 0.101852 6.85417 0.305556 6.5625L4.35417 0.765625C4.45602 0.644097 4.58333 0.522569 4.73611 0.401042C4.91435 0.279514 5.10532 0.182292 5.30903 0.109375C5.51273 0.0364583 5.7037 0 5.88194 0H16.1181C16.3981 0 16.6782 0.0850694 16.9583 0.255208C17.2639 0.401042 17.4931 0.571181 17.6458 0.765625L21.6944 6.5625ZM6.1875 2.33333L2.94097 7H7.63889L8.86111 9.33333H13.1389L14.3611 7H19.059L15.8125 2.33333H6.1875Z" fill="#2679C1"></path></svg>
-            <?php if ( ! empty( $notifications ) && count( $notifications ) > 0 ) : ?>
+            <?php if ( MeprNotifications::has_access() && ! empty( $notifications ) && count( $notifications ) > 0 ) : ?>
               <span id="meprAdminHeaderNotificationsCount" class="mepr-notifications-count"><?php echo count( $notifications ); ?></span>
             <?php endif; ?>
           </button>
@@ -391,10 +391,6 @@ class MeprAppCtrl extends MeprBaseCtrl {
     $txn_ctrl = new MeprTransactionsCtrl();
     $sub_ctrl = new MeprSubscriptionsCtrl();
     $menu_title = 'MemberPress';
-
-    if ( MeprUtils::is_black_friday_time() && empty( get_option( 'mp_2020_bf_dismissed' ) ) ) {
-      $menu_title .= '<span class="memberpress-menu-pulse green"></span>';
-    }
 
     add_menu_page('MemberPress', $menu_title, $capability, 'memberpress', 'MeprAppCtrl::toplevel_menu_route', MEPR_IMAGES_URL."/memberpress-16@2x.png", 775677);
 

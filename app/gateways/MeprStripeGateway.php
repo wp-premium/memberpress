@@ -57,6 +57,7 @@ class MeprStripeGateway extends MeprBaseRealGateway {
         'force_ssl' => false,
         'debug' => false,
         'test_mode' => false,
+        'stripe_wallet_enabled' => true,
         'stripe_checkout_enabled' => false,
         'churn_buster_enabled' => false,
         'churn_buster_uuid' => '',
@@ -206,10 +207,10 @@ class MeprStripeGateway extends MeprBaseRealGateway {
    */
   public function create_checkout_session(
       $txn,
-      $sub = null,
       $product,
       $usr,
-      $payment_method_id
+      $payment_method_id,
+      $sub = null
   ) {
     $mepr_options = MeprOptions::fetch();
     $current_user = MeprUtils::get_currentuserinfo();
@@ -1920,16 +1921,18 @@ class MeprStripeGateway extends MeprBaseRealGateway {
             <label><?php _ex('Credit Card', 'ui', 'memberpress'); ?></label>
             <span role="alert" class="mepr-stripe-card-errors"></span>
           </div>
-          <div class="mepr-stripe-card-element" data-stripe-public-key="<?php echo esc_attr($this->settings->public_key); ?>" data-payment-method-id="<?php echo esc_attr($this->settings->id); ?>" data-locale-code="<?php echo $mepr_options->language_code; ?>">
+          <div class="mepr-stripe-card-element" data-stripe-public-key="<?php echo esc_attr($this->settings->public_key); ?>" data-payment-method-id="<?php echo esc_attr($this->settings->id); ?>" data-locale-code="<?php echo esc_attr(self::get_locale_code()); ?>">
             <!-- a Stripe Element will be inserted here. -->
           </div>
 
+          <?php if($this->settings->stripe_wallet_enabled == 'on') { ?>
           <div class="mepr-stripe-payment-request-wrapper">
             <p class="mepr-stripe-payment-request-option"><?php echo esc_html(__('Or', 'memberpress')); ?></p>
             <div id="mepr-stripe-payment-request-element" style="max-width: 300px" class="mepr-stripe-payment-request-element" data-stripe-public-key="<?php echo esc_attr($this->settings->public_key); ?>" data-payment-method-id="<?php echo esc_attr($this->settings->id); ?>" data-locale-code="<?php echo $mepr_options->language_code; ?>" data-currency-code="<?php echo $mepr_options->currency_code; ?>" data-total-text="<?php echo esc_attr(__('Total', 'memberpress')); ?>">
               <!-- a Stripe Payment Request Element will be inserted here. -->
             </div>
           </div>
+          <?php } ?>
         </div>
 
         <?php MeprHooks::do_action('mepr-stripe-payment-form', $txn); ?>
@@ -1969,6 +1972,7 @@ class MeprStripeGateway extends MeprBaseRealGateway {
     $service_account_name = stripslashes(trim($this->settings->service_account_name));
     $churn_buster_enabled = ($this->settings->churn_buster_enabled == 'on' or $this->settings->churn_buster_enabled == true);
     $stripe_checkout_enabled = $this->settings->stripe_checkout_enabled == 'on';
+    $stripe_wallet_enabled = $this->settings->stripe_wallet_enabled == 'on' or $this->settings->stripe_wallet_enabled == true;
     $churn_buster_uuid    = trim($this->settings->churn_buster_uuid);
 
     $test_secret_key_str      = "{$mepr_options->integrations_str}[{$this->id}][api_keys][test][secret]";
@@ -1983,6 +1987,7 @@ class MeprStripeGateway extends MeprBaseRealGateway {
     $service_account_name_string= "{$mepr_options->integrations_str}[{$this->id}][service_account_name]";
     $churn_buster_enabled_str = "{$mepr_options->integrations_str}[{$this->id}][churn_buster_enabled]";
     $stripe_checkout_enabled_str = "{$mepr_options->integrations_str}[{$this->id}][stripe_checkout_enabled]";
+    $stripe_wallet_enabled_str = "{$mepr_options->integrations_str}[{$this->id}][stripe_wallet_enabled]";
     $churn_buster_uuid_str    = "{$mepr_options->integrations_str}[{$this->id}][churn_buster_uuid]";
 
     $account_email = get_option( 'mepr_authenticator_account_email' );
@@ -2010,11 +2015,16 @@ class MeprStripeGateway extends MeprBaseRealGateway {
   public function validate_options_form($errors) {
     $mepr_options = MeprOptions::fetch();
 
+    if ( ! isset( $_REQUEST[ $mepr_options->integrations_str ][ $this->id ]['stripe_wallet_enabled'] ) ) {
+      $_POST[ $mepr_options->integrations_str ][ $this->id ]['stripe_wallet_enabled'] = false;
+    }
+
     $testmode = isset($_REQUEST[$mepr_options->integrations_str][$this->id]['test_mode']);
     $testmodestr  = $testmode ? 'test' : 'live';
 
     // Bail if connecting to a Stripe Connect account, since the keys won't be set at this time
-    if ( isset( $_REQUEST['stripe_connect_account_number'] ) ) {
+    // Also, bail if the payment method is not currently connected.
+    if ( isset( $_REQUEST['stripe_connect_account_number'] ) || self::stripe_connect_status( $this->id ) == 'not-connected' ) {
       return $errors;
     }
 
@@ -3511,5 +3521,72 @@ class MeprStripeGateway extends MeprBaseRealGateway {
     }
 
     return MeprUtils::is_zero_decimal_currency();
+  }
+
+  /**
+   * Get the locale code
+   *
+   * Converts the configured MP language code into a Stripe-compatible locale code
+   *
+   * @see https://stripe.com/docs/js/appendix/supported_locales
+   * @return string
+   */
+  public static function get_locale_code() {
+    $mepr_options = MeprOptions::fetch();
+    $locale_code = 'auto';
+
+    $locales = array(
+      'US' => 'en',
+      'AE' => 'ar',
+      'AR' => 'es-419',
+      'AU' => 'en',
+      'BG' => 'bg',
+      'BR' => 'pt-BR',
+      'CH' => 'auto',
+      'CN' => 'zh',
+      'CO' => 'es-419',
+      'CZ' => 'cs',
+      'DE' => 'de',
+      'DK' => 'da',
+      'EN' => 'en',
+      'ES' => 'es',
+      'FI' => 'fi',
+      'FR' => 'fr',
+      'GB' => 'en-GB',
+      'HE' => 'he',
+      'HR' => 'hr',
+      'HU' => 'hu',
+      'ID' => 'id',
+      'IS' => 'auto',
+      'IT' => 'it',
+      'JP' => 'ja',
+      'KR' => 'ko',
+      'MS' => 'en',
+      'MX' => 'es-419',
+      'NL' => 'nl',
+      'NO' => 'nb',
+      'PE' => 'es-419',
+      'PH' => 'fil',
+      'PL' => 'pl',
+      'PT' => 'pt',
+      'RO' => 'ro',
+      'RU' => 'ru',
+      'SE' => 'sv',
+      'SK' => 'sk',
+      'SR' => 'nl',
+      'SW' => 'auto',
+      'TH' => 'th',
+      'TN' => 'ar',
+      'TR' => 'tr',
+      'TW' => 'zh-TW',
+      'VI' => 'vi',
+      'ZA' => 'auto',
+    );
+
+    if(isset($locales[$mepr_options->language_code])) {
+      $locale_code = $locales[$mepr_options->language_code];
+    }
+
+    return MeprHooks::apply_filters('mepr_stripe_locale_code', $locale_code);
   }
 }

@@ -57,17 +57,17 @@ jQuery(document).ready(function() {
     }
   }
   mepr_check();
-  jQuery('.mepr-password').keyup(function() {
+  jQuery('.mepr-password').on('keyup paste', function() {
     mepr_score_it(jQuery(this));
   });
 
   //Account page new password form
-  jQuery('.mepr-new-password').keyup(function() {
+  jQuery('.mepr-new-password').on('keyup paste', function() {
     mepr_score_it(jQuery(this));
   });
 
   //Reset password page form (login page)
-  jQuery('.mepr-forgot-password').keyup(function() {
+  jQuery('.mepr-forgot-password').on('keyup paste', function() {
     mepr_score_it(jQuery(this));
   });
 });

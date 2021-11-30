@@ -256,10 +256,10 @@ class MeprStripeCtrl extends MeprBaseCtrl
 
         $pm->create_checkout_session(
           $txn,
-          $sub,
           $product,
           $usr,
-          $stripe_payment_method_id
+          $stripe_payment_method_id,
+          $sub
         );
 
         return;

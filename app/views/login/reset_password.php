@@ -7,14 +7,24 @@
     <div class="mp-form-row mepr_password">
       <div class="mp-form-label">
         <label for="mepr_user_password"><?php _ex('Password', 'ui', 'memberpress'); ?>:</label>
+        <div class="mp-hide-pw">
+          <input type="password" name="mepr_user_password" id="mepr_user_password" class="mepr-form-input mepr-forgot-password" tabindex="700" />
+          <button type="button" class="button button-secondary mp-hide-pw hide-if-no-js" data-toggle="0" aria-label="<?php esc_attr_e( 'Show password', 'memberpress' ); ?>">
+            <span class="dashicons dashicons-visibility" aria-hidden="true"></span>
+          </button>
+        </div>
       </div>
-      <input type="password" name="mepr_user_password" id="mepr_user_password" class="mepr-form-input mepr-forgot-password" tabindex="700" />
     </div>
     <div class="mp-form-row mepr_password_confirm">
       <div class="mp-form-label">
         <label for="mepr_user_password_confirm"><?php _ex('Password Confirmation', 'ui', 'memberpress'); ?>:</label>
+        <div class="mp-hide-pw">
+        <input type="password" name="mepr_user_password_confirm" id="mepr_user_password_confirm" class="mepr-form-input mepr-forgot-password-confirm" tabindex="710"/>
+          <button type="button" class="button button-secondary mp-hide-pw hide-if-no-js" data-toggle="0" aria-label="<?php esc_attr_e( 'Show password', 'memberpress' ); ?>">
+            <span class="dashicons dashicons-visibility" aria-hidden="true"></span>
+          </button>
+        </div>
       </div>
-      <input type="password" name="mepr_user_password_confirm" id="mepr_user_password_confirm" class="mepr-form-input mepr-forgot-password-confirm" tabindex="710"/>
     </div>
     <?php MeprHooks::do_action('mepr-reset-password-after-password-fields'); ?>
 

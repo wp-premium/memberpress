@@ -101,7 +101,7 @@
         self.$form.find('.mepr-submit').trigger('click');
         self.allowResubmission();
 
-        if (self.$form.find('.cc-error').filter(function() {
+        if (self.$form.find('.cc-error, .invalid').filter(function() {
               return $(this).css('display') != 'none';
             }).length > 0) {
           event.preventDefault();

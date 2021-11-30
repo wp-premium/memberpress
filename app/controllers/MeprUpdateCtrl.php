@@ -30,16 +30,17 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
       die();
     }
 
-    update_option( 'mp_2020_bf_dismissed', true );
+    update_option( 'mp_2021_bf_dismissed', true );
     wp_send_json_success( array(), 201 );
   }
 
   public static function bf_upgrade_notices() {
+
     if ( ! MeprUtils::is_memberpress_admin_page() ) {
       return;
     }
 
-    if ( ! MeprUtils::is_black_friday_time() || ! empty( get_option( 'mp_2020_bf_dismissed' ) ) ) {
+    if ( ! MeprUtils::is_black_friday_time() || ! empty( get_option( 'mp_2021_bf_dismissed' ) ) ) {
       return;
     }
 
@@ -54,38 +55,40 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
       }
     }
 
-    $link = 'https://memberpress.com/plans/pricing/';
+    $link = 'https://memberpress.com/bf2021/bf-alert/lic-no';
     $heading = '📢 Black Friday is here!';
-    $message = "Get MemberPress TODAY for up to $250 OFF. PLUS enter to win a 27\" iMac w/ Retina 5K display. Don't wait!";
+    $message = "Get MemberPress TODAY for up to $300 OFF. PLUS enter to win a 14\" MacBook Pro M1. Don't wait!";
     $button_text = 'Get MemberPress 👈';
 
     if ( ! empty( $li['license_key']['expires_at'] ) && strtotime( $li['license_key']['expires_at'] ) < time() ) {
       // Expired
-      $message = "RENEW MemberPress TODAY for up to $250 OFF. PLUS enter to win a 27\" iMac w/ Retina 5K display. Don't wait!";
+      $message = "RENEW MemberPress TODAY for up to $300 OFF. PLUS enter to win a 14\" MacBook Pro M1. Don't wait!";
       $button_text = 'Renew MemberPress 👈';
+      $link = 'https://memberpress.com/bf2021/bf-alert/lic-exp';
     } else {
       // Active
       switch ( $li['product_slug'] ) {
         case 'memberpress-basic':
-          $message = "UPGRADE to MemberPress Plus or Pro TODAY & SAVE up to $250 OFF. And enter to win a 27\" iMac w/ Retina 5K display. Don't wait!";
+        case 'business':
+          $message = "UPGRADE to MemberPress Plus or Pro TODAY & SAVE up to $300 OFF. And enter to win a 14\" MacBook Pro M1. Don't wait!";
           $button_text = 'Upgrade MemberPress 👈';
+          $link = 'https://memberpress.com/bf2021/bf-alert/lic-basic';
           break;
 
         case 'memberpress-plus':
-          $message = "UPGRADE to MemberPress PRO TODAY & SAVE up to $250 OFF. PLUS enter to win a 27\" iMac w/ Retina 5K display. Don't wait!";
+        case 'memberpress-plus-2':
+          $message = "UPGRADE to MemberPress PRO TODAY & SAVE up to $300 OFF. PLUS enter to win a 14\" MacBook Pro M1. Don't wait!";
           $button_text = 'Upgrade MemberPress 👈';
+          $link = 'https://memberpress.com/bf2021/bf-alert/lic-plus';
           break;
 
         case 'memberpress-pro':
-          $message = "Upgrade to a 2 or 3 year MemberPress Pro License TODAY & SAVE up to $250 OFF. PLUS enter to win a 27\" iMac w/ Retina 5K display!";
-          $button_text = 'Upgrade MemberPress 👈';
-          $heading = '📢 Black Friday is here!';
-          break;
-
         case 'memberpress-pro-5':
-          $message = "Sign up for another 2 or 3 year MemberPress Pro License & SAVE up to $250 OFF. PLUS enter to win a 27\" iMac w/ Retina 5K display!";
-          $button_text = 'Renew MemberPress 👈';
-          $heading = '📢 It\'s Black Friday!';
+        case 'developer':
+          $message = "ENTREPRENEUR on your list? Buy a MemberPress GIFT subscription + PRINTABLE CERTIFICATE & save up to $300! PLUS enter to win a MacBook Pro!";
+          $button_text = 'Buy a MemberPress Gift Certificate 👈';
+          $heading = '📢 Black Friday is here!';
+          $link = 'https://memberpress.com/bf2021/bf-alert/lic-pro';
           break;
 
         default:
@@ -464,7 +467,7 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
           set_site_transient(
             'mepr_license_info',
             $license_info,
-            MeprUtils::hours(12)
+            MeprUtils::hours(72) // 3 days
           );
         }
         catch(Exception $e) {

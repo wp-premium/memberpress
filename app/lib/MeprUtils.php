@@ -2253,7 +2253,7 @@ class MeprUtils {
    * @return boolean
    */
   public static function is_black_friday_time() {
-    // Currently runs between November 23 and December 7, 2020
-    return time() > strtotime( '2020-11-23 00:00:00 America/Denver' ) && time() < strtotime( '2020-12-07 00:00:00 America/Denver' );
+    // Currently runs between November 22 and December 3, 2021
+    return time() > strtotime( '2021-11-22 00:00:00 America/Denver' ) && time() < strtotime( '2021-12-04 00:00:00 America/Denver' );
   }
 } // End class

@@ -148,7 +148,7 @@ if(!empty($subscriptions)) {
             <td data-label="<?php _ex('Actions', 'ui', 'memberpress'); ?>">
                 <div class="mepr-account-actions">
                   <?php
-                  if($txn != false && $txn instanceof MeprTransaction && ($txn->is_sub_account() || $txn->txn_type == MeprTransaction::$fallback_str)) {
+                  if($txn != false && $txn instanceof MeprTransaction && $txn->is_sub_account()) {
                     echo '--';
                   }
                   else {

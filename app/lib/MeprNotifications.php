@@ -60,8 +60,7 @@ class MeprNotifications {
 
     if (
       MeprUtils::is_mepr_admin()
-      // TODO: Add a MemberPress Setting?
-      // && ! mepr_setting( 'hide-announcements', false )
+      && ! get_option( 'mepr_hide_announcements' )
     ) {
       $access = true;
     }
@@ -142,6 +141,14 @@ class MeprNotifications {
    */
   public function verify( $notifications ) {
 
+    $mepr_options = MeprOptions::fetch();
+    $license = get_site_transient( 'mepr_license_info' );
+
+    if ( empty( $license['license_key'] ) ) {
+      MeprUpdateCtrl::manually_queue_update();
+      $license = get_site_transient( 'mepr_license_info' );
+    }
+
     $data = [];
 
     if ( ! is_array( $notifications ) || empty( $notifications ) ) {
@@ -159,6 +166,16 @@ class MeprNotifications {
 
       // Ignore if license type does not match.
       if ( ! in_array( MEPR_EDITION, $notification['plans'], true ) ) {
+        continue;
+      }
+
+      // Ignore if segment is for expired licenses, but license is current
+      if ( 'expired' === $notification['segment'] && ! empty( $mepr_options->mothership_license ) && ! empty( $license['license_key']['expires_at'] ) && strtotime( $license['license_key']['expires_at'] ) > time() ) {
+        continue;
+      }
+
+      // Ignore if segment is for inactive licenses, but license is active
+      if ( 'inactive' === $notification['segment'] && ! empty( $mepr_options->mothership_license ) && ! empty( $license['license_key'] ) ) {
         continue;
       }
 

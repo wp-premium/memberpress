@@ -898,6 +898,11 @@ class MeprUser extends MeprBaseModel {
       add_filter( 'upload_dir', 'MeprUsersHelper::get_upload_dir' );
       add_filter( 'upload_mimes', 'MeprUsersHelper::get_allowed_mime_types' );
       foreach($_FILES as $name => $file){
+        // If name or size of the file is empty, just skip trying to process it.
+        if(empty($file['name']) || empty($file['size'])) {
+          continue;
+        }
+
         $pathinfo = pathinfo($file['name']);
         $filename = sanitize_file_name( $pathinfo['filename'] .'_'. uniqid() .'.'. $pathinfo['extension'] );
         $file = wp_upload_bits( $filename, null, @file_get_contents( $file['tmp_name'] ) );
@@ -1743,6 +1748,7 @@ class MeprUser extends MeprBaseModel {
     // Include custom fields in results?
     if($include_fields) {
       $custom_fields = array_merge($mepr_options->address_fields, $mepr_options->custom_fields);
+
       foreach($custom_fields as $i => $field) {
         $col = "pm_col_{$i}";
         $cols[$field->field_key] = $wpdb->prepare("
@@ -1759,6 +1765,26 @@ class MeprUser extends MeprBaseModel {
           ",
           $field->field_key
         );
+      }
+
+      if(get_option('mepr_calculate_taxes') && get_option('mepr_vat_enabled')) {
+        $vat_id_keys = $vat_id_keys = array('mepr_vat_customer_type', 'mepr_vat_number');
+        foreach($vat_id_keys as $vat_id_key) {
+          $cols[$vat_id_key] = $wpdb->prepare("
+            IFNULL(
+              (
+                SELECT meta_value
+                FROM {$wpdb->usermeta}
+                WHERE meta_key = %s
+                AND user_id = u.ID
+                LIMIT 1
+              ),
+              ''
+            )
+            ",
+            $vat_id_key
+          );
+        }
       }
 
       $stripe_customer_id_keys = $wpdb->get_col($wpdb->prepare(

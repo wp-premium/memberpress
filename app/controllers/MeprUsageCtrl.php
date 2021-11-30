@@ -85,11 +85,13 @@ class MeprUsageCtrl extends MeprBaseCtrl {
 
   public function display_options() {
     $disable_senddata = get_option('mepr_disable_senddata');
-    MeprView::render('admin/usage/option', compact('disable_senddata'));
+    $hide_announcements = get_option('mepr_hide_announcements');
+    MeprView::render('admin/usage/option', compact('disable_senddata', 'hide_announcements'));
   }
 
   public function save_options($params) {
     update_option('mepr_disable_senddata',isset($params['mepr_disable_senddata']));
+    update_option('mepr_hide_announcements', isset($params['mepr_hide_announcements']));
   }
 
   public function ajax_enable_or_disable_senddata() {

@@ -117,6 +117,8 @@ abstract class MeprBaseModel {
         $this->load_from_array($obj);
       }
     }
+
+    MeprHooks::do_action('mepr-model-initialized', $this);
   }
 
   public function get_values() {
