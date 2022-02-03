@@ -45,29 +45,32 @@ function mepr_score_it($el) {
   }
 }
 
-jQuery(document).ready(function() {
+jQuery(function($) {
   //Signup forms
   function mepr_check() {
     if(typeof zxcvbn !== 'undefined') {
-      if(jQuery('.mepr-password').length && jQuery('.mepr-password').val().length > 0) {
-        mepr_score_it(jQuery('.mepr-password'));
+      if($('.mepr-password').length && $('.mepr-password').val().length > 0) {
+        mepr_score_it($('.mepr-password'));
       }
     } else {
       setTimeout(mepr_check, 100);
     }
   }
   mepr_check();
-  jQuery('.mepr-password').on('keyup paste', function() {
-    mepr_score_it(jQuery(this));
+
+  var selectors = '.mepr-password, .mepr-new-password, .mepr-forgot-password';
+
+  document.body.addEventListener('keyup', function (e) {
+    if(e.target && e.target.matches && e.target.matches(selectors)) {
+      mepr_score_it($(e.target));
+    }
   });
 
-  //Account page new password form
-  jQuery('.mepr-new-password').on('keyup paste', function() {
-    mepr_score_it(jQuery(this));
-  });
-
-  //Reset password page form (login page)
-  jQuery('.mepr-forgot-password').on('keyup paste', function() {
-    mepr_score_it(jQuery(this));
+  document.body.addEventListener('paste', function (e) {
+    if(e.target && e.target.matches && e.target.matches(selectors)) {
+      e.preventDefault();
+      e.target.value = (e.clipboardData || window.clipboardData).getData('text');
+      mepr_score_it($(e.target));
+    }
   });
 });

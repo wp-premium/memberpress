@@ -24,6 +24,7 @@ class MeprSubscriptionsHelper {
         'subscr_date',
         'subscr_gateway',
         'subscr_next_billing_at',
+        'subscr_trial_end_date',
         'subscr_expires_at',
         'subscr_terms',
         'subscr_next_billing_amount',
@@ -57,6 +58,18 @@ class MeprSubscriptionsHelper {
     $cpn          = $sub->coupon();
     $sub_date     = MeprAppHelper::format_date($sub->created_at, '');
 
+    $trial_end_date = '';
+    if( $sub->trial && $sub->trial_days ) {
+      $txn = $sub->first_txn();
+      if( $txn ){
+        // Calculate Subs Trial end date.
+        $trial_end_ts   = strtotime( $txn->created_at ) + MeprUtils::days( $sub->trial_days );
+        if( $trial_end_ts ){
+          $trial_end_date = MeprAppHelper::format_date( gmdate('c', $trial_end_ts), '' );
+        }
+      }
+    }
+
     if($sub->expires_at == MeprUtils::db_lifetime()) {
       $expires_at = __('Never', 'memberpress');
     }
@@ -87,6 +100,7 @@ class MeprSubscriptionsHelper {
       'subscr_date'                 => $sub_date,
       'subscr_gateway'              => sprintf(__('%1$s (%2$s)', 'memberpress'), $pm->label, $pm->name),
       'subscr_next_billing_at'      => MeprAppHelper::format_date($sub->next_billing_at, ''),
+      'subscr_trial_end_date'       => $trial_end_date,
       'subscr_expires_at'           => $expires_at,
       'subscr_terms'                => preg_replace('~\$~', '\\\$', MeprSubscriptionsHelper::format_currency($sub)),
       'subscr_next_billing_amount'  => preg_replace('~\$~', '\\\$', MeprAppHelper::format_currency($next_bill_amt, true, false, true)),

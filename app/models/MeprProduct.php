@@ -715,14 +715,12 @@ class MeprProduct extends MeprCptModel implements MeprProductInterface {
     return false;
   }
 
-  public static function cleanup_db()
-  {
+  public static function cleanup_db() {
     global $wpdb;
     $date = time();
     $last_run = get_option(self::$last_run_str, 0); //Prevents all this code from executing on every page load
 
-    if(($date - $last_run) > 86400) //Runs once at most once a day
-    {
+    if(($date - $last_run) > 86400) { //Runs once at most once a day
       update_option(self::$last_run_str, $date);
       $sq1 = "SELECT ID
                 FROM {$wpdb->posts}
@@ -745,16 +743,16 @@ class MeprProduct extends MeprCptModel implements MeprProductInterface {
     }
   }
 
-  public function get_page_template()
-  {
-    if($this->use_custom_template)
+  public function get_page_template() {
+    if($this->use_custom_template) {
       return locate_template($this->custom_template);
-    else
-      return locate_template(self::template_search_path());
+    }
+
+    return null;
   }
 
-  public static function template_search_path()
-  {
+  /*
+  public static function template_search_path() {
     return array( 'page_memberpressproduct.php',
                   'single-memberpressproduct.php',
                   'page.php',
@@ -762,6 +760,7 @@ class MeprProduct extends MeprCptModel implements MeprProductInterface {
                   'single.php',
                   'index.php' );
   }
+  */
 
   public function payment_methods() {
     $mepr_options = MeprOptions::fetch();

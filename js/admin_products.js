@@ -410,6 +410,7 @@
           $('#_mepr_product_who_can_purchase-product_id')
             .find('option[value=nothing], option[value=subscribed-before], option[value=not-subscribed-before]')
             .hide();
+          $('#_mepr_product_who_can_purchase-product_id').val('anything');
         }else {
           $('#_mepr_product_who_can_purchase-product_id')
             .find('option[value=nothing], option[value=subscribed-before], option[value=not-subscribed-before]')

@@ -52,7 +52,7 @@ class MeprAppCtrl extends MeprBaseCtrl {
 
     if(MeprUtils::is_memberpress_admin_page()) {
       $option = get_option( 'mepr_notifications' );
-      $notifications = $option['feed'];
+      $notifications = ! empty($option) ? $option['feed'] : array();
       ?>
       <div id="mp-admin-header">
         <img class="mp-logo" src="<?php echo MEPR_IMAGES_URL . '/memberpress-logo-color.svg'; ?>" />

@@ -74,6 +74,8 @@ class MeprDb {
   public function upgrade() {
     global $wpdb;
 
+    $this->before_do_upgrade();
+
     //This line makes it safe to check this code during admin_init action.
     if($this->do_upgrade()) {
 
@@ -348,6 +350,7 @@ class MeprDb {
           suspended_sub_count bigint(20),
           cancelled_sub_count bigint(20),
           memberships longtext,
+          inactive_memberships longtext,
           last_login_id bigint(20),
           login_count bigint(20),
           total_spent decimal(16,2) DEFAULT 0,
@@ -1211,4 +1214,15 @@ class MeprDb {
     return !empty($count);
   }
 
+  /*
+   * Conditionally schedule cron jobs for database migration
+   * - If inactive_memberships column does not exist before upgrade, then schedule the cron job to populate the column in the members table
+   */
+  public function before_do_upgrade() {
+    global $wpdb;
+
+    if ( $this->table_exists($this->members) && !$this->column_exists( $this->members, 'inactive_memberships' ) && !wp_next_scheduled( 'mepr_migrate_members_table_015' ) ) {
+      wp_schedule_event( time() + MeprUtils::minutes(10), 'mepr_migrate_members_table_015_interval', 'mepr_migrate_members_table_015' );
+    }
+  }
 }

@@ -116,6 +116,8 @@
       $(obj).trigger('mepr-validate-input');
     };
 
+    window.mepr_validate_input = meprValidateInput;
+
     var meprUpdatePriceTerms = function (form) {
       var price_string = form.find('div.mepr_price_cell');
 
@@ -134,7 +136,8 @@
           mepr_address_zip: form.find('input[name="mepr-address-zip"]').val(),
           mepr_vat_number: form.find('input[name="mepr_vat_number"]').val(),
           mepr_vat_customer_type: form.find('input[name="mepr_vat_customer_type"]:checked').val(),
-          coupon_nonce: MeprSignup.coupon_nonce
+          coupon_nonce: MeprSignup.coupon_nonce,
+          mpca_corporate_account_id: form.find('input[name="mpca_corporate_account_id"]').val()
         }
       }
 
@@ -223,7 +226,7 @@
       else {
         var submittedTelInputs = document.querySelectorAll(".mepr-tel-input");
         for (var i = 0; i < submittedTelInputs.length; i++) {
-          var iti = intlTelInput(submittedTelInputs[i]);
+          var iti = window.intlTelInputGlobals.getInstance(submittedTelInputs[i]);
           submittedTelInputs[i].value = iti.getNumber();
         }
         form.find('.validation').addClass('passed');

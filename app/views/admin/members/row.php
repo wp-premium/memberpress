@@ -195,6 +195,20 @@ if(!empty($records)) {
           <td <?php echo $attributes; ?>><?php echo implode(', ', $titles); ?></td>
           <?php
           break;
+        case 'col_inactive_memberships':
+          $inactive_titles = array();
+          if(!empty($rec->inactive_memberships)) {
+            $ids = explode(',',$rec->inactive_memberships);
+
+            foreach($ids as $id) {
+              $membership = new MeprProduct($id);
+              $inactive_titles[] = $membership->post_title;
+            }
+          }
+          ?>
+          <td <?php echo $attributes; ?>><?php echo implode(', ', $inactive_titles); ?></td>
+          <?php
+          break;
         case 'col_total_spent':
           ?>
           <td <?php echo $attributes; ?>><?php echo MeprAppHelper::format_currency($rec->total_spent,true,false); ?></td>

@@ -103,7 +103,7 @@ class MeprSubscription extends MeprBaseMetaModel implements MeprProductInterface
       $this->cc_last4 = str_pad(trim($this->cc_last4), 4, '0', STR_PAD_LEFT);
       $this->validate_regex('/^\d{4}$/', $this->cc_last4, 'cc_last4');
     }
-    if(!empty($this->cc_exp_month)) { $this->validate_regex('/^\d{2}$/', trim($this->cc_exp_month), 'cc_exp_month'); }
+    if(!empty($this->cc_exp_month)) { $this->validate_regex('/^0?([1-9]|1[012])$/', trim($this->cc_exp_month), 'cc_exp_month'); }
     if(!empty($this->cc_exp_year)) { $this->validate_regex('/^\d{2}(\d{2})?$/', $this->cc_exp_year, 'cc_exp_year'); }
   }
 

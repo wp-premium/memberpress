@@ -26,8 +26,8 @@
     this.selectedPaymentMethod = null;
     this.paymentRequest = null;
     this.submitting = false;
-    this.validatingPaymentRequestButton = false;
     this.processingPaymentRequestButton = false;
+    this.paymentRequestPaymentMethodId = '';
 
     this.initPaymentMethods();
     this.initPaymentRequestButtons();
@@ -35,8 +35,7 @@
     this.$form.on('meprAfterPriceStringUpdated', $.proxy(this.updateStripePaymentRequestPrice, this));
   }
 
-  MeprStripeForm.prototype.updateStripePaymentRequestPrice = function (e) {
-    console.log(e)
+  MeprStripeForm.prototype.updateStripePaymentRequestPrice = function () {
     if (this.isSpc) {
       var stripeAmount = this.$form.find('input[name=mepr_stripe_txn_amount]').
           attr('value');
@@ -56,12 +55,7 @@
 
   MeprStripeForm.prototype.initPaymentRequestButtons = function () {
     var self = this;
-    $('input[name="card-name"]').on('mepr-validate-field', function(e) {
-      if (self.validatingPaymentRequestButton) {
-        $(this).removeClass('invalid').addClass('valid');
-        $(this).prev('.mp-form-label').find('.cc-error').toggle(false);
-      }
-    });
+
     self.$form.find('.mepr-stripe-payment-request-element').each(function () {
       var paymentRequestElement = $(this);
       var countryCode = paymentRequestElement.data('locale-code');
@@ -97,21 +91,23 @@
       });
 
       prButton.on('click', function(event) {
-        self.validatingPaymentRequestButton = true;
-        self.$form.find('.mepr-submit').trigger('click');
-        self.allowResubmission();
+        self.$form.find('input[name="card-name"]').removeAttr('required');
 
-        if (self.$form.find('.cc-error, .invalid').filter(function() {
-              return $(this).css('display') != 'none';
-            }).length > 0) {
+        self.$form.find('.mepr-form-input:visible').each(function (i, obj) {
+          window.mepr_validate_input(obj, true);
+        });
+
+        if (self.$form.find('.invalid:visible, .cc-error:visible').length > 0) {
+          self.$form.find('.validation').addClass('failed');
           event.preventDefault();
-          return;
         } else {
-          self.$form.find('.mepr-form-has-errors').hide();
+          self.$form.find('.validation').addClass('passed');
         }
+
+        self.$form.find('input[name="card-name"]').attr('required', true);
       });
 
-// Check the availability of the Payment Request API first.
+      // Check the availability of the Payment Request API first.
       self.paymentRequest.canMakePayment().then(function(result) {
         if (result) {
           prButton.mount(paymentRequestElement.get(0));
@@ -119,15 +115,12 @@
           $('.mepr-stripe-payment-request-wrapper').hide();
         }
       });
+
       self.paymentRequest.on('paymentmethod', function (ev) {
         self.processingPaymentRequestButton = true;
-        self.$form.find('.mepr-submit').prop('disabled', true);
-        self.$form.find('.mepr-loading-gif').show();
-        self.selectedPaymentMethod = self.getSelectedPaymentMethod();
-
-        var extraData = {};
-        extraData.payment_method_id = ev.paymentMethod.id;
-        self.confirmPayment(extraData);
+        self.paymentRequestPaymentMethodId = ev.paymentMethod.id;
+        self.$form.find('input[name="card-name"]').removeAttr('required');
+        self.$form.find('.mepr-submit').trigger('click');
         ev.complete('success');
       });
     });
@@ -178,11 +171,6 @@
 
     e.preventDefault();
 
-    if (self.validatingPaymentRequestButton) {
-      self.validatingPaymentRequestButton = false;
-      return;
-    }
-
     if (self.submitting) {
       return;
     }
@@ -202,23 +190,29 @@
 
     if (self.selectedPaymentMethod) {
       var $recaptcha = self.$form.find('[name="g-recaptcha-response"]'),
-          extraData = {},
-          cardData = {
-            billing_details: self.getBillingDetails(self.selectedPaymentMethod)
-          };
+          extraData = {};
 
       if ($recaptcha.length) {
         extraData['g-recaptcha-response'] = $recaptcha.val();
       }
 
-      self.selectedPaymentMethod.stripe.createPaymentMethod('card', self.selectedPaymentMethod.card, cardData).then(function (result) {
-        if (result.error) {
-          self.handlePaymentError(result.error.message);
-        } else {
-          extraData.payment_method_id = result.paymentMethod.id;
-          self.confirmPayment(extraData);
-        }
-      });
+      if (self.processingPaymentRequestButton) {
+        extraData.payment_method_id = self.paymentRequestPaymentMethodId;
+        self.confirmPayment(extraData);
+      } else {
+        var cardData = {
+          billing_details: self.getBillingDetails(self.selectedPaymentMethod)
+        };
+
+        self.selectedPaymentMethod.stripe.createPaymentMethod('card', self.selectedPaymentMethod.card, cardData).then(function (result) {
+          if (result.error) {
+            self.handlePaymentError(result.error.message);
+          } else {
+            extraData.payment_method_id = result.paymentMethod.id;
+            self.confirmPayment(extraData);
+          }
+        });
+      }
     } else {
       if (!self.isSpc && isStripeCheckoutPageMode == '1') {
         self.redirectToStripeCheckout(e);
@@ -339,10 +333,13 @@
    */
   MeprStripeForm.prototype.allowResubmission = function () {
     this.submitting = false;
+    this.processingPaymentRequestButton = false;
+    this.paymentRequestPaymentMethodId = '';
     this.$form.find('.mepr-submit').prop('disabled', false);
     this.$form.find('.mepr-loading-gif').hide();
     this.$form.find('.mepr-form-has-errors').show();
     this.$form.find('.mepr-validation-error, .mepr-top-error').remove();
+    this.$form.find('input[name="card-name"]').attr('required', true);
   };
 
   /**
@@ -459,25 +456,22 @@
         }
       };
 
-      if (self.processingPaymentRequestButton == true) {
-        stripe.confirmCardSetup(response.client_secret).
-            then(function(result) {
-              if (result.error) {
-                self.handlePaymentError(result.error.message);
-              } else {
-                self.confirmPayment();
-              }
-            });
-        self.processingPaymentRequestButton = false;
+      if (self.processingPaymentRequestButton) {
+        stripe.confirmCardSetup(response.client_secret).then(function (result) {
+          if (result.error) {
+            self.handlePaymentError(result.error.message);
+          } else {
+            self.confirmPayment();
+          }
+        });
       } else {
-        stripe.confirmCardSetup(response.client_secret, data).
-            then(function(result) {
-              if (result.error) {
-                self.handlePaymentError(result.error.message);
-              } else {
-                self.confirmPayment();
-              }
-            });
+        stripe.confirmCardSetup(response.client_secret, data).then(function (result) {
+          if (result.error) {
+            self.handlePaymentError(result.error.message);
+          } else {
+            self.confirmPayment();
+          }
+        });
       }
     } else if (response.action === 'confirmCardPayment') {
       data = {
@@ -487,7 +481,7 @@
         }
       };
 
-      if (self.processingPaymentRequestButton == true) {
+      if (self.processingPaymentRequestButton) {
         stripe.confirmCardPayment(response.client_secret).then(function (result) {
           if (result.error) {
             self.handlePaymentError(result.error.message);
@@ -495,17 +489,14 @@
             self.confirmPayment();
           }
         });
-
-        self.processingPaymentRequestButton = false;
       } else {
-        stripe.confirmCardPayment(response.client_secret, data).
-            then(function(result) {
-              if (result.error) {
-                self.handlePaymentError(result.error.message);
-              } else {
-                self.confirmPayment();
-              }
-            });
+        stripe.confirmCardPayment(response.client_secret, data).then(function (result) {
+          if (result.error) {
+            self.handlePaymentError(result.error.message);
+          } else {
+            self.confirmPayment();
+          }
+        });
       }
     } else {
       stripe.handleCardAction(response.client_secret).then(function (result) {

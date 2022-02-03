@@ -12,8 +12,6 @@ class MeprAddonUpdates {
     $this->desc = $desc;
     $this->path = WP_PLUGIN_DIR.'/'.$slug;
 
-    $priority = mt_rand(900000,999999);
-
     $this->load_language();
 
     add_filter('pre_set_site_transient_update_plugins', array( $this, 'queue_update' ));
@@ -29,44 +27,21 @@ class MeprAddonUpdates {
   public function queue_update($transient, $first_time_install=false) {
     if(!$first_time_install && empty($transient->checked)) { return $transient; }
 
-    $license = $this->license();
-    if(empty($license)) {
-      // Just here to query for the current version
-      $args = array();
-      if( defined( "MEMBERPRESS_EDGE" ) && MEMBERPRESS_EDGE ) { $args['edge'] = 'true'; }
+    $addons_ctrl = MeprCtrlFactory::fetch('addons');
+    $plugin_info = $addons_ctrl->curr_plugin_info($this->main_file);
+    $installed_version = (!$first_time_install && isset($plugin_info['Version'])) ? $plugin_info['Version'] : '0.0.0';
+    $update_info = get_site_transient('mepr_update_info_' . $this->slug);
 
-      try {
-        $version_info = $this->send_mothership_request( "/versions/latest/".$this->slug, $args );
-        $curr_version = $version_info['version'];
-        $download_url = '';
-      }
-      catch(Exception $e) {
-        if(isset($transient->response[$this->main_file])) {
-          unset($transient->response[$this->main_file]);
-        }
+    if(!is_array($update_info)) {
+      $license = $this->license();
 
-        return $transient;
-      }
-    }
-    else {
-      try {
-        $domain = urlencode($this->site_domain());
-        $args = compact('domain');
-
+      if(empty($license)) {
+        // Just here to query for the current version
+        $args = array();
         if( defined( "MEMBERPRESS_EDGE" ) && MEMBERPRESS_EDGE ) { $args['edge'] = 'true'; }
-        $license_info = $this->send_mothership_request("/versions/info/".$this->slug."/{$license}", $args);
-        $curr_version = $license_info['version'];
-        $download_url = $license_info['url'];
-      }
-      catch(Exception $e) {
-        try {
-          // Just here to query for the current version
-          $args = array();
-          if( defined( "MEMBERPRESS_EDGE" ) && MEMBERPRESS_EDGE ) {
-            $args['edge'] = 'true';
-          }
 
-          $version_info = $this->send_mothership_request("/versions/latest/".$this->slug, $args);
+        try {
+          $version_info = $this->send_mothership_request( "/versions/latest/".$this->slug, $args );
           $curr_version = $version_info['version'];
           $download_url = '';
         }
@@ -78,19 +53,56 @@ class MeprAddonUpdates {
           return $transient;
         }
       }
-    }
+      else {
+        try {
+          $domain = urlencode($this->site_domain());
+          $args = compact('domain');
 
-    $addons_ctrl        = MeprCtrlFactory::fetch('addons');
-    $plugin_info        = $addons_ctrl->curr_plugin_info($this->main_file);
-    $installed_version  = (!$first_time_install && isset($plugin_info['Version']))?$plugin_info['Version']:'0.0.0';
-    // $installed_version = (($first_time_install || !isset($transient->checked) || empty($transient->checked) || !isset($transient->checked[$this->main_file])) ? '0.0.0' : $transient->checked[$this->main_file]);
+          if( defined( "MEMBERPRESS_EDGE" ) && MEMBERPRESS_EDGE ) { $args['edge'] = 'true'; }
+          $license_info = $this->send_mothership_request("/versions/info/".$this->slug."/{$license}", $args);
+          $curr_version = $license_info['version'];
+          $download_url = $license_info['url'];
+        }
+        catch(Exception $e) {
+          try {
+            // Just here to query for the current version
+            $args = array();
+            if( defined( "MEMBERPRESS_EDGE" ) && MEMBERPRESS_EDGE ) {
+              $args['edge'] = 'true';
+            }
+
+            $version_info = $this->send_mothership_request("/versions/latest/".$this->slug, $args);
+            $curr_version = $version_info['version'];
+            $download_url = '';
+          }
+          catch(Exception $e) {
+            if(isset($transient->response[$this->main_file])) {
+              unset($transient->response[$this->main_file]);
+            }
+
+            return $transient;
+          }
+        }
+      }
+
+      set_site_transient(
+        'mepr_update_info_' . $this->slug,
+        compact('curr_version', 'download_url'),
+        MeprUtils::hours(12)
+      );
+    }
+    else {
+      $curr_version = isset($update_info['curr_version']) ? $update_info['curr_version'] : $installed_version;
+      $download_url = isset($update_info['download_url']) ? $update_info['download_url'] : '';
+    }
 
     if(isset($curr_version) && version_compare($curr_version, $installed_version, '>')) {
       $transient->response[$this->main_file] = (object)array(
         'id'          => $curr_version,
         'slug'        => $this->slug,
+        'plugin'      => $this->main_file,
         'new_version' => $curr_version,
-        'url'         => 'http://memberpress.com',
+        'url'         => 'https://memberpress.com/',
         'package'     => $download_url
       );
     }

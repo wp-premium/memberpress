@@ -14,8 +14,8 @@
         url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
         type: 'POST',
         data: {
-          action: 'mepr_dismiss_bf_notice',
-          nonce: "<?php echo wp_create_nonce( 'mepr_dismiss_bf_notice' ); ?>"
+          action: 'mepr_dismiss_gm_notice',
+          nonce: "<?php echo wp_create_nonce( 'mepr_dismiss_gm_notice' ); ?>"
         },
       })
       .done(function() {

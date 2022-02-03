@@ -574,13 +574,15 @@ class MeprUsersCtrl extends MeprBaseCtrl {
 
     if(!$user) { return ''; }
 
+    $status = (isset($atts['status'])) ? $atts['status'] : 'all';
+
     $all_ids    = $user->current_and_prior_subscriptions(); //returns an array of Product ID's the user has ever been subscribed to
     $active_ids = $user->active_product_subscriptions('ids');
 
     foreach($all_ids as $id) {
       $prd = new MeprProduct($id);
 
-      if(in_array($id, $active_ids)) {
+      if(in_array($id, $active_ids) && $status !== 'expired') {
         $expiring_txn = MeprUser::get_user_product_expires_at_date($user->ID, $id, true);
         $renewal_link = '';
         $expires_at   = _x('Unknown', 'ui', 'memberpress');
@@ -592,7 +594,7 @@ class MeprUsersCtrl extends MeprBaseCtrl {
 
         $active_rows[] = (object)array('membership' => $prd->post_title, 'expires' => $expires_at, 'renewal_link' => $renewal_link, 'access_url' => $prd->access_url);
       }
-      else {
+      elseif(!in_array($id, $active_ids) && in_array($status, array('expired', 'all'))) {
         $inactive_rows[] = (object)array('membership' => $prd->post_title, 'purchase_link' => $prd->url());
       }
     }

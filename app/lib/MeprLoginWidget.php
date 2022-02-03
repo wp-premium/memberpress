@@ -71,7 +71,7 @@ class MeprLoginWidget extends WP_Widget {
    */
   public function update($new_instance, $old_instance) {
     $instance = array();
-    $instance['title'] = strip_tags($new_instance['title']);
+    $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : __('Login', 'memberpress');
     $instance['redirect'] = isset($new_instance['redirect']);
 
     return $instance;
@@ -85,7 +85,7 @@ class MeprLoginWidget extends WP_Widget {
    * @param array $instance Previously saved values from database.
    */
   public function form($instance) {
-    $title = (isset($instance['title'])) ? $instance['title'] : __('Login', 'memberpress');
+    $title = (!empty($instance['title'])) ? $instance['title'] : __('Login', 'memberpress');
     $redirect = (isset($instance['redirect']) && $instance['redirect']);
 
     ?>

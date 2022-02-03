@@ -391,7 +391,7 @@ class MeprTransaction extends MeprBaseMetaModel implements MeprProductInterface,
         AND txn.expires_at BETWEEN DATE_SUB(%s,INTERVAL 2 DAY) AND %s
         AND e.id IS NULL
       ",
-      MeprUtils::now(),
+      MeprUtils::db_now(),
       MeprUtils::ts_to_mysql_date(time())
     );
 

@@ -1,8 +1,8 @@
 (function($) {
   __ = wp.i18n.__;
 
-  function mpResetToggle( button, show ) {
-    $(button)
+  function mpResetToggle( $button, show ) {
+    $button
       .attr({
         'aria-label': show ? __( 'Show password' ) : __( 'Hide password' )
       })
@@ -15,17 +15,17 @@
   }
 
   $(document).ready( function() {
-    $('button.mp-hide-pw').each(function(index, button) {
-      $(button).show().on( 'click', function () {
-        pass = $(button).prev();
-        if ( 'password' === $(pass).attr( 'type' ) ) {
-          $(pass).attr( 'type', 'text' );
-          mpResetToggle( button, false );
-        } else {
-          pass.attr( 'type', 'password' );
-          mpResetToggle( button, true );
-        }
-      });
+    $('body').on('click', 'button.mp-hide-pw', function () {
+      var $button = $(this),
+        $pass = $button.prev();
+
+      if ( 'password' === $pass.attr( 'type' ) ) {
+        $pass.attr( 'type', 'text' );
+        mpResetToggle( $button, false );
+      } else {
+        $pass.attr( 'type', 'password' );
+        mpResetToggle( $button, true );
+      }
     });
   });
 })(jQuery);

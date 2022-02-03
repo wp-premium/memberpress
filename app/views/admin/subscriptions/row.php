@@ -84,9 +84,16 @@ if(!empty($records))
           <?php
           break;
         case 'col_txn_subscr_id':
+          $include_confirmations = '';
+          if($rec->sub_type === 'transaction' && $rec->id > 0) {
+            $txn = new MeprTransaction($rec->id);
+            if ($txn->txn_type === 'sub_account') {
+              $include_confirmations = '&include-confirmations';
+            }
+          }
           ?>
           <td <?php echo $attributes; ?>>
-            <a href="<?php echo admin_url('admin.php?page=memberpress-trans&transaction=').$rec->id; ?>" title="<?php _e('Show related transaction', 'memberpress'); ?>"><b><?php echo $rec->subscr_id; ?></b></a>
+            <a href="<?php echo admin_url('admin.php?page=memberpress-trans&transaction=').$rec->id.$include_confirmations; ?>" title="<?php _e('Show related transaction', 'memberpress'); ?>"><b><?php echo $rec->subscr_id; ?></b></a>
           </td>
           <?php
           break;

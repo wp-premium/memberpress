@@ -99,7 +99,15 @@ class MeprRemindersHelper {
                                     $reminder->trigger_length,
                                     $reminder->get_trigger_interval_str() )
         )
-      )
+      ),
+      'sub-trial-ends' => array(
+        'before' => array(
+          'name' => __('Subscription Trial Period is Ending Soon', 'memberpress'),
+          'description' => sprintf( __( 'Subscription trial period is ending in %d %s' , 'memberpress'),
+                                    $reminder->trigger_length,
+                                    $reminder->get_trigger_interval_str() )
+        )
+      ),
     );
 
     $lookup = MeprHooks::apply_filters( 'mepr_reminder_lookup', $lookup, $reminder );

@@ -31,7 +31,8 @@ class MeprStripeCtrl extends MeprBaseCtrl
         $stripe_customer_id = $mepr_current_user->get_stripe_customer_id($payment_method->get_meta_gateway_id());
 
         if ( empty( $stripe_customer_id ) ) {
-          return;
+          // Continue on other instances of MeprStripeGateway
+          continue;
         }
 
         $args = [ 'email' => $mepr_current_user->user_email ];

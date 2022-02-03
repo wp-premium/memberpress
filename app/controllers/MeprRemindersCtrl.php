@@ -122,6 +122,10 @@ class MeprRemindersCtrl extends MeprCptCtrl {
           $uclass = 'MeprUserCcExpiresReminderEmail';
           $aclass = 'MeprAdminCcExpiresReminderEmail';
           break;
+        case 'sub-trial-ends':
+          $uclass = 'MeprUserSubTrialEndsReminderEmail';
+          $aclass = 'MeprAdminSubTrialEndsReminderEmail';
+          break;
         default:
           echo '';
           return;
@@ -347,6 +351,14 @@ class MeprRemindersCtrl extends MeprCptCtrl {
               $args = "{$reminder_id}|{$obj->cc_exp_month}|{$obj->cc_exp_year}";
             }
             break;
+          case 'sub-trial-ends':
+           if ($reminder->trigger_timing == 'before') {
+              if (($sub_id = $reminder->get_next_trial_ends_subs())) {
+                $obj = new MeprSubscription($sub_id);
+                $args = "{$reminder_id}|{$obj->trial_days}";
+              }
+            }
+            break;
           default:
             $this->unschedule_reminder($reminder_id);
             break;
@@ -493,9 +505,20 @@ class MeprRemindersCtrl extends MeprCptCtrl {
       $params = array_merge(MeprRemindersHelper::get_email_params($reminder),
                             MeprSubscriptionsHelper::get_email_params($sub));
 
-      // Only 1 type of subscription reminder for now
-      $uclass = 'MeprUserCcExpiresReminderEmail';
-      $aclass = 'MeprAdminCcExpiresReminderEmail';
+      switch( $reminder->trigger_event ) {
+        case 'sub-trial-ends':
+          if( 'before' == $reminder->trigger_timing ) {
+            $uclass = 'MeprUserSubTrialEndsReminderEmail';
+            $aclass = 'MeprAdminSubTrialEndsReminderEmail';
+          }
+          break;
+        case 'cc-expires':
+            $uclass = 'MeprUserCcExpiresReminderEmail';
+            $aclass = 'MeprAdminCcExpiresReminderEmail';
+          break;
+        default:
+          $uclass=$aclass='';
+      }
 
       $args = array(array('reminder_id'=>$reminder->ID));
 

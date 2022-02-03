@@ -2256,4 +2256,14 @@ class MeprUtils {
     // Currently runs between November 22 and December 3, 2021
     return time() > strtotime( '2021-11-22 00:00:00 America/Denver' ) && time() < strtotime( '2021-12-04 00:00:00 America/Denver' );
   }
+
+  /**
+   * Determine whether our Green Monday promotion is active.
+   *
+   * @return boolean
+   */
+  public static function is_green_monday_time() {
+    // Currently runs between December 13 and December 18, 2021
+    return time() > strtotime( '2021-12-13 00:00:00 America/Denver' ) && time() < strtotime( '2021-12-19 00:00:00 America/Denver' );
+  }
 } // End class

@@ -360,17 +360,19 @@ class MeprUser extends MeprBaseModel {
       );
 
       $result = array();
+      $ids = array();
 
       foreach($txns as $txn) {
-        if($return_type == 'ids') {
+        if($return_type == 'ids' && ! in_array($txn->product_id, $ids)) {
           $result[] = $txn->product_id;
         }
-        else if($return_type == 'products' || $return_type === true) {
+        else if(($return_type == 'products' || $return_type === true) && ! in_array($txn->product_id, $ids)) {
           $result[] = new MeprProduct($txn->product_id);
         }
         else if($return_type == 'transactions') {
           $result[] = new MeprTransaction($txn->id);
         }
+        $ids[] = $txn->product_id;
       }
 
       // Do not static cache result if $exclude_expired is false
@@ -694,6 +696,7 @@ class MeprUser extends MeprBaseModel {
     if ($link = $this->reset_password_link()) {
       $locals = array(
         'user_login' => $this->user_login,
+        'user_data' => get_user_by('login', $this->user_login),
         'first_name' => $this->first_name,
         'mepr_blogname' => MeprUtils::blogname(),
         'mepr_blogurl' => home_url(),
@@ -716,7 +719,7 @@ class MeprUser extends MeprBaseModel {
   */
   private function send_reset_password_notification($locals = array()) {
     /* translators: In this string, %s is the Blog Name/Title */
-    $subject = apply_filters( 'retrieve_password_title', sprintf( __("[%s] Password Reset", 'memberpress'), $locals['mepr_blogname']) );
+    $subject = apply_filters('retrieve_password_title', sprintf(__("[%s] Password Reset", 'memberpress'), $locals['mepr_blogname']), $locals['user_login'], $locals['user_data']);
 
     ob_start();
       MeprView::render('/emails/user_reset_password', get_defined_vars());
@@ -897,7 +900,7 @@ class MeprUser extends MeprBaseModel {
     if (! empty($_FILES) && is_array($_FILES) ){
       add_filter( 'upload_dir', 'MeprUsersHelper::get_upload_dir' );
       add_filter( 'upload_mimes', 'MeprUsersHelper::get_allowed_mime_types' );
-      foreach($_FILES as $name => $file){
+      foreach($_FILES as $name => $file) {
         // If name or size of the file is empty, just skip trying to process it.
         if(empty($file['name']) || empty($file['size'])) {
           continue;
@@ -1675,6 +1678,7 @@ class MeprUser extends MeprBaseModel {
       'first_txn_date' => 'IFNULL(first_txn.created_at,NULL)',
       'status' => "CASE WHEN active_txn_count>0 THEN 'active' WHEN trial_txn_count>0 THEN 'active' WHEN expired_txn_count>0 THEN 'expired' ELSE 'none' END",
       'memberships' => "IFNULL(m.memberships,'')",
+      'inactive_memberships' => "IFNULL(m.inactive_memberships,'')",
       'last_login_date' => 'IFNULL(last_login.created_at, NULL)',
       'login_count' => 'IFNULL(m.login_count,0)',
       'total_spent' => 'IFNULL(m.total_spent,0.00)',
@@ -1714,10 +1718,13 @@ class MeprUser extends MeprBaseModel {
       if($params['status']=='active') {
         $args[] = '(m.active_txn_count > 0 OR m.trial_txn_count > 0)';
       }
-      else if($params['status']=='expired') {
+      else if($params['status']=='inactive') {
         $args[] = 'm.active_txn_count <= 0';
         $args[] = 'm.expired_txn_count > 0';
         $args[] = 'm.trial_txn_count <= 0';
+      }
+      else if ($params['status']=='expired') {
+        $args[] = "m.inactive_memberships <> ''";  //$args[] = 'm.expired_txn_count > 0'; Does not work here, will pull all members because active subscriptions will have expired transactions.
       }
       else if($params['status']=='none') {
         $args[] = 'm.active_txn_count <= 0';
@@ -1728,12 +1735,34 @@ class MeprUser extends MeprBaseModel {
 
     if(isset($params['membership']) && !empty($params['membership']) && is_numeric($params['membership'])) {
       // $args[] = $wpdb->prepare("%s IN (m.memberships)",$params['membership']);
-      $args[] = $wpdb->prepare("m.memberships RLIKE '(^|,)%d(,|$)'", $params['membership']);
+      if(isset($params['status']) && $params['status'] != 'all') {
+        if ($params['status']=='active') {
+          //search in active memberships only
+          $args[] = $wpdb->prepare("m.memberships RLIKE '(^|,)%d(,|$)'", $params['membership']);
+        } else if($params['status']=='expired' || $params['status']=='inactive') {
+          //search in inactive memberships only
+          $args[] = $wpdb->prepare("m.inactive_memberships RLIKE '(^|,)%d(,|$)'", $params['membership']);
+        }
+      } else {
+        //search in both
+        $args[] = $wpdb->prepare("(m.memberships RLIKE '(^|,)%d(,|$)' OR m.inactive_memberships RLIKE '(^|,)%d(,|$)')", $params['membership'], $params['membership']);
+      }
     }
 
     if(isset($params['prd_id']) && !empty($params['prd_id']) && is_numeric($params['prd_id'])) {
       // $args[] = $wpdb->prepare("%s IN (m.memberships)",$params['prd_id']);
-      $args[] = $wpdb->prepare("m.memberships RLIKE '(^|,)%d(,|$)'", $params['prd_id']);
+      if(isset($params['status']) && $params['status'] != 'all') {
+        if ($params['status']=='active') {
+          //search in active memberships only
+          $args[] = $wpdb->prepare("m.memberships RLIKE '(^|,)%d(,|$)'", $params['prd_id']);
+        } else if($params['status']=='expired' || $params['status']=='inactive') {
+          //search in inactive memberships only
+          $args[] = $wpdb->prepare("m.inactive_memberships RLIKE '(^|,)%d(,|$)'", $params['prd_id']);
+        }
+      } else {
+        //search in both
+        $args[] = $wpdb->prepare("(m.memberships RLIKE '(^|,)%d(,|$)' OR m.inactive_memberships RLIKE '(^|,)%d(,|$)')", $params['prd_id'], $params['prd_id']);
+      }
     }
 
     $joins = array(
@@ -2376,21 +2405,22 @@ class MeprUser extends MeprBaseModel {
     $select_cols = array();
 
     // empty cols indicates we're getting all columns
-    if(empty($cols) || in_array('first_txn_id',$cols))        { $select_cols['first_txn_id']        = self::member_col_first_txn_id(); }
-    if(empty($cols) || in_array('latest_txn_id',$cols))       { $select_cols['latest_txn_id']       = self::member_col_latest_txn_id(); }
-    if(empty($cols) || in_array('txn_count',$cols))           { $select_cols['txn_count']           = self::member_col_txn_count(); }
-    if(empty($cols) || in_array('expired_txn_count',$cols))   { $select_cols['expired_txn_count']   = self::member_col_expired_txn_count(); }
-    if(empty($cols) || in_array('active_txn_count',$cols))    { $select_cols['active_txn_count']    = self::member_col_active_txn_count(); }
-    if(empty($cols) || in_array('trial_txn_count',$cols))     { $select_cols['trial_txn_count']     = self::member_col_trial_txn_count(); }
-    if(empty($cols) || in_array('sub_count',$cols))           { $select_cols['sub_count']           = self::member_col_sub_count(); }
-    if(empty($cols) || in_array('pending_sub_count',$cols))   { $select_cols['pending_sub_count']   = self::member_col_sub_count(MeprSubscription::$pending_str); }
-    if(empty($cols) || in_array('active_sub_count',$cols))    { $select_cols['active_sub_count']    = self::member_col_sub_count(MeprSubscription::$active_str); }
-    if(empty($cols) || in_array('suspended_sub_count',$cols)) { $select_cols['suspended_sub_count'] = self::member_col_sub_count(MeprSubscription::$suspended_str); }
-    if(empty($cols) || in_array('cancelled_sub_count',$cols)) { $select_cols['cancelled_sub_count'] = self::member_col_sub_count(MeprSubscription::$cancelled_str); }
-    if(empty($cols) || in_array('memberships',$cols))         { $select_cols['memberships']         = self::member_col_memberships(); }
-    if(empty($cols) || in_array('last_login_id',$cols))       { $select_cols['last_login_id']       = self::member_col_last_login_id(); }
-    if(empty($cols) || in_array('login_count',$cols))         { $select_cols['login_count']         = self::member_col_login_count(); }
-    if(empty($cols) || in_array('total_spent',$cols))         { $select_cols['total_spent']         = self::member_col_total_spent(); }
+    if(empty($cols) || in_array('first_txn_id',$cols))         { $select_cols['first_txn_id']         = self::member_col_first_txn_id(); }
+    if(empty($cols) || in_array('latest_txn_id',$cols))        { $select_cols['latest_txn_id']        = self::member_col_latest_txn_id(); }
+    if(empty($cols) || in_array('txn_count',$cols))            { $select_cols['txn_count']            = self::member_col_txn_count(); }
+    if(empty($cols) || in_array('expired_txn_count',$cols))    { $select_cols['expired_txn_count']    = self::member_col_expired_txn_count(); }
+    if(empty($cols) || in_array('active_txn_count',$cols))     { $select_cols['active_txn_count']     = self::member_col_active_txn_count(); }
+    if(empty($cols) || in_array('trial_txn_count',$cols))      { $select_cols['trial_txn_count']      = self::member_col_trial_txn_count(); }
+    if(empty($cols) || in_array('sub_count',$cols))            { $select_cols['sub_count']            = self::member_col_sub_count(); }
+    if(empty($cols) || in_array('pending_sub_count',$cols))    { $select_cols['pending_sub_count']    = self::member_col_sub_count(MeprSubscription::$pending_str); }
+    if(empty($cols) || in_array('active_sub_count',$cols))     { $select_cols['active_sub_count']     = self::member_col_sub_count(MeprSubscription::$active_str); }
+    if(empty($cols) || in_array('suspended_sub_count',$cols))  { $select_cols['suspended_sub_count']  = self::member_col_sub_count(MeprSubscription::$suspended_str); }
+    if(empty($cols) || in_array('cancelled_sub_count',$cols))  { $select_cols['cancelled_sub_count']  = self::member_col_sub_count(MeprSubscription::$cancelled_str); }
+    if(empty($cols) || in_array('memberships',$cols))          { $select_cols['memberships']          = self::member_col_memberships(); }
+    if(empty($cols) || in_array('inactive_memberships',$cols)) { $select_cols['inactive_memberships'] = self::member_col_inactive_memberships(); }
+    if(empty($cols) || in_array('last_login_id',$cols))        { $select_cols['last_login_id']        = self::member_col_last_login_id(); }
+    if(empty($cols) || in_array('login_count',$cols))          { $select_cols['login_count']          = self::member_col_login_count(); }
+    if(empty($cols) || in_array('total_spent',$cols))          { $select_cols['total_spent']          = self::member_col_total_spent(); }
 
     $selects = '';
     foreach($select_cols as $col_name => $col_query) {
@@ -2416,10 +2446,26 @@ class MeprUser extends MeprBaseModel {
         LIMIT 1
       ";
 
-      return $wpdb->get_row($q);
+      $data = $wpdb->get_row($q);
+    } else {
+      $data = $wpdb->get_results($q);
     }
 
-    return $wpdb->get_results($q);
+
+    $active_memberships = explode(',', str_replace('|', ',', $data->memberships));
+    $inactive_memberships = explode(',', str_replace('|', ',', $data->inactive_memberships));
+
+    if(!empty($active_memberships) && !empty($inactive_memberships)) {
+      foreach($inactive_memberships as $key => $id) {
+        if(in_array($id, $active_memberships)) {
+          unset($inactive_memberships[$key]);
+        }
+      }
+
+      $data->inactive_memberships = implode(",", $inactive_memberships);
+    }
+
+    return $data;
   }
 
 /*** SQL FOR MEMBER COLUMNS ***/
@@ -2563,6 +2609,35 @@ class MeprUser extends MeprBaseModel {
     )";
   }
 
+  private static function member_col_inactive_memberships() {
+    global $wpdb;
+    $mepr_db = MeprDb::fetch();
+
+    return $wpdb->prepare("(
+        SELECT GROUP_CONCAT(
+                 DISTINCT t.product_id
+                 ORDER BY t.product_id
+                 SEPARATOR ','
+               )
+          FROM {$mepr_db->transactions} AS t
+         WHERE t.user_id = u.ID
+           AND (
+             t.expires_at < %s
+             AND t.expires_at <> %s
+           )
+           AND (
+                t.txn_type IN (%s,%s)
+                AND t.status=%s
+           )
+      )",
+      MeprUtils::db_now(),
+      MeprUtils::db_lifetime(),
+      MeprTransaction::$payment_str,
+      MeprTransaction::$sub_account_str,
+      MeprTransaction::$complete_str
+    );
+  }
+
   private static function member_col_memberships() {
     global $wpdb;
     $mepr_db = MeprDb::fetch();
@@ -2575,6 +2650,11 @@ class MeprUser extends MeprBaseModel {
                )
           FROM {$mepr_db->transactions} AS t
          WHERE t.user_id = u.ID
+           AND (
+             t.expires_at > %s
+             OR t.expires_at = %s
+             OR t.expires_at IS NULL
+           )
            AND ( (
                 t.txn_type IN (%s,%s,%s,%s)
                 AND t.status=%s
@@ -2584,6 +2664,8 @@ class MeprUser extends MeprBaseModel {
              )
            )
       )",
+      MeprUtils::db_now(),
+      MeprUtils::db_lifetime(),
       MeprTransaction::$payment_str,
       MeprTransaction::$sub_account_str,
       MeprTransaction::$woo_txn_str,

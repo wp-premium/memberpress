@@ -6,6 +6,14 @@
   }
 ?>
 
+<?php if($payment_method->settings->stripe_wallet_enabled == 'on' && $payment_method->settings->stripe_checkout_enabled != 'on') { ?>
+  <div class="mepr-stripe-payment-request-wrapper">
+    <div id="mepr-stripe-payment-request-element" style="  max-width: 300px" class="mepr-stripe-payment-request-element" data-stripe-public-key="<?php echo esc_attr($payment_method->settings->public_key); ?>" data-payment-method-id="<?php echo esc_attr($payment_method->settings->id); ?>" data-locale-code="<?php echo $mepr_options->language_code; ?>" data-currency-code="<?php echo $mepr_options->currency_code; ?>" data-total-text="<?php echo esc_attr(__('Total', 'memberpress')); ?>">
+      <!-- a Stripe Payment Request Element will be inserted here. -->
+    </div>
+    <br>
+  </div>
+<?php } ?>
 <?php if($payment_method->settings->stripe_checkout_enabled == 'on'): ?>
   <?php MeprHooks::do_action('mepr-stripe-payment-form-before-name-field', $txn); ?>
   <input type="hidden" name="mepr_stripe_is_checkout" value="1"/>
@@ -31,14 +39,6 @@
     <div class="mepr-stripe-card-element" data-stripe-public-key="<?php echo esc_attr($payment_method->settings->public_key); ?>" data-payment-method-id="<?php echo esc_attr($payment_method->settings->id); ?>" data-locale-code="<?php echo esc_attr(MeprStripeGateway::get_locale_code()); ?>">
       <!-- a Stripe Element will be inserted here. -->
     </div>
-    <?php if($payment_method->settings->stripe_wallet_enabled == 'on') { ?>
-    <div class="mepr-stripe-payment-request-wrapper">
-      <p class="mepr-stripe-payment-request-option"><?php echo esc_html(__('Or', 'memberpress')); ?></p>
-      <div id="mepr-stripe-payment-request-element" style="  max-width: 300px" class="mepr-stripe-payment-request-element" data-stripe-public-key="<?php echo esc_attr($payment_method->settings->public_key); ?>" data-payment-method-id="<?php echo esc_attr($payment_method->settings->id); ?>" data-locale-code="<?php echo $mepr_options->language_code; ?>" data-currency-code="<?php echo $mepr_options->currency_code; ?>" data-total-text="<?php echo esc_attr(__('Total', 'memberpress')); ?>">
-        <!-- a Stripe Payment Request Element will be inserted here. -->
-      </div>
-    </div>
-    <?php } ?>
   </div>
 <?php endif; ?>
 <?php MeprHooks::do_action('mepr-stripe-payment-form', $txn); ?>

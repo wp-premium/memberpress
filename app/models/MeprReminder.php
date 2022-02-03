@@ -40,7 +40,8 @@ class MeprReminder extends MeprCptModel {
       'sub-renews',
       'cc-expires',
       'member-signup',
-      'signup-abandoned'
+      'signup-abandoned',
+      'sub-trial-ends'
     );
 
     $this->event_actions = array();
@@ -71,6 +72,7 @@ class MeprReminder extends MeprCptModel {
       case 'cc-expires':  return __('Credit Card Expires', 'memberpress');
       case 'member-signup':  return __('Member Signs Up', 'memberpress');
       case 'signup-abandoned': return __('Sign Up Abandoned', 'memberpress');
+      case 'sub-trial-ends':  return __('Subscription Trial Ending', 'memberpress');
       default: return $this->trigger_event;
     }
   }
@@ -670,6 +672,78 @@ class MeprReminder extends MeprCptModel {
     );
 
     //echo "{$query}\n";
+
+    $res = $wpdb->get_var($query);
+
+    return $res;
+  }
+
+  public function get_next_trial_ends_subs() {
+    global $wpdb;
+
+    if( $this->trigger_length < 0 ){
+      return false; // bail out.
+    }
+
+    $mepr_db = new MeprDb();
+
+    $unit = $this->db_trigger_interval();
+    $op = ( $this->trigger_timing=='before' ? 'DATE_SUB' : 'DATE_ADD' );
+
+    //Make sure we're only grabbing from valid product ID's for this reminder yo
+    //If $this->products is empty, then we should send for all product_id's
+    $and_products = $this->get_query_products('sub.product_id');
+
+    // Make sure we only send out reminders for folks with the following status:
+    $subs_statuses = array( MeprSubscription::$active_str, MeprSubscription::$cancelled_str, MeprSubscription::$suspended_str );
+    $in_sub_status = implode( "','", $subs_statuses );
+
+    // Expiring Trial Subscriptions
+    $query =
+      // Just grab the trial_days sub.id for any subscription with an expiring transaction
+      "SELECT sub.id FROM {$mepr_db->subscriptions} AS sub " .
+
+       // Calculate trial end date with trial days for comparison
+       "WHERE sub.status IN ('{$in_sub_status}') " .
+
+        // Ensure that we're in the 2 day window.
+        "AND DATE_ADD(
+                {$op}(  DATE_ADD( sub.created_at, INTERVAL trial_days DAY), INTERVAL {$this->trigger_length} {$unit} ),
+                INTERVAL 2 DAY
+        ) >= %s" .
+        "AND {$op}( DATE_ADD( sub.created_at, INTERVAL trial_days DAY), INTERVAL {$this->trigger_length} {$unit} ) <= %s " .
+
+        // Trials not expired yet
+        "AND DATE_ADD( sub.created_at, INTERVAL trial_days DAY) >= %s " .
+
+         // check that we haven't already sent a reminder for this
+         // subscription *and* specific expiration date
+         "AND ( SELECT ev.id
+                  FROM {$mepr_db->events} AS ev
+                 WHERE ev.evt_id=sub.id
+                   AND ev.evt_id_type='subscriptions'
+                   AND ev.event=%s
+                   AND ev.args=CONCAT(%d, '|', sub.trial_days)
+                 LIMIT 1
+              ) IS NULL " .
+
+         "{$and_products} " .
+
+         // Just trials subs
+         "AND sub.trial = 1 AND sub.trial_days > 0 " .
+
+       // Get the *oldest* valid trial subs first
+       "ORDER BY sub.created_at ASC
+        LIMIT 1";
+
+    $query = $wpdb->prepare(
+      $query,
+      MeprUtils::db_now(),
+      MeprUtils::db_now(),
+      MeprUtils::db_now(),
+      "{$this->trigger_timing}-{$this->trigger_event}-reminder",
+      $this->rec->ID
+    );
 
     $res = $wpdb->get_var($query);
 

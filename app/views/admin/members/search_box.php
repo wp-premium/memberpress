@@ -11,6 +11,7 @@
   <select class="mepr_filter_field" id="status">
     <option value="all" <?php selected($status, false); ?>><?php _e('All Members', 'memberpress'); ?></option>
     <option value="active" <?php selected($status, 'active'); ?>><?php _e('Active Members', 'memberpress'); ?></option>
+    <option value="inactive" <?php selected($status, 'inactive'); ?>><?php _e('Inactive Members', 'memberpress'); ?></option>
     <option value="expired" <?php selected($status, 'expired'); ?>><?php _e('Expired Members', 'memberpress'); ?></option>
     <option value="none" <?php selected($status, 'none'); ?>><?php _e('Non-Members', 'memberpress'); ?></option>
     <?php MeprHooks::do_action('mepr-members-search-box-options', $status); ?>

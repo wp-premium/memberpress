@@ -53,6 +53,10 @@
   width: 15%;
 }
 
+#col_inactive_memberships {
+  width: 15%;
+}
+
 #col_last_login_date {
   width: 12%;
 }
@@ -60,4 +64,3 @@
 #col_registered {
   width: 12%;
 }
-

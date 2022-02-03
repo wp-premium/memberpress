@@ -1,17 +1,17 @@
-# Copyright (C) 2021 Caseproof, LLC
+# Copyright (C) 2022 Caseproof, LLC
 # This file is distributed under the same license as the MemberPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MemberPress 1.9.27\n"
+"Project-Id-Version: MemberPress 1.9.28\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/memberpress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-11-18T21:26:24+00:00\n"
+"POT-Creation-Date: 2022-02-02T23:27:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.5.0\n"
+"X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: memberpress\n"
 
 #. Plugin Name of the plugin
@@ -160,7 +160,7 @@ msgstr ""
 #: app/controllers/MeprAddonsCtrl.php:119
 #: app/controllers/MeprOptionsCtrl.php:240
 #: app/controllers/MeprOptionsCtrl.php:276
-#: app/controllers/MeprStripeCtrl.php:451
+#: app/controllers/MeprStripeCtrl.php:452
 #: app/controllers/MeprSubscriptionsCtrl.php:325
 #: app/controllers/MeprSubscriptionsCtrl.php:365
 msgid "Security check failed."
@@ -363,8 +363,8 @@ msgid "<strong>MemberPress: Your PHP version (%s) is out of date!</strong> This 
 msgstr ""
 
 #: app/controllers/MeprAppCtrl.php:397
-#: app/controllers/MeprDbCtrl.php:214
-#: app/controllers/MeprMembersCtrl.php:232
+#: app/controllers/MeprDbCtrl.php:226
+#: app/controllers/MeprMembersCtrl.php:233
 #: app/helpers/MeprProductsHelper.php:116
 #: app/views/admin/members/list.php:3
 msgid "Members"
@@ -377,7 +377,7 @@ msgstr ""
 
 #: app/controllers/MeprAppCtrl.php:408
 #: app/controllers/MeprAppCtrl.php:410
-#: app/controllers/MeprDbCtrl.php:215
+#: app/controllers/MeprDbCtrl.php:227
 #: app/controllers/MeprMembersCtrl.php:113
 #: app/controllers/MeprSubscriptionsCtrl.php:552
 #: app/views/admin/subscriptions/list.php:7
@@ -616,13 +616,13 @@ msgstr ""
 
 #: app/controllers/MeprCheckoutCtrl.php:316
 #: app/controllers/MeprCheckoutCtrl.php:317
-#: app/controllers/MeprStripeCtrl.php:162
+#: app/controllers/MeprStripeCtrl.php:163
 msgid "The user was unable to be saved."
 msgstr ""
 
 #: app/controllers/MeprCheckoutCtrl.php:331
 #: app/controllers/MeprCheckoutCtrl.php:332
-#: app/controllers/MeprStripeCtrl.php:175
+#: app/controllers/MeprStripeCtrl.php:176
 msgid "Sorry, we were unable to find the membership."
 msgstr ""
 
@@ -631,7 +631,7 @@ msgid "Invalid payment method"
 msgstr ""
 
 #: app/controllers/MeprCheckoutCtrl.php:448
-#: app/controllers/MeprStripeCtrl.php:247
+#: app/controllers/MeprStripeCtrl.php:248
 msgid "Sorry, we were unable to create a transaction."
 msgstr ""
 
@@ -740,12 +740,12 @@ msgstr ""
 #: app/controllers/MeprCouponsCtrl.php:107
 #: app/controllers/MeprUsersCtrl.php:478
 #: app/controllers/MeprUsersCtrl.php:481
-#: app/helpers/MeprSubscriptionsHelper.php:61
-#: app/helpers/MeprTransactionsHelper.php:113
-#: app/helpers/MeprTransactionsHelper.php:203
-#: app/views/admin/members/row.php:205
-#: app/views/admin/subscriptions/row.php:189
-#: app/views/admin/subscriptions/row.php:199
+#: app/helpers/MeprSubscriptionsHelper.php:74
+#: app/helpers/MeprTransactionsHelper.php:114
+#: app/helpers/MeprTransactionsHelper.php:204
+#: app/views/admin/members/row.php:219
+#: app/views/admin/subscriptions/row.php:196
+#: app/views/admin/subscriptions/row.php:206
 #: app/views/admin/transactions/row.php:40
 msgid "Never"
 msgstr ""
@@ -796,28 +796,32 @@ msgstr ""
 msgid "Courses has been activated successfully. Enjoy!"
 msgstr ""
 
-#: app/controllers/MeprDbCtrl.php:59
-#: app/controllers/MeprDbCtrl.php:89
+#: app/controllers/MeprDbCtrl.php:30
+msgid "MemberPress Member Data Migrate Interval"
+msgstr ""
+
+#: app/controllers/MeprDbCtrl.php:71
+#: app/controllers/MeprDbCtrl.php:101
 msgid "You're unauthorized to access this resource."
 msgstr ""
 
-#: app/controllers/MeprDbCtrl.php:70
+#: app/controllers/MeprDbCtrl.php:82
 msgid "Your Upgrade has completed successfully"
 msgstr ""
 
-#: app/controllers/MeprDbCtrl.php:78
+#: app/controllers/MeprDbCtrl.php:90
 msgid "No need to upgrade your database"
 msgstr ""
 
-#: app/controllers/MeprDbCtrl.php:104
+#: app/controllers/MeprDbCtrl.php:116
 msgid "MemberPress is currently upgrading your database"
 msgstr ""
 
-#: app/controllers/MeprDbCtrl.php:124
+#: app/controllers/MeprDbCtrl.php:136
 msgid "No MemberPress database upgrade is in progress"
 msgstr ""
 
-#: app/controllers/MeprDbCtrl.php:212
+#: app/controllers/MeprDbCtrl.php:224
 msgid "Database Upgrade Progress"
 msgstr ""
 
@@ -867,7 +871,7 @@ msgstr ""
 #: app/controllers/MeprTransactionsCtrl.php:470
 #: app/controllers/MeprTransactionsCtrl.php:517
 #: app/controllers/MeprTransactionsCtrl.php:539
-#: app/controllers/MeprUpdateCtrl.php:734
+#: app/controllers/MeprUpdateCtrl.php:743
 msgid "You do not have access."
 msgstr ""
 
@@ -1051,6 +1055,7 @@ msgstr ""
 #: app/controllers/MeprRulesCtrl.php:360
 #: app/controllers/MeprRulesCtrl.php:693
 #: app/lib/activation.php:16
+#: app/lib/MeprLoginWidget.php:74
 #: app/lib/MeprLoginWidget.php:88
 #: app/views/admin/options/form.php:66
 msgid "Login"
@@ -1100,60 +1105,64 @@ msgid "Name"
 msgstr ""
 
 #: app/controllers/MeprMembersCtrl.php:125
+msgid "Inactive Memberships"
+msgstr ""
+
+#: app/controllers/MeprMembersCtrl.php:126
 #: app/controllers/MeprUsersCtrl.php:422
 msgid "Last Login"
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:126
+#: app/controllers/MeprMembersCtrl.php:127
 msgid "Logins"
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:127
+#: app/controllers/MeprMembersCtrl.php:128
 msgid "Value"
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:128
+#: app/controllers/MeprMembersCtrl.php:129
 #: app/controllers/MeprUsersCtrl.php:421
 msgid "Registered"
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:214
+#: app/controllers/MeprMembersCtrl.php:215
 msgid "Your new member was created successfully."
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:281
+#: app/controllers/MeprMembersCtrl.php:282
 msgid "The username field can't be blank."
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:285
+#: app/controllers/MeprMembersCtrl.php:286
 msgid "This username is already taken."
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:289
+#: app/controllers/MeprMembersCtrl.php:290
 msgid "The username must be valid."
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:293
+#: app/controllers/MeprMembersCtrl.php:294
 msgid "The email field can't be blank."
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:297
+#: app/controllers/MeprMembersCtrl.php:298
 msgid "This email is already being used by another user."
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:301
+#: app/controllers/MeprMembersCtrl.php:302
 msgid "A valid email must be entered."
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:306
+#: app/controllers/MeprMembersCtrl.php:307
 msgid "The transaction amount must be set."
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:310
+#: app/controllers/MeprMembersCtrl.php:311
 msgid "The transaction amount must be a number."
 msgstr ""
 
-#: app/controllers/MeprMembersCtrl.php:314
+#: app/controllers/MeprMembersCtrl.php:315
 #: app/controllers/MeprTransactionsCtrl.php:337
 msgid "The Transaction Number is required, and must contain only letters, numbers, underscores and hyphens."
 msgstr ""
@@ -1443,56 +1452,56 @@ msgstr ""
 msgid "Send Reminder to Member"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:150
+#: app/controllers/MeprRemindersCtrl.php:154
 msgid "Reminders"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:151
+#: app/controllers/MeprRemindersCtrl.php:155
 msgid "Reminder"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:152
+#: app/controllers/MeprRemindersCtrl.php:156
 msgid "Add New Reminder"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:153
+#: app/controllers/MeprRemindersCtrl.php:157
 msgid "Edit Reminder"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:154
+#: app/controllers/MeprRemindersCtrl.php:158
 msgid "New Reminder"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:155
+#: app/controllers/MeprRemindersCtrl.php:159
 msgid "View Reminder"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:156
+#: app/controllers/MeprRemindersCtrl.php:160
 msgid "Search Reminders"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:157
+#: app/controllers/MeprRemindersCtrl.php:161
 msgid "No Reminders found"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:158
+#: app/controllers/MeprRemindersCtrl.php:162
 msgid "No Reminders found in Trash"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:159
+#: app/controllers/MeprRemindersCtrl.php:163
 msgid "Parent Reminder:"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:175
+#: app/controllers/MeprRemindersCtrl.php:179
 msgid "Trigger"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:177
+#: app/controllers/MeprRemindersCtrl.php:181
 #: app/views/admin/options/form.php:22
 msgid "Emails"
 msgstr ""
 
-#: app/controllers/MeprRemindersCtrl.php:273
+#: app/controllers/MeprRemindersCtrl.php:277
 msgid "MemberPress Reminders Worker"
 msgstr ""
 
@@ -1512,12 +1521,12 @@ msgstr ""
 #: app/controllers/MeprReportsCtrl.php:238
 #: app/helpers/MeprAppHelper.php:121
 #: app/helpers/MeprAppHelper.php:135
-#: app/helpers/MeprTransactionsHelper.php:357
+#: app/helpers/MeprTransactionsHelper.php:359
 #: app/views/admin/members/row.php:107
 #: app/views/admin/reports/month_table.php:7
 #: app/views/admin/reports/year_table.php:7
 #: app/views/admin/subscriptions/form.php:67
-#: app/views/admin/subscriptions/row.php:221
+#: app/views/admin/subscriptions/row.php:228
 #: app/views/admin/subscriptions/search_box.php:13
 #: app/views/admin/transactions/row.php:163
 #: app/views/admin/transactions/search_box.php:13
@@ -1529,7 +1538,7 @@ msgstr ""
 #: app/controllers/MeprReportsCtrl.php:175
 #: app/controllers/MeprReportsCtrl.php:240
 #: app/helpers/MeprAppHelper.php:123
-#: app/helpers/MeprTransactionsHelper.php:358
+#: app/helpers/MeprTransactionsHelper.php:360
 #: app/views/admin/reports/month_table.php:8
 #: app/views/admin/reports/year_table.php:8
 #: app/views/admin/transactions/row.php:164
@@ -1542,7 +1551,7 @@ msgstr ""
 #: app/controllers/MeprReportsCtrl.php:177
 #: app/controllers/MeprReportsCtrl.php:242
 #: app/helpers/MeprAppHelper.php:127
-#: app/helpers/MeprTransactionsHelper.php:359
+#: app/helpers/MeprTransactionsHelper.php:361
 #: app/views/admin/reports/month_table.php:10
 #: app/views/admin/reports/month_table.php:12
 #: app/views/admin/reports/year_table.php:10
@@ -1748,77 +1757,77 @@ msgstr ""
 msgid "You successfully stored a new payment method yo."
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:67
-#: app/gateways/MeprStripeGateway.php:1781
+#: app/controllers/MeprStripeCtrl.php:68
+#: app/gateways/MeprStripeGateway.php:1824
 msgid "An error occurred, please DO NOT submit the form again as you may be double charged. Please contact us for further assistance instead."
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:77
-#: app/controllers/MeprStripeCtrl.php:443
+#: app/controllers/MeprStripeCtrl.php:78
+#: app/controllers/MeprStripeCtrl.php:444
 msgid "Bad request"
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:85
+#: app/controllers/MeprStripeCtrl.php:86
 msgid "Transaction not found"
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:91
-#: app/controllers/MeprStripeCtrl.php:219
-#: app/controllers/MeprStripeCtrl.php:469
+#: app/controllers/MeprStripeCtrl.php:92
+#: app/controllers/MeprStripeCtrl.php:220
+#: app/controllers/MeprStripeCtrl.php:470
 msgid "Invalid payment gateway"
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:97
+#: app/controllers/MeprStripeCtrl.php:98
 msgid "Product not found"
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:103
-#: app/gateways/MeprStripeGateway.php:2329
+#: app/controllers/MeprStripeCtrl.php:104
+#: app/gateways/MeprStripeGateway.php:2375
 msgid "User not found"
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:286
-#: app/controllers/MeprStripeCtrl.php:327
-#: app/controllers/MeprStripeCtrl.php:539
+#: app/controllers/MeprStripeCtrl.php:287
+#: app/controllers/MeprStripeCtrl.php:328
+#: app/controllers/MeprStripeCtrl.php:540
 msgid "Sorry, your payment could not be processed (%s)"
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:291
-#: app/controllers/MeprStripeCtrl.php:361
-#: app/controllers/MeprStripeCtrl.php:523
-#: app/controllers/MeprStripeCtrl.php:546
+#: app/controllers/MeprStripeCtrl.php:292
+#: app/controllers/MeprStripeCtrl.php:362
+#: app/controllers/MeprStripeCtrl.php:524
+#: app/controllers/MeprStripeCtrl.php:547
 msgid "Sorry, there was an error processing your card (%s)"
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:298
-#: app/controllers/MeprStripeCtrl.php:457
+#: app/controllers/MeprStripeCtrl.php:299
+#: app/controllers/MeprStripeCtrl.php:458
 msgid "Subscription not found"
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:341
-#: app/controllers/MeprStripeCtrl.php:497
+#: app/controllers/MeprStripeCtrl.php:342
+#: app/controllers/MeprStripeCtrl.php:498
 msgid "Sorry, your card setup could not be processed (%s)"
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:347
-#: app/controllers/MeprStripeCtrl.php:543
+#: app/controllers/MeprStripeCtrl.php:348
+#: app/controllers/MeprStripeCtrl.php:544
 msgid "Card payment failed, please try another payment method"
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:353
+#: app/controllers/MeprStripeCtrl.php:354
 msgid "Card setup failed, please try another payment method"
 msgstr ""
 
 #. translators: %1$s: open link tag, %2$s: close link tag
-#: app/controllers/MeprStripeCtrl.php:396
+#: app/controllers/MeprStripeCtrl.php:397
 msgid "You are already subscribed to this item, %1$sclick here%2$s to view your subscriptions."
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:447
+#: app/controllers/MeprStripeCtrl.php:448
 msgid "Sorry, you must be logged in to do this."
 msgstr ""
 
-#: app/controllers/MeprStripeCtrl.php:463
+#: app/controllers/MeprStripeCtrl.php:464
 msgid "This subscription is for another user."
 msgstr ""
 
@@ -1901,7 +1910,7 @@ msgstr ""
 #: app/helpers/MeprAppHelper.php:139
 #: app/views/admin/members/row.php:106
 #: app/views/admin/subscriptions/form.php:69
-#: app/views/admin/subscriptions/row.php:224
+#: app/views/admin/subscriptions/row.php:231
 msgid "Stopped"
 msgstr ""
 
@@ -1924,7 +1933,7 @@ msgstr ""
 #: app/helpers/MeprAppHelper.php:141
 #: app/views/admin/members/row.php:108
 #: app/views/admin/subscriptions/form.php:68
-#: app/views/admin/subscriptions/row.php:223
+#: app/views/admin/subscriptions/row.php:230
 #: app/views/admin/subscriptions/search_box.php:15
 msgid "Paused"
 msgstr ""
@@ -1964,7 +1973,7 @@ msgid "The response from the server was invalid or malformed"
 msgstr ""
 
 #: app/controllers/MeprSubscriptionsCtrl.php:248
-#: app/gateways/MeprStripeGateway.php:2053
+#: app/gateways/MeprStripeGateway.php:2096
 msgid "Ajax error"
 msgstr ""
 
@@ -1972,7 +1981,7 @@ msgstr ""
 #: app/helpers/MeprAppHelper.php:137
 #: app/views/admin/members/row.php:105
 #: app/views/admin/subscriptions/form.php:66
-#: app/views/admin/subscriptions/row.php:222
+#: app/views/admin/subscriptions/row.php:229
 #: app/views/admin/subscriptions/search_box.php:14
 msgid "Enabled"
 msgstr ""
@@ -2160,8 +2169,8 @@ msgstr ""
 
 #: app/controllers/MeprTransactionsCtrl.php:493
 #: app/controllers/MeprVatTaxCtrl.php:391
-#: app/gateways/MeprStripeGateway.php:1931
-#: app/views/checkout/MeprStripeGateway/payment_form.php:37
+#: app/gateways/MeprStripeGateway.php:1950
+#: app/views/checkout/MeprStripeGateway/payment_form.php:11
 msgid "Total"
 msgstr ""
 
@@ -2178,35 +2187,35 @@ msgstr ""
 msgid "Welcome Email sent"
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:122
+#: app/controllers/MeprUpdateCtrl.php:131
 #: app/views/admin/db/upgrade_error.php:45
 msgid "Rollback MemberPress"
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:230
+#: app/controllers/MeprUpdateCtrl.php:239
 msgid "You don't have sufficient permissions to rollback MemberPress."
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:277
+#: app/controllers/MeprUpdateCtrl.php:286
 #: app/controllers/MeprUsersCtrl.php:155
 msgid "Why you creepin'?"
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:533
+#: app/controllers/MeprUpdateCtrl.php:542
 msgid "Check for Update"
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:694
-#: app/lib/MeprAddonUpdates.php:127
+#: app/controllers/MeprUpdateCtrl.php:703
+#: app/lib/MeprAddonUpdates.php:139
 msgid "You had an HTTP error connecting to Caseproof's Mothership API"
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:706
-#: app/lib/MeprAddonUpdates.php:139
+#: app/controllers/MeprUpdateCtrl.php:715
+#: app/lib/MeprAddonUpdates.php:151
 msgid "Your License Key was invalid"
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:738
+#: app/controllers/MeprUpdateCtrl.php:747
 msgid "Edge updates couldn't be updated."
 msgstr ""
 
@@ -2261,15 +2270,15 @@ msgstr ""
 #: app/helpers/MeprAppHelper.php:92
 #: app/helpers/MeprAppHelper.php:129
 #: app/helpers/MeprAppHelper.php:143
-#: app/helpers/MeprTransactionsHelper.php:110
+#: app/helpers/MeprTransactionsHelper.php:111
 #: app/lib/MeprUtils.php:976
 #: app/models/MeprSubscription.php:420
 #: app/models/MeprSubscription.php:671
 #: app/models/MeprTransaction.php:424
-#: app/views/admin/subscriptions/row.php:134
-#: app/views/admin/subscriptions/row.php:196
-#: app/views/admin/subscriptions/row.php:202
-#: app/views/admin/subscriptions/row.php:246
+#: app/views/admin/subscriptions/row.php:141
+#: app/views/admin/subscriptions/row.php:203
+#: app/views/admin/subscriptions/row.php:209
+#: app/views/admin/subscriptions/row.php:253
 #: app/views/admin/taxes/vat_profile_fields.php:18
 #: app/views/admin/transactions/edit_trans.php:11
 #: app/views/admin/transactions/row.php:60
@@ -2286,7 +2295,7 @@ msgstr ""
 msgid "MemberPress Settings"
 msgstr ""
 
-#: app/controllers/MeprUsersCtrl.php:586
+#: app/controllers/MeprUsersCtrl.php:588
 #: app/views/account/payments.php:38
 #: app/views/account/subscriptions.php:46
 #: app/views/account/subscriptions.php:52
@@ -2294,7 +2303,7 @@ msgctxt "ui"
 msgid "Unknown"
 msgstr ""
 
-#: app/controllers/MeprUsersCtrl.php:590
+#: app/controllers/MeprUsersCtrl.php:592
 #: app/views/account/subscriptions.php:31
 #: app/views/account/subscriptions.php:49
 msgctxt "ui"
@@ -2487,6 +2496,38 @@ msgstr ""
 msgid "Slovakia"
 msgstr ""
 
+#: app/data/taxes/vat_countries.php:33
+msgid "French Guiana"
+msgstr ""
+
+#: app/data/taxes/vat_countries.php:34
+msgid "Saint Martin (French part)"
+msgstr ""
+
+#: app/data/taxes/vat_countries.php:35
+msgid "Martinique"
+msgstr ""
+
+#: app/data/taxes/vat_countries.php:36
+msgid "Reunion"
+msgstr ""
+
+#: app/data/taxes/vat_countries.php:37
+msgid "Mayotte"
+msgstr ""
+
+#: app/data/taxes/vat_countries.php:38
+msgid "Saint Pierre and Miquelon"
+msgstr ""
+
+#: app/data/taxes/vat_countries.php:39
+msgid "Guadeloupe"
+msgstr ""
+
+#: app/data/taxes/vat_countries.php:40
+msgid "Monaco"
+msgstr ""
+
 #: app/emails/MeprAdminCancelledSubEmail.php:10
 #: app/emails/MeprUserCancelledSubEmail.php:7
 msgid "<b>Cancelled Subscription</b> Notice"
@@ -2509,6 +2550,7 @@ msgstr ""
 #: app/emails/MeprAdminSignupAbandonedReminderEmail.php:11
 #: app/emails/MeprAdminSubExpiresReminderEmail.php:11
 #: app/emails/MeprAdminSubRenewsReminderEmail.php:11
+#: app/emails/MeprAdminSubTrialEndsReminderEmail.php:11
 msgid "This email is sent to the admin when triggered for a user."
 msgstr ""
 
@@ -2655,7 +2697,7 @@ msgstr ""
 #: app/emails/MeprAdminSignupAbandonedReminderEmail.php:32
 #: app/emails/MeprUserSignupAbandonedReminderEmail.php:29
 #: app/helpers/MeprRemindersHelper.php:97
-#: app/models/MeprReminder.php:73
+#: app/models/MeprReminder.php:74
 msgid "Sign Up Abandoned"
 msgstr ""
 
@@ -2697,6 +2739,24 @@ msgstr ""
 
 #: app/emails/MeprAdminSubRenewsReminderEmail.php:32
 msgid "Subscription Renewing in 2 Days"
+msgstr ""
+
+#: app/emails/MeprAdminSubTrialEndsReminderEmail.php:10
+msgid "Subscription Trial Ending Reminder Email to Admin"
+msgstr ""
+
+#: app/emails/MeprAdminSubTrialEndsReminderEmail.php:15
+msgid "A Member's Subscription Trial Period is Ending Soon"
+msgstr ""
+
+#: app/emails/MeprAdminSubTrialEndsReminderEmail.php:31
+#: app/emails/MeprUserSubTrialEndsReminderEmail.php:29
+#: app/models/MeprReminder.php:75
+msgid "Subscription Trial Ending"
+msgstr ""
+
+#: app/emails/MeprAdminSubTrialEndsReminderEmail.php:32
+msgid "Subscription Trial Ending in 2 Days"
 msgstr ""
 
 #: app/emails/MeprAdminSuspendedSubEmail.php:10
@@ -2742,6 +2802,7 @@ msgstr ""
 #: app/emails/MeprUserSignupAbandonedReminderEmail.php:8
 #: app/emails/MeprUserSubExpiresReminderEmail.php:8
 #: app/emails/MeprUserSubRenewsReminderEmail.php:8
+#: app/emails/MeprUserSubTrialEndsReminderEmail.php:8
 msgid "This email is sent to the user when triggered."
 msgstr ""
 
@@ -2827,6 +2888,18 @@ msgstr ""
 msgid "** Please complete your signup"
 msgstr ""
 
+#: app/emails/MeprUserStripeInvoiceEmail.php:7
+msgid "<b>Stripe Failed Payment</b> Notice"
+msgstr ""
+
+#: app/emails/MeprUserStripeInvoiceEmail.php:8
+msgid "This email is sent to the user when a Stripe subscription payment of theirs fails, with a link to pay the outstanding invoice."
+msgstr ""
+
+#: app/emails/MeprUserStripeInvoiceEmail.php:12
+msgid "** Your Subscription Payment Failed"
+msgstr ""
+
 #: app/emails/MeprUserSubExpiresReminderEmail.php:7
 msgid "Subscription Expires Reminder Email to User"
 msgstr ""
@@ -2837,6 +2910,18 @@ msgstr ""
 
 #: app/emails/MeprUserSubRenewsReminderEmail.php:29
 msgid "Subscription Renewing in 2 days"
+msgstr ""
+
+#: app/emails/MeprUserSubTrialEndsReminderEmail.php:7
+msgid "Subscription Trial Ending Reminder Email to User"
+msgstr ""
+
+#: app/emails/MeprUserSubTrialEndsReminderEmail.php:12
+msgid "Your Subscription Trial Period is Ending Soon"
+msgstr ""
+
+#: app/emails/MeprUserSubTrialEndsReminderEmail.php:30
+msgid "Subscription Trial Ending in 2 days"
 msgstr ""
 
 #: app/emails/MeprUserSuspendedSubEmail.php:8
@@ -2887,8 +2972,8 @@ msgstr ""
 #: app/gateways/MeprPayPalProGateway.php:899
 #: app/gateways/MeprPayPalProGateway.php:1091
 #: app/gateways/MeprPayPalStandardGateway.php:790
-#: app/gateways/MeprStripeGateway.php:1942
-#: app/gateways/MeprStripeGateway.php:2104
+#: app/gateways/MeprStripeGateway.php:1985
+#: app/gateways/MeprStripeGateway.php:2147
 #: app/views/account/home.php:58
 #: app/views/account/password.php:36
 #: app/views/admin/emails/options.php:32
@@ -2905,8 +2990,8 @@ msgid "Loading..."
 msgstr ""
 
 #: app/gateways/MeprArtificialGateway.php:400
-#: app/gateways/MeprStripeGateway.php:1944
-#: app/gateways/MeprStripeGateway.php:2106
+#: app/gateways/MeprStripeGateway.php:1987
+#: app/gateways/MeprStripeGateway.php:2149
 #: app/views/checkout/MeprStripeGateway/payment_form.php:45
 #: app/views/checkout/payment_form.php:30
 msgid "Javascript is disabled in your browser. You will not be able to complete your purchase until you either enable JavaScript in your browser, or switch to a browser that supports it."
@@ -2940,8 +3025,8 @@ msgstr ""
 #: app/gateways/MeprAuthorizeGateway.php:437
 #: app/gateways/MeprAuthorizeGateway.php:485
 #: app/gateways/MeprPayPalProGateway.php:274
-#: app/gateways/MeprStripeGateway.php:530
-#: app/gateways/MeprStripeGateway.php:1157
+#: app/gateways/MeprStripeGateway.php:533
+#: app/gateways/MeprStripeGateway.php:1200
 msgid "Payment was unsuccessful, please check your payment details and try again."
 msgstr ""
 
@@ -3115,7 +3200,7 @@ msgstr ""
 
 #: app/gateways/MeprAuthorizeGateway.php:1119
 #: app/gateways/MeprPayPalProGateway.php:1042
-#: app/gateways/MeprStripeGateway.php:2080
+#: app/gateways/MeprStripeGateway.php:2123
 msgid "Update your Credit Card information below"
 msgstr ""
 
@@ -3170,14 +3255,14 @@ msgstr ""
 #: app/gateways/MeprPayPalGateway.php:692
 #: app/gateways/MeprPayPalProGateway.php:644
 #: app/gateways/MeprPayPalStandardGateway.php:576
-#: app/gateways/MeprStripeGateway.php:1443
+#: app/gateways/MeprStripeGateway.php:1486
 msgid "This subscription has already been paused."
 msgstr ""
 
 #: app/gateways/MeprPayPalGateway.php:696
 #: app/gateways/MeprPayPalProGateway.php:648
 #: app/gateways/MeprPayPalStandardGateway.php:580
-#: app/gateways/MeprStripeGateway.php:1447
+#: app/gateways/MeprStripeGateway.php:1490
 msgid "Sorry, subscriptions cannot be paused during a free trial."
 msgstr ""
 
@@ -3250,7 +3335,7 @@ msgstr ""
 #: app/gateways/MeprPayPalGateway.php:1032
 #: app/gateways/MeprPayPalProGateway.php:1166
 #: app/gateways/MeprPayPalStandardGateway.php:1053
-#: app/gateways/MeprStripeGateway.php:2619
+#: app/gateways/MeprStripeGateway.php:2665
 msgid "You had an HTTP error connecting to %s"
 msgstr ""
 
@@ -3417,148 +3502,143 @@ msgstr ""
 msgid "stripe"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:449
-#: app/gateways/MeprStripeGateway.php:542
+#: app/gateways/MeprStripeGateway.php:452
+#: app/gateways/MeprStripeGateway.php:545
 msgid "%s (transaction: %s)"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:570
-#: app/gateways/MeprStripeGateway.php:1029
-#: app/gateways/MeprStripeGateway.php:1179
+#: app/gateways/MeprStripeGateway.php:573
+#: app/gateways/MeprStripeGateway.php:1072
+#: app/gateways/MeprStripeGateway.php:1222
 msgid "There was a problem sending your credit card details to the processor. Please try again later."
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1203
-#: app/gateways/MeprStripeGateway.php:3303
-#: app/helpers/MeprTransactionsHelper.php:249
-#: app/helpers/MeprTransactionsHelper.php:265
+#: app/gateways/MeprStripeGateway.php:1246
+#: app/gateways/MeprStripeGateway.php:3349
+#: app/helpers/MeprTransactionsHelper.php:251
+#: app/helpers/MeprTransactionsHelper.php:267
 msgid "Initial Payment"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1504
+#: app/gateways/MeprStripeGateway.php:1547
 msgid "This subscription has already been resumed."
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1563
+#: app/gateways/MeprStripeGateway.php:1606
 msgid "The subscription is locked to a different currency. Please contact us to resume your subscription."
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1567
-#: app/gateways/MeprStripeGateway.php:2340
+#: app/gateways/MeprStripeGateway.php:1610
+#: app/gateways/MeprStripeGateway.php:2386
 msgid "Customer not found"
 msgstr ""
 
 #. translators: %1$s: open link tag, %2$s: close link tag
-#: app/gateways/MeprStripeGateway.php:1630
+#: app/gateways/MeprStripeGateway.php:1673
 msgid "The subscription could not be resumed automatically, %1$sclick here%2$s to complete the payment."
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1692
+#: app/gateways/MeprStripeGateway.php:1735
 msgid "This subscription has already been cancelled."
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1782
-#: app/gateways/MeprStripeGateway.php:2054
+#: app/gateways/MeprStripeGateway.php:1825
+#: app/gateways/MeprStripeGateway.php:2097
 msgid "The response from the server was invalid"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1783
+#: app/gateways/MeprStripeGateway.php:1826
 msgid "An error occurred, please try again"
 msgstr ""
 
 #. translators: %1$s: open strong tag, %2$s: close strong tag, %3$s: error message
-#: app/gateways/MeprStripeGateway.php:1786
+#: app/gateways/MeprStripeGateway.php:1829
 msgid "%1$sERROR%2$s: %3$s"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1877
-#: app/gateways/MeprStripeGateway.php:1941
-#: app/gateways/MeprStripeGateway.php:2103
+#: app/gateways/MeprStripeGateway.php:1920
+#: app/gateways/MeprStripeGateway.php:1984
+#: app/gateways/MeprStripeGateway.php:2146
 msgctxt "ui"
 msgid "Submit"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1878
+#: app/gateways/MeprStripeGateway.php:1921
 msgctxt "ui"
 msgid "Pay Now"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1908
-#: app/views/checkout/MeprStripeGateway/payment_form.php:13
+#: app/gateways/MeprStripeGateway.php:1960
+#: app/views/checkout/MeprStripeGateway/payment_form.php:21
 msgid "Pay with your Credit Card via Stripe Checkout"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1913
-#: app/gateways/MeprStripeGateway.php:2086
-#: app/views/checkout/MeprStripeGateway/payment_form.php:19
+#: app/gateways/MeprStripeGateway.php:1965
+#: app/gateways/MeprStripeGateway.php:2129
+#: app/views/checkout/MeprStripeGateway/payment_form.php:27
 msgid "Name on the card:*"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1914
-#: app/gateways/MeprStripeGateway.php:2087
-#: app/views/checkout/MeprStripeGateway/payment_form.php:20
+#: app/gateways/MeprStripeGateway.php:1966
+#: app/gateways/MeprStripeGateway.php:2130
+#: app/views/checkout/MeprStripeGateway/payment_form.php:28
 msgctxt "ui"
 msgid "Name on the card is required."
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1921
-#: app/gateways/MeprStripeGateway.php:2094
+#: app/gateways/MeprStripeGateway.php:1973
+#: app/gateways/MeprStripeGateway.php:2137
 msgctxt "ui"
 msgid "Credit Card"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:1930
-#: app/views/checkout/MeprStripeGateway/payment_form.php:36
-msgid "Or"
-msgstr ""
-
-#: app/gateways/MeprStripeGateway.php:2035
+#: app/gateways/MeprStripeGateway.php:2078
 msgid "All Stripe keys must be filled in."
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:2065
+#: app/gateways/MeprStripeGateway.php:2108
 msgid "Update successful, please allow some time for the payment to process. Your account will reflect the updated payment soon."
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:2184
+#: app/gateways/MeprStripeGateway.php:2227
 msgid "No Webhook Signature"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:2194
+#: app/gateways/MeprStripeGateway.php:2237
 msgid "Incorrect Webhook Signature"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:2200
+#: app/gateways/MeprStripeGateway.php:2243
 msgid "No `event` set"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:2211
+#: app/gateways/MeprStripeGateway.php:2254
 msgid "Request was sent to the wrong site?"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:2217
+#: app/gateways/MeprStripeGateway.php:2260
 msgid "No payment method like that exists on this site"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:2228
+#: app/gateways/MeprStripeGateway.php:2271
 msgid "Webhook not supported"
 msgstr ""
 
 #. translators: In this string, %s is the Blog Name/Title
-#: app/gateways/MeprStripeGateway.php:2359
+#: app/gateways/MeprStripeGateway.php:2405
 msgid "[%s] Confirm Subscription Payment"
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:2371
+#: app/gateways/MeprStripeGateway.php:2417
 msgid "The invoice does not require action from the customer."
 msgstr ""
 
-#: app/gateways/MeprStripeGateway.php:2630
+#: app/gateways/MeprStripeGateway.php:2676
 msgid "There was an issue with the credit card processor. Try again later."
 msgstr ""
 
 #. translators: %d: the product ID
-#: app/gateways/MeprStripeGateway.php:3008
+#: app/gateways/MeprStripeGateway.php:3054
 msgid "Product %d"
 msgstr ""
 
@@ -3585,7 +3665,7 @@ msgstr ""
 #: app/views/admin/db/upgrade_needed.php:207
 #: app/views/admin/members/new_member.php:60
 #: app/views/admin/subscriptions/row.php:76
-#: app/views/admin/subscriptions/row.php:227
+#: app/views/admin/subscriptions/row.php:234
 #: app/views/admin/transactions/row.php:169
 msgid "Cancel"
 msgstr ""
@@ -3598,14 +3678,14 @@ msgstr ""
 
 #: app/helpers/MeprAppHelper.php:43
 #: app/helpers/MeprAppHelper.php:199
-#: app/models/MeprOptions.php:837
-#: app/models/MeprOptions.php:838
+#: app/models/MeprOptions.php:861
+#: app/models/MeprOptions.php:862
 #: app/models/MeprTransaction.php:710
 msgid "Free"
 msgstr ""
 
 #: app/helpers/MeprAppHelper.php:125
-#: app/helpers/MeprTransactionsHelper.php:356
+#: app/helpers/MeprTransactionsHelper.php:358
 #: app/views/admin/members/row.php:134
 #: app/views/admin/reports/month_table.php:9
 #: app/views/admin/reports/year_table.php:9
@@ -3770,7 +3850,7 @@ msgstr ""
 #: app/helpers/MeprOptionsHelper.php:398
 #: app/helpers/MeprOptionsHelper.php:433
 #: app/helpers/MeprOptionsHelper.php:453
-#: app/helpers/MeprTransactionsHelper.php:413
+#: app/helpers/MeprTransactionsHelper.php:415
 #: app/views/admin/products/advanced.php:18
 msgid "Default"
 msgstr ""
@@ -3807,8 +3887,8 @@ msgstr ""
 
 #: app/helpers/MeprOptionsHelper.php:41
 #: app/helpers/MeprTransactionsHelper.php:41
-#: app/models/MeprOptions.php:842
-#: app/models/MeprOptions.php:843
+#: app/models/MeprOptions.php:866
+#: app/models/MeprOptions.php:867
 msgid "Manual"
 msgstr ""
 
@@ -3998,7 +4078,15 @@ msgstr ""
 msgid "Sign Up Abandoned %d %s ago"
 msgstr ""
 
-#: app/helpers/MeprRemindersHelper.php:131
+#: app/helpers/MeprRemindersHelper.php:105
+msgid "Subscription Trial Period is Ending Soon"
+msgstr ""
+
+#: app/helpers/MeprRemindersHelper.php:106
+msgid "Subscription trial period is ending in %d %s"
+msgstr ""
+
+#: app/helpers/MeprRemindersHelper.php:139
 #: app/views/admin/coupons/form.php:201
 msgid "Hold the Control Key (Command Key on the Mac) in order to select or deselect multiple memberships"
 msgstr ""
@@ -4025,7 +4113,7 @@ msgstr ""
 #: app/helpers/MeprReportsHelper.php:47
 #: app/helpers/MeprReportsHelper.php:92
 #: app/helpers/MeprReportsHelper.php:129
-#: app/views/admin/members/search_box.php:19
+#: app/views/admin/members/search_box.php:20
 #: app/views/admin/subscriptions/search_box.php:26
 #: app/views/admin/table_controls.php:20
 #: app/views/admin/transactions/search_box.php:26
@@ -4165,34 +4253,34 @@ msgstr ""
 msgid "member purchases"
 msgstr ""
 
-#: app/helpers/MeprSubscriptionsHelper.php:88
-#: app/helpers/MeprSubscriptionsHelper.php:157
+#: app/helpers/MeprSubscriptionsHelper.php:101
+#: app/helpers/MeprSubscriptionsHelper.php:171
 #: app/helpers/MeprTransactionsHelper.php:47
-#: app/helpers/MeprTransactionsHelper.php:170
+#: app/helpers/MeprTransactionsHelper.php:171
 #: app/views/admin/subscriptions/search_box.php:22
 #: app/views/admin/transactions/search_box.php:22
 msgid "%1$s (%2$s)"
 msgstr ""
 
-#: app/helpers/MeprTransactionsHelper.php:262
+#: app/helpers/MeprTransactionsHelper.php:264
 msgid "Subscription Payment"
 msgstr ""
 
-#: app/helpers/MeprTransactionsHelper.php:269
+#: app/helpers/MeprTransactionsHelper.php:271
 msgid "Payment"
 msgstr ""
 
-#: app/helpers/MeprTransactionsHelper.php:275
-#: app/helpers/MeprTransactionsHelper.php:282
-#: app/helpers/MeprTransactionsHelper.php:288
+#: app/helpers/MeprTransactionsHelper.php:277
+#: app/helpers/MeprTransactionsHelper.php:284
+#: app/helpers/MeprTransactionsHelper.php:290
 msgid "Coupon Code '%s'"
 msgstr ""
 
-#: app/helpers/MeprTransactionsHelper.php:395
+#: app/helpers/MeprTransactionsHelper.php:397
 msgid "Now"
 msgstr ""
 
-#: app/helpers/MeprTransactionsHelper.php:414
+#: app/helpers/MeprTransactionsHelper.php:416
 #: app/views/admin/products/form.php:42
 msgid "Lifetime"
 msgstr ""
@@ -4823,32 +4911,32 @@ msgctxt "ui"
 msgid "I have read and agree to the Terms of Service"
 msgstr ""
 
-#: app/models/MeprOptions.php:932
+#: app/models/MeprOptions.php:956
 msgctxt "ui"
 msgid "Address Line 1"
 msgstr ""
 
-#: app/models/MeprOptions.php:933
+#: app/models/MeprOptions.php:957
 msgctxt "ui"
 msgid "Address Line 2"
 msgstr ""
 
-#: app/models/MeprOptions.php:934
+#: app/models/MeprOptions.php:958
 msgctxt "ui"
 msgid "City"
 msgstr ""
 
-#: app/models/MeprOptions.php:935
+#: app/models/MeprOptions.php:959
 msgctxt "ui"
 msgid "Country"
 msgstr ""
 
-#: app/models/MeprOptions.php:936
+#: app/models/MeprOptions.php:960
 msgctxt "ui"
 msgid "State/Province"
 msgstr ""
 
-#: app/models/MeprOptions.php:937
+#: app/models/MeprOptions.php:961
 msgctxt "ui"
 msgid "Zip/Postal Code"
 msgstr ""
@@ -4858,27 +4946,27 @@ msgctxt "ui"
 msgid "You don't have access to purchase this item."
 msgstr ""
 
-#: app/models/MeprReminder.php:69
+#: app/models/MeprReminder.php:70
 msgid "Subscription Expires"
 msgstr ""
 
-#: app/models/MeprReminder.php:70
+#: app/models/MeprReminder.php:71
 msgid "Subscription Renews"
 msgstr ""
 
-#: app/models/MeprReminder.php:71
+#: app/models/MeprReminder.php:72
 msgid "Credit Card Expires"
 msgstr ""
 
-#: app/models/MeprReminder.php:72
+#: app/models/MeprReminder.php:73
 msgid "Member Signs Up"
 msgstr ""
 
-#: app/models/MeprReminder.php:92
+#: app/models/MeprReminder.php:94
 msgid "%d %s %s %s"
 msgstr ""
 
-#: app/models/MeprReminder.php:132
+#: app/models/MeprReminder.php:134
 #: app/views/admin/members/search_box.php:5
 #: app/views/admin/subscriptions/search_box.php:5
 #: app/views/admin/transactions/search_box.php:5
@@ -4988,126 +5076,126 @@ msgstr ""
 msgid "MemberPress database migration failed: %1$s %2$s"
 msgstr ""
 
-#: app/models/MeprUser.php:617
+#: app/models/MeprUser.php:619
 msgid "The user was unable to be saved: %s"
 msgstr ""
 
-#: app/models/MeprUser.php:657
+#: app/models/MeprUser.php:659
 msgid "This user was unable to be deleted."
 msgstr ""
 
 #. translators: In this string, %s is the Blog Name/Title
-#: app/models/MeprUser.php:719
+#: app/models/MeprUser.php:722
 msgid "[%s] Password Reset"
 msgstr ""
 
 #. translators: In this string, %s is the Blog Name/Title
-#: app/models/MeprUser.php:735
+#: app/models/MeprUser.php:738
 msgid "[%s] Set Your New Password"
 msgstr ""
 
 #. translators: In this string, %s is the Blog Name/Title
-#: app/models/MeprUser.php:769
+#: app/models/MeprUser.php:772
 msgid "[%s] Password Lost/Changed"
 msgstr ""
 
 #. translators: In this string, %s is the Blog Name/Title
-#: app/models/MeprUser.php:783
+#: app/models/MeprUser.php:786
 msgctxt "ui"
 msgid "[%s] Your new Password"
 msgstr ""
 
-#: app/models/MeprUser.php:805
-#: app/models/MeprUser.php:881
+#: app/models/MeprUser.php:808
+#: app/models/MeprUser.php:884
 msgid "You must enter both your First and Last name"
 msgstr ""
 
-#: app/models/MeprUser.php:809
+#: app/models/MeprUser.php:812
 msgid "You must enter a valid email address"
 msgstr ""
 
-#: app/models/MeprUser.php:815
+#: app/models/MeprUser.php:818
 msgid "This email is already in use by another member"
 msgstr ""
 
-#: app/models/MeprUser.php:833
-#: app/models/MeprUser.php:965
+#: app/models/MeprUser.php:836
+#: app/models/MeprUser.php:968
 msgid "Username must not be blank"
 msgstr ""
 
-#: app/models/MeprUser.php:837
+#: app/models/MeprUser.php:840
 msgid "Username must only contain letters, numbers and/or underscores"
 msgstr ""
 
-#: app/models/MeprUser.php:844
+#: app/models/MeprUser.php:847
 msgid "This username has already been taken. If you are an existing user, please %sLogin%s first. You will be redirected back here to complete your sign-up afterwards."
 msgstr ""
 
-#: app/models/MeprUser.php:849
+#: app/models/MeprUser.php:852
 msgid "Email must be a real and properly formatted email address"
 msgstr ""
 
-#: app/models/MeprUser.php:856
+#: app/models/MeprUser.php:859
 msgid "This email address has already been used. If you are an existing user, please %sLogin%s to complete your purchase. You will be redirected back here to complete your sign-up afterwards."
 msgstr ""
 
-#: app/models/MeprUser.php:861
-#: app/models/MeprUser.php:1019
+#: app/models/MeprUser.php:864
+#: app/models/MeprUser.php:1022
 msgid "You must enter a Password."
 msgstr ""
 
-#: app/models/MeprUser.php:865
-#: app/models/MeprUser.php:1022
+#: app/models/MeprUser.php:868
+#: app/models/MeprUser.php:1025
 msgid "You must enter a Password Confirmation."
 msgstr ""
 
-#: app/models/MeprUser.php:869
-#: app/models/MeprUser.php:1025
+#: app/models/MeprUser.php:872
+#: app/models/MeprUser.php:1028
 msgid "Your Password and Password Confirmation don't match."
 msgstr ""
 
-#: app/models/MeprUser.php:876
+#: app/models/MeprUser.php:879
 msgid "Only humans are allowed to register."
 msgstr ""
 
-#: app/models/MeprUser.php:885
+#: app/models/MeprUser.php:888
 msgid "Your coupon code is invalid."
 msgstr ""
 
-#: app/models/MeprUser.php:889
+#: app/models/MeprUser.php:892
 msgid "You must agree to the Terms of Service"
 msgstr ""
 
-#: app/models/MeprUser.php:893
+#: app/models/MeprUser.php:896
 msgid "You must agree to the Privacy Policy"
 msgstr ""
 
-#: app/models/MeprUser.php:933
+#: app/models/MeprUser.php:936
 msgid "There are no active Payment Methods right now ... please contact the system administrator for help."
 msgstr ""
 
-#: app/models/MeprUser.php:949
+#: app/models/MeprUser.php:952
 msgid "Invalid Payment Method"
 msgstr ""
 
-#: app/models/MeprUser.php:981
-#: app/models/MeprUser.php:987
+#: app/models/MeprUser.php:984
+#: app/models/MeprUser.php:990
 msgid "Your username or password was incorrect"
 msgstr ""
 
-#: app/models/MeprUser.php:998
+#: app/models/MeprUser.php:1001
 msgid "You must enter a Username or Email"
 msgstr ""
 
-#: app/models/MeprUser.php:1004
+#: app/models/MeprUser.php:1007
 msgid "That Username or Email wasn't found."
 msgstr ""
 
-#: app/models/MeprUser.php:1015
+#: app/models/MeprUser.php:1018
 msgid "Your password must meet the minimum strength requirement."
 msgstr ""
 
-#: app/models/MeprUser.php:1513
+#: app/models/MeprUser.php:1516
 msgid "<br/>%1$s<br/>%2$s, %3$s %4$s%5$s<br/>"
 msgstr ""
 
@@ -6350,13 +6438,13 @@ msgid "Create"
 msgstr ""
 
 #: app/views/admin/members/row.php:50
-#: app/views/admin/subscriptions/row.php:107
+#: app/views/admin/subscriptions/row.php:114
 #: app/views/admin/transactions/row.php:47
 msgid "View member's profile"
 msgstr ""
 
 #: app/views/admin/members/row.php:50
-#: app/views/admin/subscriptions/row.php:109
+#: app/views/admin/subscriptions/row.php:116
 #: app/views/admin/transactions/row.php:49
 msgid "Deleted"
 msgstr ""
@@ -6395,10 +6483,15 @@ msgid "Active Members"
 msgstr ""
 
 #: app/views/admin/members/search_box.php:14
-msgid "Expired Members"
+#: app/views/admin/reports/main.php:13
+msgid "Inactive Members"
 msgstr ""
 
 #: app/views/admin/members/search_box.php:15
+msgid "Expired Members"
+msgstr ""
+
+#: app/views/admin/members/search_box.php:16
 msgid "Non-Members"
 msgstr ""
 
@@ -7708,11 +7801,15 @@ msgstr ""
 msgid "after Subscription Renews"
 msgstr ""
 
-#: app/views/admin/reminders/trigger.php:25
-msgid "before Credit Card Expires"
+#: app/views/admin/reminders/trigger.php:19
+msgid "before Subscription Trial Ends"
 msgstr ""
 
 #: app/views/admin/reminders/trigger.php:26
+msgid "before Credit Card Expires"
+msgstr ""
+
+#: app/views/admin/reminders/trigger.php:27
 msgid "after Credit Card Expires"
 msgstr ""
 
@@ -7773,10 +7870,6 @@ msgstr ""
 #: app/views/admin/reports/all_time_info_blocks.php:39
 #: app/views/admin/reports/month_info_blocks.php:39
 msgid "Total Net Income"
-msgstr ""
-
-#: app/views/admin/reports/main.php:13
-msgid "Inactive Members"
 msgstr ""
 
 #: app/views/admin/reports/main.php:18
@@ -8175,28 +8268,28 @@ msgstr ""
 msgid "Delete Subscription"
 msgstr ""
 
-#: app/views/admin/subscriptions/row.php:89
+#: app/views/admin/subscriptions/row.php:96
 msgid "Show related transaction"
 msgstr ""
 
-#: app/views/admin/subscriptions/row.php:98
+#: app/views/admin/subscriptions/row.php:105
 msgid "Show related transactions"
 msgstr ""
 
-#: app/views/admin/subscriptions/row.php:217
+#: app/views/admin/subscriptions/row.php:224
 msgid "Editing Subscription Status"
 msgstr ""
 
-#: app/views/admin/subscriptions/row.php:218
+#: app/views/admin/subscriptions/row.php:225
 msgid "Modifying the Auto Rebill status here will change the status of the Subscription ONLY on your site, not at the Gateway itself. To cancel a Subscription, either you or the member must click on Cancel."
 msgstr ""
 
-#: app/views/admin/subscriptions/row.php:226
+#: app/views/admin/subscriptions/row.php:233
 #: app/views/admin/transactions/row.php:168
 msgid "Save"
 msgstr ""
 
-#: app/views/admin/subscriptions/row.php:231
+#: app/views/admin/subscriptions/row.php:238
 msgid "Saving..."
 msgstr ""
 
@@ -9021,6 +9114,7 @@ msgstr ""
 #: app/views/emails/user_cancelled_sub.php:10
 #: app/views/emails/user_downgraded_sub.php:10
 #: app/views/emails/user_resumed_sub.php:10
+#: app/views/emails/user_stripe_invoice.php:13
 #: app/views/emails/user_suspended_sub.php:10
 #: app/views/emails/user_upgraded_sub.php:10
 msgctxt "ui"
@@ -9119,7 +9213,7 @@ msgstr ""
 msgid "Last Name on Card"
 msgstr ""
 
-#: app/views/checkout/MeprStripeGateway/payment_form.php:28
+#: app/views/checkout/MeprStripeGateway/payment_form.php:36
 msgid "Credit Card:*"
 msgstr ""
 
@@ -9232,6 +9326,7 @@ msgstr ""
 #: app/views/emails/user_failed_txn.php:15
 #: app/views/emails/user_refunded_txn.php:15
 #: app/views/emails/user_resumed_sub.php:14
+#: app/views/emails/user_stripe_invoice.php:16
 #: app/views/emails/user_suspended_sub.php:14
 #: app/views/emails/user_upgraded_sub.php:14
 msgctxt "ui"
@@ -9258,6 +9353,7 @@ msgstr ""
 #: app/views/emails/user_failed_txn.php:16
 #: app/views/emails/user_refunded_txn.php:16
 #: app/views/emails/user_resumed_sub.php:15
+#: app/views/emails/user_stripe_invoice.php:17
 #: app/views/emails/user_suspended_sub.php:15
 #: app/views/emails/user_upgraded_sub.php:15
 msgctxt "ui"
@@ -9279,6 +9375,7 @@ msgstr ""
 #: app/views/emails/user_cc_expiring.php:11
 #: app/views/emails/user_downgraded_sub.php:11
 #: app/views/emails/user_resumed_sub.php:11
+#: app/views/emails/user_stripe_invoice.php:14
 #: app/views/emails/user_suspended_sub.php:11
 #: app/views/emails/user_upgraded_sub.php:11
 msgctxt "ui"
@@ -9294,6 +9391,7 @@ msgstr ""
 #: app/views/emails/user_cancelled_sub.php:12
 #: app/views/emails/user_downgraded_sub.php:12
 #: app/views/emails/user_resumed_sub.php:12
+#: app/views/emails/user_stripe_invoice.php:15
 #: app/views/emails/user_suspended_sub.php:12
 #: app/views/emails/user_upgraded_sub.php:12
 msgctxt "ui"
@@ -9403,6 +9501,7 @@ msgstr ""
 #: app/views/emails/user_failed_txn.php:10
 #: app/views/emails/user_refunded_txn.php:10
 #: app/views/emails/user_resumed_sub.php:9
+#: app/views/emails/user_stripe_invoice.php:12
 #: app/views/emails/user_suspended_sub.php:9
 #: app/views/emails/user_upgraded_sub.php:9
 msgctxt "ui"
@@ -9666,6 +9765,7 @@ msgstr ""
 #: app/views/emails/user_cancelled_sub.php:4
 #: app/views/emails/user_downgraded_sub.php:4
 #: app/views/emails/user_resumed_sub.php:4
+#: app/views/emails/user_stripe_invoice.php:4
 #: app/views/emails/user_suspended_sub.php:4
 #: app/views/emails/user_upgraded_sub.php:4
 msgctxt "ui"
@@ -9912,6 +10012,21 @@ msgstr ""
 #: app/views/emails/user_signup_abandoned_reminder.php:9
 msgctxt "ui"
 msgid "We'd be really sad if you missed out so we just wanted to drop you a line to let you to know that it's easy to <strong>%1$scomplete your signup today%2$s</strong>."
+msgstr ""
+
+#: app/views/emails/user_stripe_invoice.php:3
+msgctxt "ui"
+msgid "Your Subscription Payment Failed"
+msgstr ""
+
+#: app/views/emails/user_stripe_invoice.php:7
+msgctxt "ui"
+msgid "Sorry, your latest subscription payment on {$blog_name} failed. Please click the link below to pay the invoice to keep your subscription active."
+msgstr ""
+
+#: app/views/emails/user_stripe_invoice.php:9
+msgctxt "ui"
+msgid "Pay Invoice"
 msgstr ""
 
 #: app/views/emails/user_sub_expires_reminder.php:9

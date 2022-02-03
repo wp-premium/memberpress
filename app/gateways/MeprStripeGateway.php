@@ -191,6 +191,8 @@ class MeprStripeGateway extends MeprBaseRealGateway {
       ]);
     }
 
+    $methods = MeprHooks::apply_filters('mepr-stripe-checkout-methods-for-onetime-payment', $methods);
+
     return $methods;
   }
 
@@ -388,7 +390,6 @@ class MeprStripeGateway extends MeprBaseRealGateway {
         ];
       }
 
-
       if ($coupon->discount_mode == 'first-payment'
           && $coupon->first_payment_discount_amount > 0
           && !$product->is_one_time_payment()
@@ -399,6 +400,8 @@ class MeprStripeGateway extends MeprBaseRealGateway {
 
     // active product to use in stripe checkout
     $this->send_stripe_request('products/' . $stripe_product_id, ['active' => 'true']);
+
+    $checkout_session = MeprHooks::apply_filters('mepr_stripe_checkout_session_args', $checkout_session, $txn, $sub);
 
     $result = $this->send_stripe_request('checkout/sessions', $checkout_session, 'post');
     $result['public_key'] = $this->settings->public_key;
@@ -831,6 +834,45 @@ class MeprStripeGateway extends MeprBaseRealGateway {
     }
   }
 
+  /**
+   * Handle the invoice.payment_failed webhook
+   *
+   * Sends an email to the customer to pay the outstanding invoice.
+   *
+   * @param stdClass $invoice The Stripe Invoice object
+   */
+  public function handle_invoice_payment_failed_webhook($invoice) {
+    try {
+      $email = MeprEmailFactory::fetch('MeprUserStripeInvoiceEmail');
+
+      if($email->enabled() && $invoice->hosted_invoice_url) {
+        $sub = MeprSubscription::get_one_by_subscr_id($invoice->subscription);
+
+        if(!($sub instanceof MeprSubscription)) {
+          // Look for an old cus_xxx subscription
+          $sub = MeprSubscription::get_one_by_subscr_id($invoice->customer);
+        }
+
+        if($sub instanceof MeprSubscription && $sub->id > 0 && $sub->txn_count > 1) {
+          $usr = $sub->user();
+
+          if($usr->ID > 0) {
+            $email->to = $usr->formatted_email();
+
+            $params = array_merge(
+              MeprSubscriptionsHelper::get_email_params($sub),
+              array('stripe_invoice_url' => $invoice->hosted_invoice_url)
+            );
+
+            $email->send($params);
+          }
+        }
+      }
+    } catch (Exception $e) {
+      // Fail silently
+    }
+  }
+
   /** Used to record a declined payment. */
   public function record_payment_failure() {
     if(isset($_REQUEST['data'])) {
@@ -1012,6 +1054,7 @@ class MeprStripeGateway extends MeprBaseRealGateway {
     return false;
   }
 
+  /* Is this even being used? */
   public function process_trial_payment($txn) {
     $mepr_options = MeprOptions::fetch();
     $sub = $txn->subscription();
@@ -1901,11 +1944,20 @@ class MeprStripeGateway extends MeprBaseRealGateway {
             MeprView::render("/checkout/MeprStripeGateway/payment_gateway_fields", get_defined_vars());
           }
         ?>
+
+        <?php if($this->settings->stripe_wallet_enabled == 'on' && $this->settings->stripe_checkout_enabled != 'on') { ?>
+          <div class="mepr-stripe-payment-request-wrapper">
+            <div id="mepr-stripe-payment-request-element" style="max-width: 300px" class="mepr-stripe-payment-request-element" data-stripe-public-key="<?php echo esc_attr($this->settings->public_key); ?>" data-payment-method-id="<?php echo esc_attr($this->settings->id); ?>" data-locale-code="<?php echo $mepr_options->language_code; ?>" data-currency-code="<?php echo $mepr_options->currency_code; ?>" data-total-text="<?php echo esc_attr(__('Total', 'memberpress')); ?>">
+              <!-- a Stripe Payment Request Element will be inserted here. -->
+            </div>
+            <br>
+          </div>
+        <?php } ?>
     <?php if($this->settings->stripe_checkout_enabled == 'on'): ?>
       <?php MeprHooks::do_action('mepr-stripe-payment-form-before-name-field', $txn); ?>
       <input type="hidden" name="mepr_stripe_is_checkout" value="1"/>
       <input type="hidden" name="mepr_stripe_checkout_page_mode" value="1"/>
-      <h4><?php _e('Pay with your Credit Card via Stripe Checkout', 'memberpress'); ?></h4>
+      <div><?php _e('Pay with your Credit Card via Stripe Checkout', 'memberpress'); ?></div>
       <span role="alert" class="mepr-stripe-checkout-errors"></span>
     <?php else: ?>
         <div class="mp-form-row">
@@ -1924,15 +1976,6 @@ class MeprStripeGateway extends MeprBaseRealGateway {
           <div class="mepr-stripe-card-element" data-stripe-public-key="<?php echo esc_attr($this->settings->public_key); ?>" data-payment-method-id="<?php echo esc_attr($this->settings->id); ?>" data-locale-code="<?php echo esc_attr(self::get_locale_code()); ?>">
             <!-- a Stripe Element will be inserted here. -->
           </div>
-
-          <?php if($this->settings->stripe_wallet_enabled == 'on') { ?>
-          <div class="mepr-stripe-payment-request-wrapper">
-            <p class="mepr-stripe-payment-request-option"><?php echo esc_html(__('Or', 'memberpress')); ?></p>
-            <div id="mepr-stripe-payment-request-element" style="max-width: 300px" class="mepr-stripe-payment-request-element" data-stripe-public-key="<?php echo esc_attr($this->settings->public_key); ?>" data-payment-method-id="<?php echo esc_attr($this->settings->id); ?>" data-locale-code="<?php echo $mepr_options->language_code; ?>" data-currency-code="<?php echo $mepr_options->currency_code; ?>" data-total-text="<?php echo esc_attr(__('Total', 'memberpress')); ?>">
-              <!-- a Stripe Payment Request Element will be inserted here. -->
-            </div>
-          </div>
-          <?php } ?>
         </div>
 
         <?php MeprHooks::do_action('mepr-stripe-payment-form', $txn); ?>
@@ -2279,6 +2322,9 @@ class MeprStripeGateway extends MeprBaseRealGateway {
     }
     else if($event->type=='invoice.payment_succeeded') {
       $this->handle_invoice_payment_succeeded_webhook($obj);
+    }
+    else if ($event->type=='invoice.payment_failed') {
+      $this->handle_invoice_payment_failed_webhook($obj);
     }
     else if($event->type=='customer.deleted') {
       MeprUser::delete_stripe_customer_id($this->get_meta_gateway_id(), $obj->id);

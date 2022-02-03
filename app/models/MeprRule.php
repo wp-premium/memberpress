@@ -1190,6 +1190,9 @@ class MeprRule extends MeprCptModel {
         else {
           $unauth->excerpt = force_balance_tags((do_shortcode(substr($post->post_content, 0, $pos))));
         }
+
+        $unauth->excerpt = wpautop($unauth->excerpt);
+
       }
       else { //No more tag?
         $unauth->excerpt = wpautop($post->post_excerpt);

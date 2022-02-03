@@ -63,9 +63,8 @@ class MeprUserRoles  {
     //Along the way we also need to keep track of Roles the user may have which aren't associated with Memberships - and make sure they stay in place
     //And lastly - make sure the user doesn't have an empty $wp_user->roles - if they somehow do - we'll just set the default role
 
-    $all_memberships_roles  = $this->get_all_roles_from_all_memberships();
     $roles_user_should_have = $this->get_users_active_roles($wp_user);
-    $roles_to_remove        = array_diff($all_memberships_roles, $roles_user_should_have);
+    $roles_to_remove        = $this->get_roles_to_remove($wp_user);
 
     //Remove the Roles they shouldn't have
     $roles_to_remove = MeprHooks::apply_filters('mepr-userroles-remove-roles', $roles_to_remove, $wp_user);
@@ -104,6 +103,23 @@ class MeprUserRoles  {
     $products = $mp_user->active_product_subscriptions('ids', true);
 
     return $this->get_roles_from_products_array($products);
+  }
+
+  public function get_roles_to_remove($wp_user) {
+    $inactive_memberships = array();
+
+    $mepr_user = new MeprUser($wp_user->ID);
+    $memberships = $mepr_user->active_product_subscriptions('ids', true, false);
+
+    if(!empty($memberships)) {
+      foreach($memberships as $membership) {
+        if(!($mepr_user->is_already_subscribed_to($membership))) {
+          $inactive_memberships[] = $membership;
+        }
+      }
+    }
+
+    return $this->get_roles_from_products_array($inactive_memberships);
   }
 
   public function get_roles_from_products_array($products) {

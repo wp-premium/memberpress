@@ -265,7 +265,7 @@ class MeprAntiCardTestingCtrl extends MeprBaseCtrl {
 
     if($ip && !self::is_private_ip_address($ip)) {
       $failed = (int) get_transient("mepr_failed_payments_$ip");
-      set_transient("mepr_failed_payments_$ip", $failed + 1, 2 * HOUR_IN_SECONDS);
+      set_transient("mepr_failed_payments_$ip", $failed + 1, MeprHooks::apply_filters('mepr_card_testing_timeframe', 2 * HOUR_IN_SECONDS));
     }
   }
 
@@ -288,7 +288,7 @@ class MeprAntiCardTestingCtrl extends MeprBaseCtrl {
       }
 
       // If there have been 5 or more failed payments, add to permanently banned IPs
-      if($failed >= 5 && !in_array($ip, $blocked_ips, true)) {
+      if($failed >= MeprHooks::apply_filters('mepr_card_testing_failure_limit', 5) && !in_array($ip, $blocked_ips, true)) {
         $blocked_ips[] = $ip;
         $mepr_options->anti_card_testing_blocked = $blocked_ips;
         $mepr_options->store(false);

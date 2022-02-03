@@ -9,12 +9,13 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     add_filter('plugins_api', 'MeprUpdateCtrl::plugin_info', 11, 3);
     add_action('admin_enqueue_scripts', 'MeprUpdateCtrl::enqueue_scripts');
     add_action('admin_notices', 'MeprUpdateCtrl::activation_warning');
-    add_action('admin_notices', 'MeprUpdateCtrl::bf_upgrade_notices');
+    add_action('admin_notices', 'MeprUpdateCtrl::promo_upgrade_notices');
     //add_action('mepr_display_options', 'MeprUpdateCtrl::queue_button');
     add_action('admin_init', 'MeprUpdateCtrl::activate_from_define');
     add_action('admin_init', 'MeprUpdateCtrl::maybe_activate');
     add_action('wp_ajax_mepr_edge_updates', 'MeprUpdateCtrl::mepr_edge_updates');
     add_action( 'wp_ajax_mepr_dismiss_bf_notice', 'MeprUpdateCtrl::dismiss_bf_notice' );
+    add_action( 'wp_ajax_mepr_dismiss_gm_notice', 'MeprUpdateCtrl::dismiss_gm_notice' );
     //add_action('wp_ajax_mepr_rollback', 'MeprUpdateCtrl::rollback');
 
     add_action( 'mepr_display_general_options', array( $this,'display_options' ), 99 );
@@ -33,14 +34,23 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     update_option( 'mp_2021_bf_dismissed', true );
     wp_send_json_success( array(), 201 );
   }
+  public static function dismiss_gm_notice() {
 
-  public static function bf_upgrade_notices() {
+    if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'mepr_dismiss_gm_notice' ) ) {
+      die();
+    }
+
+    update_option( 'mp_2021_gm_dismissed', true );
+    wp_send_json_success( array(), 201 );
+  }
+
+  public static function promo_upgrade_notices() {
 
     if ( ! MeprUtils::is_memberpress_admin_page() ) {
       return;
     }
 
-    if ( ! MeprUtils::is_black_friday_time() || ! empty( get_option( 'mp_2021_bf_dismissed' ) ) ) {
+    if ( ! MeprUtils::is_green_monday_time() || ! empty( get_option( 'mp_2021_gm_dismissed' ) ) ) {
       return;
     }
 
@@ -55,40 +65,39 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
       }
     }
 
-    $link = 'https://memberpress.com/bf2021/bf-alert/lic-no';
-    $heading = '📢 Black Friday is here!';
-    $message = "Get MemberPress TODAY for up to $300 OFF. PLUS enter to win a 14\" MacBook Pro M1. Don't wait!";
-    $button_text = 'Get MemberPress 👈';
+    $link = 'https://memberpress.com/gm2021/gm-alert/lic-no';
+    $heading = '🌳 Wanna Plant a Tree?';
+    $message = "Buy MemberPress NOW 👉 We'll Plant a Tree & You'll Save Up To $300 🌲 Go Green & Save Big on Green Monday 🌲 Use Code GREEN21 Thru Dec 18";
+    $button_text = '👉 GET MEMBERPRESS 👈';
 
     if ( ! empty( $li['license_key']['expires_at'] ) && strtotime( $li['license_key']['expires_at'] ) < time() ) {
       // Expired
-      $message = "RENEW MemberPress TODAY for up to $300 OFF. PLUS enter to win a 14\" MacBook Pro M1. Don't wait!";
-      $button_text = 'Renew MemberPress 👈';
-      $link = 'https://memberpress.com/bf2021/bf-alert/lic-exp';
+      $message = "NOW's the Time to RENEW Your License 👉 We'll Plant a Tree + You'll Save Up To $300 🌲 Happy GREEN MONDAY 🌲 Use Code GREEN21 Thru Dec 18";
+      $button_text = '👉 RENEW NOW 👈';
+      $link = 'https://memberpress.com/gm2021/gm-alert/lic-exp';
     } else {
       // Active
       switch ( $li['product_slug'] ) {
         case 'memberpress-basic':
         case 'business':
-          $message = "UPGRADE to MemberPress Plus or Pro TODAY & SAVE up to $300 OFF. And enter to win a 14\" MacBook Pro M1. Don't wait!";
-          $button_text = 'Upgrade MemberPress 👈';
-          $link = 'https://memberpress.com/bf2021/bf-alert/lic-basic';
+          $message = "UPGRADE to Plus or Pro NOW 👉We'll Plant a Tree & You'll Pay LESS than Your Basic Renewal 🌲 It's GREEN MONDAY! Use Code GREEN21 Thru Dec 18";
+          $button_text = '👉 UPGRADE NOW 👈';
+          $link = 'https://memberpress.com/gm2021/gm-alert/lic-basic';
           break;
 
         case 'memberpress-plus':
         case 'memberpress-plus-2':
-          $message = "UPGRADE to MemberPress PRO TODAY & SAVE up to $300 OFF. PLUS enter to win a 14\" MacBook Pro M1. Don't wait!";
-          $button_text = 'Upgrade MemberPress 👈';
-          $link = 'https://memberpress.com/bf2021/bf-alert/lic-plus';
+          $message = "UPGRADE to PRO Now 👉 We'll Plant a Tree & You'll Pay LESS than Renewal for Basic 🌲GREEN MONDAY🌳 Use Code GREEN21 Thru Dec 18";
+          $button_text = '👉 UPGRADE NOW 👈';
+          $link = 'https://memberpress.com/gm2021/gm-alert/lic-plus';
           break;
 
         case 'memberpress-pro':
         case 'memberpress-pro-5':
         case 'developer':
-          $message = "ENTREPRENEUR on your list? Buy a MemberPress GIFT subscription + PRINTABLE CERTIFICATE & save up to $300! PLUS enter to win a MacBook Pro!";
-          $button_text = 'Buy a MemberPress Gift Certificate 👈';
-          $heading = '📢 Black Friday is here!';
-          $link = 'https://memberpress.com/bf2021/bf-alert/lic-pro';
+          $message = "Buy a MemberPress Gift Certificate 👉 We'll Plant a Tree & You'll Save Up To $300 🌲Happy Green Monday🌲 Use Code GREEN21 Thru Dec 18";
+          $button_text = '👉 GIVE THE GIFT OF MEMBERPRESS 👈';
+          $link = 'https://memberpress.com/gm2021/gm-alert/lic-pro';
           break;
 
         default:

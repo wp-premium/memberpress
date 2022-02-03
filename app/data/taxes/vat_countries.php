@@ -29,5 +29,13 @@ return MeprHooks::apply_filters('mepr-vat-countries', array(
   'RO' => array( 'name' => __('Romania', 'memberpress'),        'rate' => 19, 'reduced_rate' => 5,    'fmt' => '(RO)?[0-9]{2,10}' ),
   'SE' => array( 'name' => __('Sweden', 'memberpress'),         'rate' => 25, 'reduced_rate' => 6,    'fmt' => '(SE)?[0-9]{12}' ),
   'SI' => array( 'name' => __('Slovenia', 'memberpress'),       'rate' => 22, 'reduced_rate' => 5,    'fmt' => '(SI)?[0-9]{8}' ),
-  'SK' => array( 'name' => __('Slovakia', 'memberpress'),       'rate' => 20, 'fmt' => '(SK)?[0-9]{10}' )
+  'SK' => array( 'name' => __('Slovakia', 'memberpress'),       'rate' => 20, 'fmt' => '(SK)?[0-9]{10}' ),
+  'GF' => array( 'name' => __('French Guiana', 'memberpress'),     'rate' => 20, 'reduced_rate' => 5.5,  'fmt' => '[0-9A-Z]{2}[0-9]{9}' ),
+  'MF' => array( 'name' => __('Saint Martin (French part)', 'memberpress'),     'rate' => 20, 'reduced_rate' => 5.5,  'fmt' => '?[0-9A-Z]{2}[0-9]{9}' ),
+  'MQ' => array( 'name' => __('Martinique', 'memberpress'),     'rate' => 20, 'reduced_rate' => 5.5,  'fmt' => '[0-9A-Z]{2}[0-9]{9}' ),
+  'RE' => array( 'name' => __('Reunion', 'memberpress'),        'rate' => 20, 'reduced_rate' => 15.5,  'fmt' => '[0-9A-Z]{2}[0-9]{9}' ),
+  'YT' => array( 'name' => __('Mayotte', 'memberpress'),        'rate' => 20, 'reduced_rate' => 5.5,  'fmt' => '[0-9A-Z]{2}[0-9]{9}' ),
+  'PM' => array( 'name' => __('Saint Pierre and Miquelon', 'memberpress'),        'rate' => 20, 'reduced_rate' => 5.5,  'fmt' => '[0-9A-Z]{2}[0-9]{9}' ),
+  'GP' => array( 'name' => __('Guadeloupe', 'memberpress'),        'rate' => 20, 'reduced_rate' => 5.5,  'fmt' => '[0-9A-Z]{2}[0-9]{9}' ),
+  'MC' => array( 'name' => __('Monaco', 'memberpress'),        'rate' => 20, 'reduced_rate' => 5.5,  'fmt' => '(FR)?[0-9A-Z]{2}[0-9]{9}' ),
 ) );

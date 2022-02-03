@@ -122,6 +122,7 @@ class MeprMembersCtrl extends MeprBaseCtrl {
       //'col_suspended_sub_count' => __('Paused Subscriptions'),
       //'col_cancelled_sub_count' => __('Stopped Subscriptions'),
       'col_memberships' => __('Memberships', 'memberpress'),
+      'col_inactive_memberships' => __('Inactive Memberships', 'memberpress'),
       'col_last_login_date' => __('Last Login', 'memberpress'),
       'col_login_count' => __('Logins', 'memberpress'),
       'col_total_spent' => __('Value', 'memberpress'),

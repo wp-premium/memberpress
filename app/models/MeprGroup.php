@@ -265,11 +265,11 @@ class MeprGroup extends MeprCptModel {
     if($this->use_custom_template) {
       return locate_template($this->custom_template);
     }
-    else {
-      return locate_template(self::template_search_path());
-    }
+
+    return null;
   }
 
+  /*
   public static function template_search_path() {
     return array(
       'page_memberpressgroup.php',
@@ -279,6 +279,7 @@ class MeprGroup extends MeprCptModel {
       'index.php'
     );
   }
+  */
 
   public function manual_append_price_boxes() {
     return preg_match('~\[mepr-group-price-boxes~',$this->post_content);

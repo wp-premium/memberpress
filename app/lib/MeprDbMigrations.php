@@ -571,4 +571,55 @@ class MeprDbMigrations {
       AND status = 'complete'
     ");
   }
+
+  /*
+   * This script populates both the membership and inactive_membership columns in the
+   * members table now that the inactive_membership column has been added.
+   *
+   * The memberships column is update because a previous "fix" populated it with both
+   * active and inactive memberships.
+   *
+   * Runs in batches on a cron job to reduce load on customer sites.
+   */
+  public static function populate_inactive_memberships_col_015() {
+    //scheduled in
+    global $wpdb;
+    $mepr_db = new MeprDb();
+
+    //Large member base may take days to update. So setting thet start date
+    //And only updating ones that haven't been updated since then
+    //Store as transient so it can be accesses/won't change between cron job executions
+    $started = get_transient('mepr_members_migrate_start');
+    if(!isset($started) || !$started) {
+      $started = MeprUtils::ts_to_mysql_date(time());
+      set_transient('mepr_members_migrate_start', $started);
+    }
+
+    //Get the next 100 user ids that have not been updated since the migration started
+    //Note: If the member data was already updated by some other process since the migration started
+    //that is okay, it will have the correct data and will be skipped here
+    $batch_query = "SELECT user_id FROM " . $mepr_db->members . " WHERE updated_at < %s LIMIT 25";
+    $batch_query = $wpdb->prepare($batch_query, $started);
+
+    $batch_ids = $wpdb->get_col($batch_query);
+
+    if (empty($batch_ids)) {
+      //Nothing left to update so remove transient and cancel cron job
+      delete_transient('mepr_members_migrate_start');
+
+      $timestamp = wp_next_scheduled( 'mepr_migrate_members_table_015' );
+      wp_unschedule_event( $timestamp, 'mepr_migrate_members_table_015' );
+      wp_clear_scheduled_hook('mepr_migrate_members_table_015');
+    } else {
+      //Loop through all the ids
+      foreach($batch_ids as $uid) {
+        $u = new MeprUser();
+
+        // We just set the ID here to avoid looking up the ID and
+        // it's the only thing we care about in updat_member_data
+        $u->ID = $uid;
+        $u->update_member_data(array('memberships', 'inactive_memberships'));
+      }
+    }
+  }
 }

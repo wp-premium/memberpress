@@ -11,6 +11,9 @@ class MeprDbCtrl extends MeprBaseCtrl {
     add_action('wp_ajax_mepr_db_upgrade_in_progress', array($this,'ajax_db_upgrade_in_progress'));
     add_action('wp_ajax_mepr_db_upgrade_error', array($this,'ajax_db_upgrade_error'));
 
+    add_filter( 'cron_schedules', array($this,'intervals') );
+    add_action( 'mepr_migrate_members_table_015', 'MeprDbMigrations::populate_inactive_memberships_col_015' );
+
     // Cleanup soft db migrate for now
     // TODO: Remove soon
     if(($timestamp = wp_next_scheduled('mepr_migration_worker'))) {
@@ -19,6 +22,15 @@ class MeprDbCtrl extends MeprBaseCtrl {
 
     // Small UI to check on some table records
     add_action('mepr_activate_license_page', array($this, 'activate_license_page'));
+  }
+
+  public function intervals( $schedules ) {
+    $schedules['mepr_migrate_members_table_015_interval'] = array(
+      'interval' => MeprUtils::minutes(10), // Run every 10 minutes
+      'display' => __('MemberPress Member Data Migrate Interval', 'memberpress'),
+    );
+
+    return $schedules;
   }
 
   public function upgrade_needed() {
@@ -220,4 +232,3 @@ class MeprDbCtrl extends MeprBaseCtrl {
   }
 
 } //End class
-

@@ -119,6 +119,9 @@ return array(
   'before-cc-expires-reminder' => (object)array(
     'unique' => false
   ),
+  'before-sub-trial-ends' => (object)array(
+    'unique' => false
+  ),
 
   /** Events for Corporate Accounts */
   'sub-account-added' => (object)array(

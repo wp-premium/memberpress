@@ -693,9 +693,33 @@ class MeprOptions {
     if(isset($params[$this->custom_fields_str]) && !empty($params[$this->custom_fields_str])) {
       $indexes = $params['mepr-custom-fields-index'];
 
+      $used = array();
+
       foreach($indexes as $i) {
         $name = isset($params[$this->custom_fields_str][$i]['name'])?$params[$this->custom_fields_str][$i]['name']:'';
-        $slug = ($params[$this->custom_fields_str][$i]['slug'] == 'mepr_none')?MeprUtils::sanitize_string('mepr_'.$name):$params[$this->custom_fields_str][$i]['slug']; //Need to check that this key doesn't already exist in usermeta table
+        $slug = ($params[$this->custom_fields_str][$i]['slug'] == 'mepr_none') ? substr( MeprUtils::sanitize_string('mepr_'.$name), 0, 240 ) : substr( $params[$this->custom_fields_str][$i]['slug'], 0, 240 ); //Need to check that this key doesn't already exist in usermeta table
+
+        // Prevent duplicate slugs
+        if ( in_array( $slug, $used ) ) {
+          do {
+            $slug_parts = explode( '-', $slug );
+            if ( is_array( $slug_parts ) ) { // We may have a number appended already
+              $number = array_pop( $slug_parts );
+              if ( is_numeric( $number ) ) { // Increment the existing number
+                $append = (int) $number + 1;
+                $last_index = count( $slug_parts ) - 1;
+                $slug_parts[$last_index] .= "-{$append}";
+                $slug = implode( '-', $slug_parts );
+              } else { // Append 1
+                $slug .= '-1';
+              }
+            } else { // Append 1
+              $slug .= '-1';
+            }
+          } while ( in_array( $slug, $used ) );
+        }
+        $used[] = $slug;
+
         $type = $params[$this->custom_fields_str][$i]['type'];
         $default = isset($params[$this->custom_fields_str][$i]['default'])?$params[$this->custom_fields_str][$i]['default']:'';
         $signup = isset($params[$this->custom_fields_str][$i]['signup']);
