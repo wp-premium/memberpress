@@ -13,6 +13,12 @@ class MeprOptions {
     $this->wpml_custom_fields(); //Need to store as an array for WPML - this converts back to objects :)
   }
 
+  /**
+   * Fetch the MeprOptions instance
+   *
+   * @param bool $force Force a fresh instance
+   * @return self
+   */
   public static function fetch($force = false) {
     static $mepr_options;
 
@@ -809,18 +815,6 @@ class MeprOptions {
     $postcode = $this->attr('biz_postcode');
 
     return (!empty($country) && !empty($postcode) && !empty($state) && !empty($city) && !empty($one));
-  }
-
-  public function deactivate_license() {
-    $this->mothership_license = '';
-    $this->store(false);
-
-    // Don't need to check the mothership for this one ... we just deactivated
-    update_option('mepr_activated', false);
-
-    // Clear the cache of add-ons
-    delete_site_transient('mepr_addons');
-    delete_site_transient('mepr_all_addons');
   }
 
   public function payment_method($id = 'default') {

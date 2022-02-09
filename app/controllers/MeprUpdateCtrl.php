@@ -14,8 +14,7 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     add_action('admin_init', 'MeprUpdateCtrl::activate_from_define');
     add_action('admin_init', 'MeprUpdateCtrl::maybe_activate');
     add_action('wp_ajax_mepr_edge_updates', 'MeprUpdateCtrl::mepr_edge_updates');
-    add_action( 'wp_ajax_mepr_dismiss_bf_notice', 'MeprUpdateCtrl::dismiss_bf_notice' );
-    add_action( 'wp_ajax_mepr_dismiss_gm_notice', 'MeprUpdateCtrl::dismiss_gm_notice' );
+    add_action( 'wp_ajax_mepr_dismiss_ip_admin_notice', 'MeprUpdateCtrl::dismiss_admin_notice' );
     //add_action('wp_ajax_mepr_rollback', 'MeprUpdateCtrl::rollback');
 
     add_action( 'mepr_display_general_options', array( $this,'display_options' ), 99 );
@@ -25,22 +24,16 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     add_action('admin_menu', 'MeprUpdateCtrl::admin_menu', 50);
   }
 
-  public static function dismiss_bf_notice() {
+  public static function dismiss_admin_notice() {
 
-    if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'mepr_dismiss_bf_notice' ) ) {
+    if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'mepr_dismiss_ip_admin_notice' ) ) {
       die();
     }
 
-    update_option( 'mp_2021_bf_dismissed', true );
-    wp_send_json_success( array(), 201 );
-  }
-  public static function dismiss_gm_notice() {
+    $dismissed_admin_notices = get_option( 'mp_dismissed_admin_notices', array() );
+    $dismissed_admin_notices[] = sanitize_text_field( $_POST['notice_id'] );
 
-    if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'mepr_dismiss_gm_notice' ) ) {
-      die();
-    }
-
-    update_option( 'mp_2021_gm_dismissed', true );
+    update_option( 'mp_dismissed_admin_notices', $dismissed_admin_notices );
     wp_send_json_success( array(), 201 );
   }
 
@@ -50,7 +43,12 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
       return;
     }
 
-    if ( ! MeprUtils::is_green_monday_time() || ! empty( get_option( 'mp_2021_gm_dismissed' ) ) ) {
+    // Set an identifier for this notice
+    $notice_id = 'mp_quizzes_0222';
+    $dismissed_admin_notices = get_option( 'mp_dismissed_admin_notices', array() );
+
+    // This notice has already been dismissed
+    if ( in_array( $notice_id, $dismissed_admin_notices) ) {
       return;
     }
 
@@ -65,12 +63,13 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
       }
     }
 
-    $link = 'https://memberpress.com/gm2021/gm-alert/lic-no';
-    $heading = '🌳 Wanna Plant a Tree?';
-    $message = "Buy MemberPress NOW 👉 We'll Plant a Tree & You'll Save Up To $300 🌲 Go Green & Save Big on Green Monday 🌲 Use Code GREEN21 Thru Dec 18";
-    $button_text = '👉 GET MEMBERPRESS 👈';
+    // Default
+    $link = 'https://memberpress.com/quizzes/qz-alert/all';
+    $heading = '💥 NEW FEATURE: Course Quizzes';
+    $message = "MemberPress Courses now includes built-in quizzes – attract & keep more students!";
+    $button_text = '👉 LEARN MORE 👈';
 
-    if ( ! empty( $li['license_key']['expires_at'] ) && strtotime( $li['license_key']['expires_at'] ) < time() ) {
+    /*if ( ! empty( $li['license_key']['expires_at'] ) && strtotime( $li['license_key']['expires_at'] ) < time() ) {
       // Expired
       $message = "NOW's the Time to RENEW Your License 👉 We'll Plant a Tree + You'll Save Up To $300 🌲 Happy GREEN MONDAY 🌲 Use Code GREEN21 Thru Dec 18";
       $button_text = '👉 RENEW NOW 👈';
@@ -103,26 +102,9 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
         default:
           break;
       }
-    }
+    }*/
 
-    MeprView::render('/admin/black-friday', get_defined_vars());
-  }
-
-  public static function route() {
-    if(strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
-      return self::process_form();
-    }
-    else {
-      if( isset($_GET['action']) &&
-          $_GET['action'] == 'deactivate' &&
-          isset($_GET['_wpnonce']) &&
-          wp_verify_nonce($_GET['_wpnonce'], 'memberpress_deactivate') ) {
-        return self::deactivate();
-      }
-      else {
-        return self::display_form();
-      }
-    }
+    MeprView::render('/admin/admin-notification', get_defined_vars());
   }
 
   public static function admin_menu() {
@@ -250,6 +232,7 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
 
     $args = wp_parse_args($_GET, array('page' => 'mepr-rollback'));
 
+    $title   = '';
     $nonce   = 'upgrade-plugin_' . MEPR_PLUGIN_NAME;
     $url     = 'index.php?page=mepr-rollback';
     $plugin  = MEPR_PLUGIN_NAME;
@@ -267,93 +250,76 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     return admin_url("index.php?page=mepr-rollback&_wpnonce={$nonce}");
   }
 
-  public static function display_form($message='', $errors=array()) {
-    $mepr_options = MeprOptions::fetch();
-
-    // We just force the queue to update when this page is visited
-    // that way we ensure the license info transient is set
-    self::manually_queue_update();
-
-    if(!empty($mepr_options->mothership_license) && empty($errors)) {
-      $li = get_site_transient( 'mepr_license_info' );
-    }
-
-    MeprView::render('/admin/update/ui', get_defined_vars());
-  }
-
-  public static function process_form() {
-    if(!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'],'activation_form')) {
-      wp_die(_e('Why you creepin\'?', 'memberpress'));
-    }
-
-    $mepr_options = MeprOptions::fetch();
-
-    if(!isset($_POST[$mepr_options->mothership_license_str])) {
-      self::display_form();
-      return;
-    }
-
-    $message = '';
-    $errors = array();
-    $mepr_options->mothership_license = sanitize_text_field(wp_unslash($_POST[$mepr_options->mothership_license_str]));
-
-    try {
-      $act = self::send_mothership_request("/license_keys/jactivate/{$mepr_options->mothership_license}", self::activation_args(true), 'post');
-      self::manually_queue_update();
-      $mepr_options->store(false);
-      $message = $act['message'];
-    }
-    catch(Exception $e) {
-      $errors[] = $e->getMessage();
-    }
-
-    self::display_form($message, $errors);
-  }
-
   public static function is_activated() {
     $mepr_options = MeprOptions::fetch();
     $activated = get_option('mepr_activated');
     return (!empty($mepr_options->mothership_license) && !empty($activated));
   }
 
-  public static function activation_args($return_json=false) {
-    $args = array(
-      'domain' => urlencode(MeprUtils::site_domain()),
-      'extra_info' => array(
-        //'members' => array(
-        //  'paid' => MeprReports::get_paid_active_members_count(),
-        //  'free' => MeprReports::get_free_active_members_count(),
-        //  'inactive' => MeprReports::get_inactive_members_count(),
-        //)
-      )
-    );
-
-    if($return_json) {
-      $args = json_encode($args);
-    }
-
-    return $args;
-  }
-
   public static function check_license_activation() {
     $aov = get_option('mepr_activation_override');
 
-    if(!empty($aov)) { return update_option('mepr_activated', true); }
+    if(!empty($aov)) {
+      update_option('mepr_activated', true);
+      do_action('mepr_license_activated', array('aov' => 1));
+      return;
+    }
 
     $mepr_options = MeprOptions::fetch();
-    $domain = urlencode(MeprUtils::site_domain());
 
+    if(empty($mepr_options->mothership_license)) {
+      return;
+    }
+
+    // Only check the key once per day
+    $option_key = "mepr_license_check_{$mepr_options->mothership_license}";
+
+    if(get_site_transient($option_key)) {
+      return;
+    }
+
+    $check_count = get_option($option_key, 0) + 1;
+    update_option($option_key, $check_count);
+
+    set_site_transient($option_key, true, MeprUtils::hours($check_count > 3 ? 72 : 24));
+
+    $domain = urlencode(MeprUtils::site_domain());
     $args = compact('domain');
 
     try {
-      $act = self::send_mothership_request("/license_keys/check/{$mepr_options->mothership_license}", $args, 'get');
+      $act = self::send_mothership_request("/license_keys/check/{$mepr_options->mothership_license}", $args);
 
-      if(!empty($act) && is_array($act) && isset($act['status'])) {
-        update_option('mepr_activated', ($act['status']=='enabled'));
+      if(!empty($act) && is_array($act)) {
+        $license_expired = false;
+
+        if(isset($act['expires_at'])) {
+          $expires_at = strtotime($act['expires_at']);
+
+          if($expires_at && $expires_at < time()) {
+            $license_expired = true;
+            update_option('mepr_activated', false);
+            do_action('mepr_license_expired', $act);
+          }
+        }
+
+        if(isset($act['status']) && !$license_expired) {
+          if($act['status'] == 'enabled') {
+            update_option($option_key, 0);
+            update_option('mepr_activated', true);
+            do_action('mepr_license_activated', $act);
+          }
+          elseif($act['status'] == 'disabled') {
+            update_option('mepr_activated', false);
+            do_action('mepr_license_invalidated', $act);
+          }
+        }
       }
     }
     catch(Exception $e) {
-      // TODO: For now do nothing if the server can't be reached
+      if($e->getMessage() == 'Not Found') {
+        update_option('mepr_activated', false);
+        do_action('mepr_license_invalidated');
+      }
     }
   }
 
@@ -368,28 +334,19 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
   public static function activate_from_define() {
     $mepr_options = MeprOptions::fetch();
 
-    if( defined('MEMBERPRESS_LICENSE_KEY') &&
-        $mepr_options->mothership_license != MEMBERPRESS_LICENSE_KEY ) {
-      $message = '';
-      $errors = array();
-      $mepr_options->mothership_license = stripslashes(MEMBERPRESS_LICENSE_KEY);
-      $domain = urlencode(MeprUtils::site_domain());
-
+    if(defined('MEMBERPRESS_LICENSE_KEY') && $mepr_options->mothership_license != MEMBERPRESS_LICENSE_KEY) {
       try {
-        $args = compact('domain');
-
         if(!empty($mepr_options->mothership_license)) {
-          $act = self::send_mothership_request("/license_keys/deactivate/{$mepr_options->mothership_license}", $args, 'post');
-          delete_site_transient('mepr_addons');
+          // Deactivate the old license key
+          self::deactivate_license();
         }
 
-        $act = self::send_mothership_request("/license_keys/jactivate/".MEMBERPRESS_LICENSE_KEY, self::activation_args(true), 'post');
-
-        self::manually_queue_update();
-
         // If we're using defines then we have to do this with defines too
+        $mepr_options = MeprOptions::fetch();
         $mepr_options->edge_updates = false;
         $mepr_options->store(false);
+
+        $act = self::activate_license(MEMBERPRESS_LICENSE_KEY);
 
         $message = $act['message'];
         $view = '/admin/errors';
@@ -409,28 +366,71 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     }
   }
 
-  public static function deactivate() {
+  /**
+   * Activate the license with the given key
+   *
+   * @param string $license_key The license key
+   * @return array The license data
+   * @throws Exception If there was an error activating the license
+   */
+  public static function activate_license($license_key) {
     $mepr_options = MeprOptions::fetch();
-    $domain       = urlencode(MeprUtils::site_domain());
-    $message      = '';
+
+    $args = array(
+      'domain' => urlencode(MeprUtils::site_domain())
+    );
+
+    $act = self::send_mothership_request("/license_keys/activate/{$license_key}", $args, 'post');
+
+    $mepr_options->mothership_license = $license_key;
+    $mepr_options->store(false);
+
+    self::manually_queue_update();
+
+    // Clear the cache of add-ons
+    delete_site_transient('mepr_addons');
+    delete_site_transient('mepr_all_addons');
+
+    do_action('mepr_license_activated', $act);
+
+    return $act;
+  }
+
+  /**
+   * Deactivate the license
+   *
+   * @return array
+   */
+  public static function deactivate_license() {
+    $mepr_options = MeprOptions::fetch();
 
     try {
-      $args = compact('domain');
+      $args = array(
+        'domain' => urlencode(MeprUtils::site_domain())
+      );
+
       $act = self::send_mothership_request("/license_keys/deactivate/{$mepr_options->mothership_license}", $args, 'post');
-
-      self::manually_queue_update();
-
-      $mepr_options->deactivate_license();
-
-      $message = $act['message'];
     }
     catch(Exception $e) {
-      $mepr_options->deactivate_license();
-
-      $errors[] = $e->getMessage();
+      // Catching here to allow invalid license keys to be deactivated
+      $act = array('message' => __('License key deactivated', 'memberpress'));
     }
 
-    self::display_form($message);
+    $mepr_options->mothership_license = '';
+    $mepr_options->store(false);
+
+    self::manually_queue_update();
+
+    // Don't need to check the mothership for this one ... we just deactivated
+    update_option('mepr_activated', false);
+
+    // Clear the cache of add-ons
+    delete_site_transient('mepr_addons');
+    delete_site_transient('mepr_all_addons');
+
+    do_action('mepr_license_deactivated', $act);
+
+    return $act;
   }
 
   public static function queue_update($transient, $force=false, $rollback=false) {
@@ -473,11 +473,7 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
           $curr_version = $license_info['version'];
           $download_url = $license_info['url'];
 
-          set_site_transient(
-            'mepr_license_info',
-            $license_info,
-            MeprUtils::hours(72) // 3 days
-          );
+          set_site_transient('mepr_license_info', $license_info, MeprUtils::hours(24));
         }
         catch(Exception $e) {
           try {

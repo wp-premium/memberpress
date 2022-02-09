@@ -241,17 +241,11 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
     }
 
     $mepr_options = MeprOptions::fetch();
-    $mepr_options->mothership_license = sanitize_text_field(wp_unslash($_POST['key']));
+    $license_key = sanitize_text_field(wp_unslash($_POST['key']));
 
     try {
-      $act = MeprUpdateCtrl::send_mothership_request("/license_keys/jactivate/{$mepr_options->mothership_license}", MeprUpdateCtrl::activation_args(true), 'post');
-      MeprUpdateCtrl::manually_queue_update();
-      $mepr_options->store(false);
+      $act = MeprUpdateCtrl::activate_license($license_key);
       $li = get_site_transient('mepr_license_info');
-
-      // Clear the cache of add-ons
-      delete_site_transient('mepr_addons');
-      delete_site_transient('mepr_all_addons');
 
       $output = sprintf('<div class="notice notice-success"><p>%s</p></div>', esc_html($act['message']));
       $output .= MeprView::get_string('/admin/options/active_license', get_defined_vars());
@@ -277,25 +271,11 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
     }
 
     $mepr_options = MeprOptions::fetch();
-    $domain       = urlencode(MeprUtils::site_domain());
+    $act = MeprUpdateCtrl::deactivate_license();
 
-    try {
-      $args = compact('domain');
-      $act = MeprUpdateCtrl::send_mothership_request("/license_keys/deactivate/{$mepr_options->mothership_license}", $args, 'post');
+    $output = sprintf('<div class="notice notice-success"><p>%s</p></div>', esc_html($act['message']));
+    $output .= MeprView::get_string('/admin/options/inactive_license', get_defined_vars());
 
-      MeprUpdateCtrl::manually_queue_update();
-
-      $mepr_options->deactivate_license();
-
-      $output = sprintf('<div class="notice notice-success"><p>%s</p></div>', esc_html($act['message']));
-      $output .= MeprView::get_string('/admin/options/inactive_license', get_defined_vars());
-
-      wp_send_json_success($output);
-    }
-    catch(Exception $e) {
-      $mepr_options->deactivate_license();
-
-      wp_send_json_error($e->getMessage());
-    }
+    wp_send_json_success($output);
   }
 } //End class

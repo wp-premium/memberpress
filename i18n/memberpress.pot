@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the MemberPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MemberPress 1.9.28\n"
+"Project-Id-Version: MemberPress 1.9.29\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/memberpress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-02-02T23:27:27+00:00\n"
+"POT-Creation-Date: 2022-02-08T21:13:47+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: memberpress\n"
@@ -139,7 +139,7 @@ msgstr ""
 #: app/controllers/MeprAddonsCtrl.php:88
 #: app/controllers/MeprAddonsCtrl.php:111
 #: app/controllers/MeprOptionsCtrl.php:232
-#: app/controllers/MeprOptionsCtrl.php:268
+#: app/controllers/MeprOptionsCtrl.php:262
 msgid "Bad request."
 msgstr ""
 
@@ -148,7 +148,7 @@ msgstr ""
 #: app/controllers/MeprAddonsCtrl.php:115
 #: app/controllers/MeprCoursesCtrl.php:64
 #: app/controllers/MeprOptionsCtrl.php:236
-#: app/controllers/MeprOptionsCtrl.php:272
+#: app/controllers/MeprOptionsCtrl.php:266
 #: app/controllers/MeprStripeConnectCtrl.php:331
 #: app/controllers/MeprStripeConnectCtrl.php:377
 #: app/controllers/MeprStripeConnectCtrl.php:450
@@ -159,7 +159,7 @@ msgstr ""
 #: app/controllers/MeprAddonsCtrl.php:96
 #: app/controllers/MeprAddonsCtrl.php:119
 #: app/controllers/MeprOptionsCtrl.php:240
-#: app/controllers/MeprOptionsCtrl.php:276
+#: app/controllers/MeprOptionsCtrl.php:270
 #: app/controllers/MeprStripeCtrl.php:452
 #: app/controllers/MeprSubscriptionsCtrl.php:325
 #: app/controllers/MeprSubscriptionsCtrl.php:365
@@ -407,7 +407,6 @@ msgstr ""
 
 #: app/controllers/MeprAppCtrl.php:415
 #: app/views/admin/options/account_login.php:6
-#: app/views/admin/update/ui.php:21
 msgid "Account Login"
 msgstr ""
 
@@ -686,7 +685,6 @@ msgstr ""
 #: app/controllers/MeprCouponsCtrl.php:56
 #: app/controllers/MeprCouponsCtrl.php:146
 #: app/gateways/MeprArtificialGateway.php:432
-#: app/views/admin/update/addons.php:15
 msgid "Description"
 msgstr ""
 
@@ -871,7 +869,7 @@ msgstr ""
 #: app/controllers/MeprTransactionsCtrl.php:470
 #: app/controllers/MeprTransactionsCtrl.php:517
 #: app/controllers/MeprTransactionsCtrl.php:539
-#: app/controllers/MeprUpdateCtrl.php:743
+#: app/controllers/MeprUpdateCtrl.php:739
 msgid "You do not have access."
 msgstr ""
 
@@ -1303,13 +1301,12 @@ msgid "Ajax error."
 msgstr ""
 
 #: app/controllers/MeprOptionsCtrl.php:153
-#: app/views/admin/update/license.php:43
 msgid "Are you sure? MemberPress will not be functional on %s if this License Key is deactivated."
 msgstr ""
 
 #: app/controllers/MeprOptionsCtrl.php:154
-#: app/controllers/MeprOptionsCtrl.php:268
-#: app/controllers/MeprOptionsCtrl.php:276
+#: app/controllers/MeprOptionsCtrl.php:262
+#: app/controllers/MeprOptionsCtrl.php:270
 msgid "An error occurred during deactivation: %s"
 msgstr ""
 
@@ -1413,7 +1410,7 @@ msgstr ""
 
 #: app/controllers/MeprProductsCtrl.php:194
 #: app/lib/activation.php:8
-#: app/models/MeprOptions.php:550
+#: app/models/MeprOptions.php:556
 msgid "Your subscription has been set up successfully."
 msgstr ""
 
@@ -2187,35 +2184,34 @@ msgstr ""
 msgid "Welcome Email sent"
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:131
+#: app/controllers/MeprUpdateCtrl.php:113
 #: app/views/admin/db/upgrade_error.php:45
 msgid "Rollback MemberPress"
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:239
+#: app/controllers/MeprUpdateCtrl.php:221
 msgid "You don't have sufficient permissions to rollback MemberPress."
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:286
-#: app/controllers/MeprUsersCtrl.php:155
-msgid "Why you creepin'?"
+#: app/controllers/MeprUpdateCtrl.php:416
+msgid "License key deactivated"
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:542
+#: app/controllers/MeprUpdateCtrl.php:538
 msgid "Check for Update"
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:703
+#: app/controllers/MeprUpdateCtrl.php:699
 #: app/lib/MeprAddonUpdates.php:139
 msgid "You had an HTTP error connecting to Caseproof's Mothership API"
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:715
+#: app/controllers/MeprUpdateCtrl.php:711
 #: app/lib/MeprAddonUpdates.php:151
 msgid "Your License Key was invalid"
 msgstr ""
 
-#: app/controllers/MeprUpdateCtrl.php:747
+#: app/controllers/MeprUpdateCtrl.php:743
 msgid "Edge updates couldn't be updated."
 msgstr ""
 
@@ -2241,6 +2237,10 @@ msgstr ""
 
 #: app/controllers/MeprUsersCtrl.php:152
 msgid "There was an issue sending the email"
+msgstr ""
+
+#: app/controllers/MeprUsersCtrl.php:155
+msgid "Why you creepin'?"
 msgstr ""
 
 #: app/controllers/MeprUsersCtrl.php:157
@@ -3678,8 +3678,8 @@ msgstr ""
 
 #: app/helpers/MeprAppHelper.php:43
 #: app/helpers/MeprAppHelper.php:199
-#: app/models/MeprOptions.php:861
-#: app/models/MeprOptions.php:862
+#: app/models/MeprOptions.php:855
+#: app/models/MeprOptions.php:856
 #: app/models/MeprTransaction.php:710
 msgid "Free"
 msgstr ""
@@ -3887,8 +3887,8 @@ msgstr ""
 
 #: app/helpers/MeprOptionsHelper.php:41
 #: app/helpers/MeprTransactionsHelper.php:41
-#: app/models/MeprOptions.php:866
-#: app/models/MeprOptions.php:867
+#: app/models/MeprOptions.php:860
+#: app/models/MeprOptions.php:861
 msgid "Manual"
 msgstr ""
 
@@ -4724,7 +4724,7 @@ msgstr[1] ""
 
 #: app/lib/MeprNotifications.php:490
 #: app/lib/MeprNotifications.php:555
-#: app/views/admin/black-friday.php:6
+#: app/views/admin/admin-notification.php:6
 msgid "Dismiss"
 msgstr ""
 
@@ -4863,80 +4863,80 @@ msgstr ""
 msgid "An unsupported Event type was used"
 msgstr ""
 
-#: app/models/MeprOptions.php:166
+#: app/models/MeprOptions.php:172
 msgid "Welcome to %s"
 msgstr ""
 
-#: app/models/MeprOptions.php:230
+#: app/models/MeprOptions.php:236
 msgctxt "ui"
 msgid "I have read and agree to the Terms Of Service"
 msgstr ""
 
-#: app/models/MeprOptions.php:233
-#: app/models/MeprOptions.php:603
+#: app/models/MeprOptions.php:239
+#: app/models/MeprOptions.php:609
 msgctxt "ui"
 msgid "This site collects names, emails and other user information. I consent to the terms set forth in the %Privacy Policy%."
 msgstr ""
 
-#: app/models/MeprOptions.php:283
+#: app/models/MeprOptions.php:289
 msgid "You are unauthorized to view this page."
 msgstr ""
 
-#: app/models/MeprOptions.php:477
+#: app/models/MeprOptions.php:483
 msgid "The Membership Pages Slug must be set"
 msgstr ""
 
-#: app/models/MeprOptions.php:481
+#: app/models/MeprOptions.php:487
 msgid "The Group Pages Slug must be set"
 msgstr ""
 
-#: app/models/MeprOptions.php:485
+#: app/models/MeprOptions.php:491
 msgid "The Membership Pages Slug must only contain letters, numbers and dashes."
 msgstr ""
 
-#: app/models/MeprOptions.php:489
+#: app/models/MeprOptions.php:495
 msgid "The Group Pages Slug must only contain letters, numbers and dashes."
 msgstr ""
 
-#: app/models/MeprOptions.php:493
+#: app/models/MeprOptions.php:499
 msgid "At least one Admin Email Address must be set"
 msgstr ""
 
-#: app/models/MeprOptions.php:498
+#: app/models/MeprOptions.php:504
 msgid "The Admin Email Address field must contain 1 or more valid email addresses"
 msgstr ""
 
-#: app/models/MeprOptions.php:601
+#: app/models/MeprOptions.php:607
 msgctxt "ui"
 msgid "I have read and agree to the Terms of Service"
 msgstr ""
 
-#: app/models/MeprOptions.php:956
+#: app/models/MeprOptions.php:950
 msgctxt "ui"
 msgid "Address Line 1"
 msgstr ""
 
-#: app/models/MeprOptions.php:957
+#: app/models/MeprOptions.php:951
 msgctxt "ui"
 msgid "Address Line 2"
 msgstr ""
 
-#: app/models/MeprOptions.php:958
+#: app/models/MeprOptions.php:952
 msgctxt "ui"
 msgid "City"
 msgstr ""
 
-#: app/models/MeprOptions.php:959
+#: app/models/MeprOptions.php:953
 msgctxt "ui"
 msgid "Country"
 msgstr ""
 
-#: app/models/MeprOptions.php:960
+#: app/models/MeprOptions.php:954
 msgctxt "ui"
 msgid "State/Province"
 msgstr ""
 
-#: app/models/MeprOptions.php:961
+#: app/models/MeprOptions.php:955
 msgctxt "ui"
 msgid "Zip/Postal Code"
 msgstr ""
@@ -5511,42 +5511,34 @@ msgstr ""
 
 #: app/views/admin/account-login/ui.php:4
 #: app/views/admin/options/account_login.php:3
-#: app/views/admin/update/account.php:3
 msgid "MemberPress.com Account Login"
 msgstr ""
 
 #: app/views/admin/account-login/ui.php:10
-#: app/views/admin/update/account.php:17
 msgid "Connected to MemberPress.com"
 msgstr ""
 
 #: app/views/admin/account-login/ui.php:14
-#: app/views/admin/update/account.php:21
 msgid "Account Email"
 msgstr ""
 
 #: app/views/admin/account-login/ui.php:18
-#: app/views/admin/update/account.php:25
 msgid "Site ID"
 msgstr ""
 
 #: app/views/admin/account-login/ui.php:33
-#: app/views/admin/update/account.php:44
 msgid "Are you sure? This action will disconnect any of your Stripe payment methods, block webhooks from being processed, and prevent you from charging Credit Cards with and being notified of automatic rebills from Stripe."
 msgstr ""
 
 #: app/views/admin/account-login/ui.php:33
-#: app/views/admin/update/account.php:44
 msgid "Disconnect from MemberPress.com"
 msgstr ""
 
 #: app/views/admin/account-login/ui.php:42
-#: app/views/admin/update/account.php:53
 msgid "Connect your site to MemberPress.com to enable MemberPress Cloud Services!"
 msgstr ""
 
 #: app/views/admin/account-login/ui.php:45
-#: app/views/admin/update/account.php:56
 msgid "Connect to MemberPress.com"
 msgstr ""
 
@@ -5602,7 +5594,6 @@ msgstr ""
 #: app/views/admin/addons/affiliates.php:65
 #: app/views/admin/addons/analytics.php:45
 #: app/views/admin/addons/smtp.php:45
-#: app/views/admin/update/addons.php:50
 msgid "Installed & Active"
 msgstr ""
 
@@ -5733,7 +5724,6 @@ msgid "Select and configure your mailer."
 msgstr ""
 
 #: app/views/admin/addons/ui.php:5
-#: app/views/admin/update/addons.php:3
 msgid "MemberPress Add-ons"
 msgstr ""
 
@@ -5772,7 +5762,6 @@ msgid "Upgrade Now"
 msgstr ""
 
 #: app/views/admin/addons/ui.php:115
-#: app/views/admin/update/addons.php:8
 msgid "There were no Add-ons found for your license or lack thereof..."
 msgstr ""
 
@@ -6500,19 +6489,16 @@ msgid "<b>MemberPress hasn't been configured yet.</b> Go to the MemberPress %1$s
 msgstr ""
 
 #: app/views/admin/options/active_license.php:4
-#: app/views/admin/update/license.php:24
 msgid "Active License Key Information:"
 msgstr ""
 
 #: app/views/admin/options/active_license.php:7
 #: app/views/admin/options/inactive_license.php:16
-#: app/views/admin/update/license.php:27
 msgid "License Key:"
 msgstr ""
 
 #: app/views/admin/options/active_license.php:11
 #: app/views/admin/transactions/trans_form.php:64
-#: app/views/admin/update/license.php:31
 msgid "Status:"
 msgstr ""
 
@@ -6521,12 +6507,10 @@ msgid "Active on %s"
 msgstr ""
 
 #: app/views/admin/options/active_license.php:15
-#: app/views/admin/update/license.php:35
 msgid "Product:"
 msgstr ""
 
 #: app/views/admin/options/active_license.php:19
-#: app/views/admin/update/license.php:39
 msgid "Activations:"
 msgstr ""
 
@@ -6536,7 +6520,6 @@ msgid "%1$s%2$d of %3$s%4$s sites have been activated with this license key"
 msgstr ""
 
 #: app/views/admin/options/active_license.php:35
-#: app/views/admin/update/license.php:43
 msgid "Deactivate License Key on %s"
 msgstr ""
 
@@ -6561,7 +6544,6 @@ msgid "User Manual"
 msgstr ""
 
 #: app/views/admin/options/form.php:17
-#: app/views/admin/update/ui.php:20
 msgid "License"
 msgstr ""
 
@@ -6590,7 +6572,6 @@ msgid "General"
 msgstr ""
 
 #: app/views/admin/options/form.php:31
-#: app/views/admin/update/license.php:3
 msgid "MemberPress License"
 msgstr ""
 
@@ -7261,7 +7242,6 @@ msgstr ""
 
 #. translators: %1$s: link to memberpress.com, %2$s: link to memberpress.com/login
 #: app/views/admin/options/inactive_license.php:7
-#: app/views/admin/update/license.php:6
 msgid "You must have a License Key to enable automatic updates for MemberPress. If you don't have a License please go to %1$s to get one. If you do have a license you can login at %2$s to manage your licenses and site activations."
 msgstr ""
 
@@ -8444,7 +8424,6 @@ msgid "Extensions"
 msgstr ""
 
 #: app/views/admin/support/view.php:106
-#: app/views/admin/update/ui.php:22
 msgid "Add-Ons"
 msgstr ""
 
@@ -8927,79 +8906,6 @@ msgstr ""
 
 #: app/views/admin/update/activation_warning.php:5
 msgid "<b>MemberPress doesn't have a valid license key installed.</b> Go to the MemberPress %1$ssettings page%2$s to activate your license or go to %3$smemberpress.com%4$s to get one."
-msgstr ""
-
-#: app/views/admin/update/addons.php:14
-msgid "Add-on"
-msgstr ""
-
-#: app/views/admin/update/addons.php:16
-#: app/views/admin/update/addons.php:54
-msgid "Install"
-msgstr ""
-
-#: app/views/admin/update/addons.php:42
-msgid "(Update Available)"
-msgstr ""
-
-#: app/views/admin/update/addons.php:52
-msgid "Installed & Inactive"
-msgstr ""
-
-#: app/views/admin/update/addon_popup.php:4
-msgid "ACTION REQUIRED"
-msgstr ""
-
-#: app/views/admin/update/addon_popup.php:5
-msgid "The %s features in your MemberPress options have been moved from MemberPress into a separate plugin."
-msgstr ""
-
-#: app/views/admin/update/addon_popup.php:6
-msgid "Why you ask? Well, it's to streamline and increase the performance of MemberPress for you."
-msgstr ""
-
-#: app/views/admin/update/addon_popup.php:9
-msgid "And good for you, it looks like you've already got the %1$s Add-on installed. Just click the \"Activate %2$s Add-on\" button below and you'll get all these features back now."
-msgstr ""
-
-#: app/views/admin/update/addon_popup.php:11
-msgid "Luckily it's easy to get these features back now. Just click the \"Install %s Add-on\" button below."
-msgstr ""
-
-#: app/views/admin/update/addon_popup.php:12
-msgid "If you have problems with the auto-install please refer to %1$sthe user manual%2$s for manual install instructions."
-msgstr ""
-
-#: app/views/admin/update/addon_popup.php:18
-msgid "Activate %s Add-on"
-msgstr ""
-
-#: app/views/admin/update/addon_popup.php:20
-msgid "Install %s Add-on"
-msgstr ""
-
-#: app/views/admin/update/addon_popup.php:22
-msgid "Don't Show This Message Again"
-msgstr ""
-
-#: app/views/admin/update/license.php:12
-msgid "Enter Your MemberPress License Key:"
-msgstr ""
-
-#: app/views/admin/update/license.php:19
-msgid "Activate License Key on %s"
-msgstr ""
-
-#: app/views/admin/update/license.php:32
-msgid "<b>Active on %s</b>"
-msgstr ""
-
-#: app/views/admin/update/license.php:48
-msgid "You're currently running version %s of MemberPress"
-msgstr ""
-
-#: app/views/admin/update/ui.php:7
-msgid "Automatic Updates & Add-ons"
 msgstr ""
 
 #: app/views/admin/usage/option.php:3

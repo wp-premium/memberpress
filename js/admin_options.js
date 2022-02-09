@@ -503,6 +503,13 @@ jQuery(document).ready(function($) {
     });
   });
 
+  $('body').on('keypress', '#mepr-license-key', function (e) {
+    if(e.which === 13) {
+      e.preventDefault();
+      $('#mepr-activate-license-key').trigger('click');
+    }
+  });
+
   var deactivating = false;
 
   $('body').on('click', '#mepr-deactivate-license-key', function () {
