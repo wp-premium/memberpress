@@ -395,4 +395,8 @@ class MeprMembersCtrl extends MeprBaseCtrl {
     }
   }
 
+  public function listing_drm() {
+      $this->display_list();
+  }
+
 } //End clas

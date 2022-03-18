@@ -146,4 +146,20 @@ jQuery(document).ready(function($) {
     e.preventDefault();
     $('#mepr-notifications').removeClass('visible');
   });
+
+  $('body').on('click', '.mepr-notice-dismiss-24hour button.notice-dismiss', function (e) {
+
+    var notice = $(this).closest('.notice');
+
+    $.ajax({
+      url: MeprAdminShared.ajax_url,
+      method: 'POST',
+      data: {
+        action: 'mepr_dismiss_notice_drm',
+        _ajax_nonce: MeprAdminShared.dismiss_notice_nonce,
+        notice: notice.data('notice'),
+        secret: notice.data('secret')
+      }
+    })
+  });
 });

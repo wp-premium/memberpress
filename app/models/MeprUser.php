@@ -520,7 +520,7 @@ class MeprUser extends MeprBaseModel {
 
     $result = $wpdb->get_var($wpdb->prepare($q, $user_id));
 
-    return (empty($result)?time('c'):$result);
+    return (empty($result) ? gmdate('Y-m-d H:i:s') : $result);
   }
 
   /** This used to be called "get_ts_of_product_signup" */
@@ -836,8 +836,8 @@ class MeprUser extends MeprBaseModel {
           $errors['user_login'] = __('Username must not be blank','memberpress');
         }
 
-        if(!preg_match('#^[a-zA-Z0-9_@\.\-\+]+$#', $user_login)) { //emails can have a few more characters - so let's not block an email here
-          $errors['user_login'] = __('Username must only contain letters, numbers and/or underscores', 'memberpress');
+        if(!preg_match('#^[a-zA-Z0-9_@\.\-\+ ]+$#', $user_login)) { //emails can have a few more characters - so let's not block an email here
+          $errors['user_login'] = __('Username must only contain letters, numbers, spaces and/or underscores', 'memberpress');
         }
 
         if(username_exists($user_login)) {

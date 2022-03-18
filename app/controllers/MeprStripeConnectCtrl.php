@@ -23,7 +23,7 @@ class MeprStripeConnectCtrl extends MeprBaseCtrl {
     add_filter( 'site_status_tests', array( $this, 'add_site_health_test' ) );
     add_action( 'mepr-weekly-summary-email-inner-table-top-tr', array( $this, 'maybe_add_notice_to_weekly_summary_email' ) );
 
-    add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+    /*add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );*/
 
     add_action( 'wp_ajax_mepr_stripe_connect_update_creds', array( $this, 'process_update_creds' ) );
     add_action( 'wp_ajax_mepr_stripe_connect_refresh', array( $this, 'process_refresh_tokens' ) );

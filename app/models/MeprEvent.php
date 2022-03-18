@@ -6,6 +6,7 @@ class MeprEvent extends MeprBaseModel {
   public static $users_str = 'users';
   public static $transactions_str = 'transactions';
   public static $subscriptions_str = 'subscriptions';
+  public static $drm_str = 'drm';
 
   // User events
   public static $login_event_str = 'login';
@@ -122,6 +123,18 @@ class MeprEvent extends MeprBaseModel {
     switch($this->evt_id_type) {
       case self::$users_str:
         $obj = new MeprUser($this->evt_id);
+
+        // If member-deleted event is being passed, make sure we generate some data.
+        if(!isset($obj->ID) || $obj->ID <= 0) {
+          if($this->event == 'member-deleted') {
+            $obj->ID = 0;
+            $obj->user_email = 'johndoe@email.com';
+            $obj->user_login = 'johndoe';
+            $obj->first_name = 'John';
+            $obj->last_name = 'Doe';
+          }
+        }
+
         break;
       case self::$transactions_str:
         $obj = new MeprTransaction($this->evt_id);
@@ -165,6 +178,10 @@ class MeprEvent extends MeprBaseModel {
     elseif($obj instanceof MeprSubscription) {
       $e->evt_id = $obj->rec->id;
       $e->evt_id_type = self::$subscriptions_str;
+    }
+    elseif($obj instanceof MeprDrm) {
+      $e->evt_id = $obj->rec->id;
+      $e->evt_id_type = self::$drm_str;
     }
     else { return; }
 
@@ -246,5 +263,26 @@ class MeprEvent extends MeprBaseModel {
         $this->args = $existing_event->args;
       }
     }
+  }
+
+  /** Get the latest object for a given event and elapsed days */
+  public static function latest_by_elapsed_days( $event, $elapsed_days ) {
+    global $wpdb;
+    $mepr_db = new MeprDb();
+
+    $q = $wpdb->prepare("
+      SELECT id
+        FROM {$mepr_db->events}
+       WHERE event=%s
+       AND created_at >= '%s' - interval %d day
+       ORDER BY id DESC
+       LIMIT 1
+    ", $event, MeprUtils::db_now(), $elapsed_days );
+
+    if(($id = $wpdb->get_var($q))) {
+      return new MeprEvent($id);
+    }
+
+    return false;
   }
 } //End class

@@ -2266,4 +2266,62 @@ class MeprUtils {
     // Currently runs between December 13 and December 18, 2021
     return time() > strtotime( '2021-12-13 00:00:00 America/Denver' ) && time() < strtotime( '2021-12-19 00:00:00 America/Denver' );
   }
+
+  /**
+   * Get the edition data from a product slug
+   *
+   * @param string $product_slug
+   * @return array|null
+   */
+  public static function get_edition($product_slug) {
+    $editions = array(
+      array('index' => 0, 'slug' => 'business', 'name' => 'MemberPress Business'),
+      array('index' => 1, 'slug' => 'memberpress-basic', 'name' => 'MemberPress Basic'),
+      array('index' => 2, 'slug' => 'memberpress-plus', 'name' => 'MemberPress Plus'),
+      array('index' => 3, 'slug' => 'memberpress-plus-2', 'name' => 'MemberPress Plus'),
+      array('index' => 4, 'slug' => 'developer', 'name' => 'MemberPress Developer'),
+      array('index' => 5, 'slug' => 'memberpress-pro', 'name' => 'MemberPress Pro'),
+      array('index' => 6, 'slug' => 'memberpress-pro-5', 'name' => 'MemberPress Pro'),
+    );
+
+    foreach($editions as $edition) {
+      if($product_slug == $edition['slug']) {
+        return $edition;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Is the installed edition of MemberPress different from the edition in the license?
+   *
+   * @return array|false An array containing the installed edition and license edition data, false if the correct edition is installed
+   */
+  public static function is_incorrect_edition_installed() {
+    $license = get_site_transient('mepr_license_info');
+    $license_product_slug = !empty($license) && !empty($license['product_slug']) ? $license['product_slug'] : '';
+
+    if(
+      empty($license_product_slug) ||
+      empty(MEPR_EDITION) ||
+      $license_product_slug == MEPR_EDITION ||
+      !current_user_can('update_plugins') ||
+      @is_dir(MEPR_PATH . '/.git')
+    ) {
+      return false;
+    }
+
+    $installed_edition = self::get_edition(MEPR_EDITION);
+    $license_edition = self::get_edition($license_product_slug);
+
+    if(!is_array($installed_edition) || !is_array($license_edition)) {
+      return false;
+    }
+
+    return array(
+      'installed' => $installed_edition,
+      'license' => $license_edition
+    );
+  }
 } // End class

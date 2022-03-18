@@ -188,7 +188,7 @@ class MeprTransactionsCtrl extends MeprBaseCtrl {
         MeprHooks::do_action( 'mepr-signup', $txn );
       } else if (
         isset( $sub ) &&
-        empty( $sub->transactions() ) &&
+        count( $sub->transactions() ) <= 1 &&
         $txn->status == MeprTransaction::$complete_str
       ) {
         // If the transaction is the only completed transaction of a recurring subscription

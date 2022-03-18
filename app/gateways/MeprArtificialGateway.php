@@ -128,7 +128,8 @@ class MeprArtificialGateway extends MeprBaseRealGateway {
     if(!$this->settings->manually_complete) {
       $txn->status = MeprTransaction::$complete_str;
       $txn->store(); //Need to store here so the event will show as "complete" when firing the hooks
-      MeprUtils::send_transaction_receipt_notices($txn);
+      //The receipt is set when the transaction is automatically set to complete (see: capture_txn_status_for_events)
+      //MeprUtils::send_transaction_receipt_notices($txn);
       MeprUtils::send_signup_notices($txn);
     }
     else {

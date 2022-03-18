@@ -4,12 +4,100 @@
   content: "\e839";
 }
 
-#toplevel_page_memberpress div.wp-menu-image img {
+#toplevel_page_memberpress div.wp-menu-image img,
+#toplevel_page_memberpress-drm div.wp-menu-image img {
   display: none;
 }
 
-#toplevel_page_memberpress div.wp-menu-image:before {
+#toplevel_page_memberpress div.wp-menu-image:before,
+#toplevel_page_memberpress-drm div.wp-menu-image::before {
   content: "\e839";
   font-family: "memberpress";
 }
 
+#toplevel_page_memberpress-drm li.wp-first-item{
+  display: none;
+}
+
+.mepr-locked #toplevel_page_memberpress-downloads, .mepr-locked .memberpress, .mepr-locked .memberpress-downloads { display: none; }
+
+.mepr-notice-dismiss-24hour { color: #484848; border-width: 1px 1px 1px 18px; border-style: solid; border-color: #c3c3c4 #c3c3c4 #c3c3c4 #fc5034; border-radius: 8px; padding: 0;}
+body.site-health-php .mepr-notice-dismiss-24hour{ display:none; }
+.mepr-notice-dismiss-24hour .mepr-notice-wrapper { padding: 25px 80px; }
+.mepr-notice-dismiss-24hour .mepr-notice-wrapper > * { margin: 0; padding: 0; }
+.mepr-notice-dismiss-24hour .mepr-notice-wrapper:before { content: ""; background: url('../images/mepr-notice-icon-error.png') no-repeat; background-size: 100%; display: block; position: absolute; top: 25px; left: 20px; width: 42px; height: 42px; }
+.mepr-notice-dismiss-24hour .mepr-notice-title { margin-bottom: 15px; font-size: 18px; font-weight: 600; }
+.mepr-notice-dismiss-24hour .mepr-notice-desc { margin-bottom: 15px; font-size: 15px; line-height: 1.5; }
+
+.mepr-notice-dismiss-24hour .mepr-notice-actions .button-primary { min-height: auto; padding: 6px 13px; background-color: #0085ba; border: 1px solid #006799; box-shadow: 0 2px 0 #006799; border-radius: 3px; color: #fff; text-shadow: -1px 0px 1px #006799, 0px 1px 1px #006799, 1px 0px 1px #006799, 0px -1px 1px #006799; font-size: 13px; font-weight: 600; line-height: 1.5; }
+
+.mepr-notice-dismiss-24hour .notice-dismiss { top: 10px; right: 15px; padding: 10px; color: #484848; }
+.mepr-notice-dismiss-24hour .notice-dismiss:before { content: "\f158"; font-size: 21px; }
+.mepr-notice-dismiss-24hour .notice-dismiss:active::before,
+.mepr-notice-dismiss-24hour .notice-dismiss:focus::before,
+.mepr-notice-dismiss-24hour .notice-dismiss:hover::before { color: #fc5034; }
+
+.mepr-notice-modal-active { overflow: hidden; }
+.mepr-notice-modal-active #wpcontent { position: relative; }
+.mepr-notice-modal-active #wpcontent #wpbody { filter: blur(3px); }
+.mepr-notice-modal-active #wpcontent:before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(9, 29, 46, 0.2); z-index: 99; }
+
+.mepr-notice-modal { display: none; position: fixed; top: 50%; left: 160px; width: calc(100% - 160px); z-index: 999; -webkit-transform: translateY(-50%); transform: translateY(-50%); }
+.mepr-notice-modal-active .mepr-notice-modal { display: block; }
+
+.mepr-notice-modal .mepr-notice-modal-wrapper { max-height: 95vh; overflow-y: auto; padding: 36px 72px 0; box-sizing: border-box; width: 73%; max-width: 904px; margin: 0 auto; background-color: #fff;   border-radius: 10px; text-align: center; box-shadow: 0px 10px 20px rgba(9, 29, 46, 0.1); }
+
+.mepr-notice-modal .mepr-notice-modal-banner { display: block; max-width: 100%; height: auto; }
+
+.mepr-notice-modal .mepr-notice-modal-content { max-width: 650px; margin: 0 auto; }
+
+.mepr-notice-modal .mepr-notice-title { margin-bottom: 30px; font-size: 25px; font-weight: 600; line-height: 37px; }
+.mepr-notice-modal .mepr-notice-title span { position: relative; display: inline-block; padding-left: 48px; color: #fc5034; }
+.mepr-notice-modal .mepr-notice-title span:before { display: block; position: absolute; left: 0; content: ""; width: 37px; height: 37px; background: url('../images/mepr-notice-icon-error.png') no-repeat left center; background-size: 100%; }
+
+.mepr-notice-modal .mepr-notice-desc { margin-bottom: 25px; font-size: 15px; line-height: 1.5; }
+.mepr-notice-modal .mepr-notice-desc p { font-size: 15px; margin-bottom: 25px; }
+.mepr-notice-modal .mepr-notice-desc ul { margin-bottom: 25px; }
+.mepr-notice-modal .mepr-notice-desc ul li { position: relative; display: inline-block; padding: 0 0 0 32px; margin: 0 13px; }
+.mepr-notice-modal .mepr-notice-desc ul li:before { display: block; position: absolute; top: 50%; left: 0; -webkit-transform: translateY(-50%); transform: translateY(-50%); content: ""; width: 17px; height: 18px; background: url('../images/bullet-cross-2x.png') no-repeat center; background-size: 100%; }
+
+.mepr-notice-modal .button-primary { max-width: 100%; white-space: pre-wrap; background: linear-gradient(90deg, #CF3200 0%, #CF3200 0.01%, #F47B0D 100%); border: 0; border-radius: 100px; font-weight: 600; font-size: 16px; padding: 18px 32px; line-height: 1; -webkit-transition: all 0.3s linear 0s; transition: all 0.25s linear 0s; }
+.mepr-notice-modal .button-primary:hover { background: linear-gradient(180deg, #CF3200 0%, #CF3200 0.01%, #F47B0D 100%); }
+
+.mepr-notice-modal .mepr-notice-desc form { display: flex; align-items: flex; justify-content: center; align-items: center; }
+
+.mepr-notice-modal .mepr-notice-desc form .field { margin: 0 15px; }
+.mepr-notice-modal .mepr-notice-desc form input[type=text] { width: 280px; padding: 7px 13px; line-height: 1; }
+.mepr-notice-modal .mepr-notice-desc form input[type=button] { cursor: pointer; padding: 8px 13px; color: #06429E; background-color: #f3f6fb; border-color: #06429E; border-radius: 3px; font-weight: 600; font-size: 14px; line-height: 1; }
+
+.mepr-notice-modal .mepr-notice-desc .mepr-key-error { padding: 0 20px; margin-top: 25px; background-color: #ffd0cb; border-width: 1px 1px 1px 10px; border-style: solid; border-color: #bdbdbd #bdbdbd #bdbdbd #fb5034; border-radius: 8px; font-weight: 600; font-size: 15px; }
+.mepr-notice-modal .mepr-notice-desc .mepr-key-error > span { display: inline-block; position: relative; padding: 10px 10px 10px 42px; }
+.mepr-notice-modal .mepr-notice-desc .mepr-key-error > span:before { content: ""; background: url('../images/mepr-notice-icon-error.png') no-repeat; background-size: 100% auto; display: block; position: absolute; top: 50%; left: 0; -webkit-transform: translateY(-50%); transform: translateY(-50%); width: 24px; height: 24px; }
+
+.mepr-notice-modal .mepr-notice-desc .mepr-key-success { font-weight: 600; font-size: 15px; }
+.mepr-notice-modal .mepr-notice-desc .mepr-key-success > span { display: inline-block; position: relative; padding: 10px 10px 10px 47px; }
+.mepr-notice-modal .mepr-notice-desc .mepr-key-success > span:before { content: ""; background: url('../images/mepr-notice-icon-success.gif') no-repeat; background-size: 100% auto; display: block; position: absolute; top: 50%; left: 0; -webkit-transform: translateY(-50%); transform: translateY(-50%); width: 24px; height: 24px; }
+
+@media (max-width: 782px) {
+.mepr-notice-modal { left: 0; width: calc(100%); }
+
+.mepr-notice-modal .mepr-notice-modal-wrapper { width: 95%; padding-top: 32px; padding-right: 32px; padding-left: 32px; }
+}
+@media (min-width: 783px) and (max-width: 1199px) {
+.mepr-notice-modal .mepr-notice-modal-wrapper { padding-top: 52px; padding-right: 52px; padding-left: 52px; }
+}
+@media (max-width: 960px) {
+.mepr-notice-modal .mepr-notice-modal-content { max-width: 100%; }
+
+.mepr-notice-modal .mepr-notice-title { font-size: 21px; }
+}
+@media (min-width: 783px) and  (max-width: 960px) {
+.mepr-notice-modal { left: 36px; width: calc(100% - 36px); }
+
+.mepr-notice-modal .mepr-notice-modal-wrapper { width: 90%; }
+}
+@media (min-width: 961px) and (max-width: 1199px) {
+.mepr-notice-modal .mepr-notice-modal-wrapper { width: 90%; }
+
+.mepr-notice-modal .mepr-notice-title { font-size: 23px; }
+}

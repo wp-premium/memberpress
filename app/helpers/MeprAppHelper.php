@@ -269,7 +269,7 @@ class MeprAppHelper {
 
           $conv_trial_type_str = MeprUtils::period_type_name($conv_trial_type, $conv_trial_count);
           $sub_str = __( '%1$s %2$s for %3$s%4$s then ', 'memberpress' );
-          $price_str = sprintf( $sub_str, $conv_trial_count, strtolower($conv_trial_type_str), $trial_str, $upgrade_str );
+          $price_str = sprintf( $sub_str, $conv_trial_count, $conv_trial_type_str, $trial_str, $upgrade_str );
         }
         else {
           $sub_str = __( '%1$s%2$s once and ', 'memberpress' );

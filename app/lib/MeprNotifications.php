@@ -352,7 +352,8 @@ class MeprNotifications {
       }
     }
 
-    $notification = $this->verify( [ $notification ] );
+    // Associative key is notification id.
+    $notification = $this->verify( [ $notification['id'] => $notification ] );
 
     // The only thing changing here is adding the notification to the events
     update_option(
@@ -487,7 +488,7 @@ class MeprNotifications {
                 ! empty( $btn['text'] ) ? sanitize_text_field( $btn['text'] ) : ''
               );
             }
-            $buttons_html .= sprintf( '<button class="mepr-notice-dismiss" data-message-id="%d">%s</button>', $notification['id'], __( 'Dismiss', 'memberpress' ) );
+            $buttons_html .= sprintf( '<button class="mepr-notice-dismiss" data-message-id="%s">%s</button>', $notification['id'], __( 'Dismiss', 'memberpress' ) );
             $buttons_html = ! empty( $buttons_html ) ? '<div class="mepr-notifications-buttons">' . $buttons_html . '</div>' : '';
           }
 
@@ -552,7 +553,7 @@ class MeprNotifications {
                 ! empty( $btn['text'] ) ? sanitize_text_field( $btn['text'] ) : ''
               );
             }
-            $buttons_html .= sprintf( '<button class="mepr-notice-dismiss" data-message-id="%d">%s</button>', $notification['id'], __( 'Dismiss', 'memberpress' ) );
+            $buttons_html .= sprintf( '<button class="mepr-notice-dismiss" data-message-id="%s">%s</button>', $notification['id'], __( 'Dismiss', 'memberpress' ) );
             $buttons_html = ! empty( $buttons_html ) ? '<div class="mepr-notifications-buttons">' . $buttons_html . '</div>' : '';
           }
 
@@ -683,14 +684,47 @@ class MeprNotifications {
       // If the notification ID includes "event_", we know it's an even notification
       $type = false !== strpos( $id, 'event_' ) ? 'events' : 'feed';
 
-      if ( ! empty( $option[$type][$id] ) ) {
+      if( $type == 'events' ){
+        if( !empty($option[$type]) ){
+            foreach( $option[$type] as $index => $event_notification ){
+               if( $event_notification['id'] == $id ){
+                  unset( $option[$type][$index] );
+                  break;
+               }
+            }
+        }
+      }else{
+        if ( ! empty( $option[$type][$id] ) ) {
           $option['dismissed'][$id] = $option[$type][$id];
           unset( $option[$type][$id] );
         }
+      }
     }
+
 
     update_option( 'mepr_notifications', $option );
 
     wp_send_json_success();
+  }
+
+  public function dismiss_events( $type ) {
+
+    $option = $this->get_option();
+
+    // Event notifications.
+    if ( ! empty( $option['events'] ) ) {
+      $found = 0;
+      foreach ( $option['events'] as $key => $notification ) {
+        // We found event.
+        if( $type  === $notification['type'] ){
+            unset($option['events'][$key]);
+            $found = 1;
+        }
+      }
+
+      if( $found ){
+        update_option( 'mepr_notifications', $option );
+      }
+    }
   }
 }

@@ -12,7 +12,7 @@
           ?>
         </th>
         <td>
-          <input type="checkbox" id="mepr_calculate_taxes" class="mepr-toggle-checkbox" data-box="mepr_tax_options_box" name="mepr_calculate_taxes" <?php checked($calculate_taxes != 0); ?>/>
+          <input type="checkbox" id="mepr_calculate_taxes" class="mepr-toggle-checkbox" data-box="mepr_tax_options_box" name="mepr_calculate_taxes" <?php checked(!empty($calculate_taxes)); ?>/>
         </td>
       </tr>
     </tbody>

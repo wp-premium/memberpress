@@ -15,6 +15,10 @@ class MeprAddonUpdates {
     $this->load_language();
 
     add_filter('pre_set_site_transient_update_plugins', array( $this, 'queue_update' ));
+    add_action("in_plugin_update_message-$main_file", array($this, 'check_incorrect_edition'));
+    add_action('mepr_plugin_edition_changed', array($this, 'clear_update_transient'));
+    add_action('mepr_license_activated_before_queue_update', array($this, 'clear_update_transient'));
+    add_action('mepr_license_deactivated_before_queue_update', array($this, 'clear_update_transient'));
 
     include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
     $this->memberpress_active = is_plugin_active('memberpress/memberpress.php');
@@ -62,6 +66,10 @@ class MeprAddonUpdates {
           $license_info = $this->send_mothership_request("/versions/info/".$this->slug."/{$license}", $args);
           $curr_version = $license_info['version'];
           $download_url = $license_info['url'];
+
+          if(MeprUtils::is_incorrect_edition_installed()) {
+            $download_url = '';
+          }
         }
         catch(Exception $e) {
           try {
@@ -194,5 +202,20 @@ class MeprAddonUpdates {
     foreach($paths as $path) {
       load_plugin_textdomain($this->slug, false, $path);
     }
+  }
+
+  public function check_incorrect_edition() {
+    if(MeprUtils::is_incorrect_edition_installed()) {
+      printf(
+        /* translators: %1$s: open link tag, %2$s: close link tag */
+        ' <strong>' . esc_html__('To restore automatic updates, %1$sinstall the correct edition%2$s of MemberPress.', 'memberpress') . '</strong>',
+        sprintf('<a href="%s">', esc_url(admin_url('admin.php?page=memberpress-options#mepr-license'))),
+        '</a>'
+      );
+    }
+  }
+
+  public function clear_update_transient() {
+    delete_site_transient('mepr_update_info_' . $this->slug);
   }
 } //End class

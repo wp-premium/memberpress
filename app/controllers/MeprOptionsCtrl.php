@@ -5,6 +5,7 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
   public function load_hooks() {
     add_action('wp_ajax_mepr_activate_license', 'MeprOptionsCtrl::ajax_activate_license');
     add_action('wp_ajax_mepr_deactivate_license', 'MeprOptionsCtrl::ajax_deactivate_license');
+    add_action('wp_ajax_mepr_install_license_edition', 'MeprOptionsCtrl::ajax_install_license_edition');
     add_action('wp_ajax_mepr_gateway_form', 'MeprOptionsCtrl::gateway_form');
     add_action('admin_enqueue_scripts', 'MeprOptionsCtrl::enqueue_scripts');
     add_action('admin_notices', 'MeprOptionsCtrl::maybe_show_stripe_checkout_warning');
@@ -151,7 +152,8 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
         'ajax_error'        => __('Ajax error.', 'memberpress'),
         'deactivate_license_nonce' => wp_create_nonce('mepr_deactivate_license'),
         'deactivate_confirm' => sprintf(__('Are you sure? MemberPress will not be functional on %s if this License Key is deactivated.', 'memberpress'), MeprUtils::site_domain()),
-        'deactivation_error'  => __('An error occurred during deactivation: %s', 'memberpress')
+        'deactivation_error'  => __('An error occurred during deactivation: %s', 'memberpress'),
+        'install_license_edition_nonce' => wp_create_nonce('mepr_install_license_edition'),
       );
 
       wp_register_script('memberpress-i18n', MEPR_JS_URL.'/i18n.js', array('jquery'), MEPR_VERSION);
@@ -246,13 +248,74 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
     try {
       $act = MeprUpdateCtrl::activate_license($license_key);
       $li = get_site_transient('mepr_license_info');
+      $output = sprintf('<div class="notice notice-success inline"><p>%s</p></div>', esc_html($act['message']));
 
-      $output = sprintf('<div class="notice notice-success"><p>%s</p></div>', esc_html($act['message']));
-      $output .= MeprView::get_string('/admin/options/active_license', get_defined_vars());
+      if(is_array($li)) {
+        $editions = MeprUtils::is_incorrect_edition_installed();
+        $automatic_updates = !empty($mepr_options->auto_updates) ? $mepr_options->auto_updates : 'all';
+
+        if(is_array($editions) && $editions['license']['index'] > $editions['installed']['index'] && $automatic_updates != 'none') {
+          // The installed plugin is a lower edition, try to upgrade to the higher license edition
+          if(!empty($li['url']) && MeprUtils::is_url($li['url'])) {
+            $result = self::install_plugin_silently($li['url'], array('overwrite_package' => true));
+
+            if($result === true) {
+              do_action('mepr_plugin_edition_changed');
+              wp_send_json_success(true);
+            }
+          }
+        }
+
+        $output .= MeprView::get_string('/admin/options/active_license', get_defined_vars());
+      }
+      else {
+        $output .= sprintf('<div class="notice notice-warning"><p>%s</p></div>', esc_html__('The license information is not available, try refreshing the page.', 'memberpress'));
+      }
 
       wp_send_json_success($output);
     }
     catch(Exception $e) {
+      try {
+        $expires = MeprUpdateCtrl::send_mothership_request("/license_keys/expires_at/$license_key");
+
+        if(isset($expires['expires_at'])) {
+          $expires_at = strtotime($expires['expires_at']);
+
+          if($expires_at && $expires_at < time()) {
+            $licenses = MeprUpdateCtrl::send_mothership_request("/license_keys/list_keys/$license_key");
+
+            if(!empty($licenses) && is_array($licenses)) {
+              $highest_edition_index = -1;
+              $highest_license = null;
+
+              foreach($licenses as $license) {
+                $edition = MeprUtils::get_edition($license['product_slug']);
+
+                if(is_array($edition) && $edition['index'] > $highest_edition_index) {
+                  $highest_edition_index = $edition['index'];
+                  $highest_license = $license;
+                }
+              }
+
+              if(is_array($highest_license)) {
+                wp_send_json_error(
+                  sprintf(
+                    /* translators: %1$s: the product name, %2$s: open link tag, %3$s: close link tag */
+                    esc_html__('This License Key has expired, but you have an active license for %1$s, %2$sclick here%3$s to activate using this license instead.', 'memberpress'),
+                    '<strong>' . esc_html($highest_license['product_name']) . '</strong>',
+                    sprintf('<a href="#" id="mepr-activate-new-license" data-license-key="%s">', esc_attr($highest_license['license_key'])),
+                    '</a>'
+                  )
+                );
+              }
+            }
+          }
+        }
+      }
+      catch(Exception $ignore) {
+        // Nothing we can do, let it fail.
+      }
+
       wp_send_json_error($e->getMessage());
     }
   }
@@ -277,5 +340,51 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
     $output .= MeprView::get_string('/admin/options/inactive_license', get_defined_vars());
 
     wp_send_json_success($output);
+  }
+
+  public static function install_plugin_silently($url, $args) {
+    require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+
+    $skin = new Automatic_Upgrader_Skin();
+    $upgrader = new Plugin_Upgrader($skin);
+
+    if(!$skin->request_filesystem_credentials(false, WP_PLUGIN_DIR)) {
+      return new WP_Error('no_filesystem_access', __('Failed to get filesystem access', 'memberpress'));
+    }
+
+    return $upgrader->install($url, $args);
+  }
+
+  public static function ajax_install_license_edition() {
+    if(!MeprUtils::is_post_request()) {
+      wp_send_json_error(__('Bad request.', 'memberpress'));
+    }
+
+    if(!current_user_can('update_plugins')) {
+      wp_send_json_error(__('Sorry, you don\'t have permission to do this.', 'memberpress'));
+    }
+
+    if(!check_ajax_referer('mepr_install_license_edition', false, false)) {
+      wp_send_json_error(__('Security check failed.', 'memberpress'));
+    }
+
+    $li = get_site_transient('mepr_license_info');
+
+    if(!empty($li) && is_array($li) && !empty($li['url']) && MeprUtils::is_url($li['url'])) {
+      $result = self::install_plugin_silently($li['url'], array('overwrite_package' => true));
+
+      if($result instanceof WP_Error) {
+        wp_send_json_error($result->get_error_message());
+      }
+      elseif($result === true) {
+        do_action('mepr_plugin_edition_changed');
+        wp_send_json_success(__('The correct edition of MemberPress has been installed successfully.', 'memberpress'));
+      }
+      else {
+        wp_send_json_error(__('Failed to install the correct edition of MemberPress, please download it from memberpress.com and install it manually.', 'memberpress'));
+      }
+    }
+
+    wp_send_json_error(__('License data not found', 'memberpress'));
   }
 } //End class

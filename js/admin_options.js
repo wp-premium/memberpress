@@ -381,6 +381,63 @@ jQuery(document).ready(function($) {
     $('input#mepr-require-address-fields').prop('disabled', true);
   }
 
+  if($('#mepr-require-address-fields').is(':checked')) {
+    $('#mepr-show-address-fields').prop('checked', true);
+    $('#mepr-show-address-fields').prop('disabled', true);
+  }
+
+  if($('#mepr-require-fname-lname').is(':checked')) {
+    $('#mepr-show-fname-lname').prop('checked', true);
+    $('#mepr-show-fname-lname').prop('disabled', true);
+  }
+
+  $('.mepr-custom-field').each(function() {
+    var field_id = $(this).find('input[name="mepr-custom-fields-index[]"]').val();
+
+    if(!field_id) {
+      return;
+    }
+
+    if($('#mepr-custom-fields-required-' + field_id).is(':checked')) {
+      $('#mepr-custom-fields-signup-' + field_id).prop('checked', true);
+      $('#mepr-custom-fields-signup-' + field_id).prop('disabled', true);
+      $('#mepr-custom-fields-account-' + field_id).prop('checked', true);
+      $('#mepr-custom-fields-account-' + field_id).prop('disabled', true);
+    }
+  });
+
+  $('#mepr-require-address-fields').on('click', function() {
+    if($('#mepr-require-address-fields').is(':checked')) {
+      $('#mepr-show-address-fields').prop('checked', true);
+      $('#mepr-show-address-fields').prop('disabled', true);
+    } else {
+      $('#mepr-show-address-fields').prop('disabled', false);
+    }
+  });
+
+  $('#mepr-require-fname-lname').on('click', function() {
+    if($('#mepr-require-fname-lname').is(':checked')) {
+      $('#mepr-show-fname-lname').prop('checked', true);
+      $('#mepr-show-fname-lname').prop('disabled', true);
+    } else {
+      $('#mepr-show-fname-lname').prop('disabled', false);
+    }
+  });
+
+  $('#custom_profile_fields').on('change', function(e) {
+    // If this is a text or select field, then let's bail.
+    if($(e.target).is('input[type="text"]') || $(e.target).is('select')) {
+      return;
+    }
+
+    if(e.target.id.indexOf('required') >= 0 && $(e.target).is('input[type="checkbox"]') && $(e.target).is(':checked')) {
+      $(e.target).siblings('input[type="checkbox"]').prop('checked', true);
+      $(e.target).siblings('input[type="checkbox"]').prop('disabled', true);
+    } else {
+      $(e.target).siblings('input[type="checkbox"]').prop('disabled', false);
+    }
+  });
+
   $('body').on('click', '#mepr_calculate_taxes', function(e) {
     if($('#mepr_calculate_taxes').is(':checked')) {
       $('#address-tax-info').show();
@@ -391,8 +448,14 @@ jQuery(document).ready(function($) {
     }
     else {
       $('#address-tax-info').hide();
-      $('input#mepr-show-address-fields').prop('disabled', false);
-      $('input#mepr-require-address-fields').prop('disabled', false);
+
+      if($('input#mepr-require-address-fields').is(':checked')) {
+        $('input#mepr-require-address-fields').prop('disabled', false);
+        $('input#mepr-show-address-fields').prop('disabled', true);
+      } else {
+        $('input#mepr-show-address-fields').prop('disabled', false);
+        $('input#mepr-require-address-fields').prop('disabled', false);
+      }
     }
   });
 
@@ -456,7 +519,7 @@ jQuery(document).ready(function($) {
     licenseError = function (message) {
       $licenseContainer.prepend(
         $('<div class="notice notice-error">').append(
-          $('<p>').text(message)
+          $('<p>').html(message)
         )
       );
     };
@@ -491,7 +554,12 @@ jQuery(document).ready(function($) {
       } else if (!response.success) {
         licenseError(response.data);
       } else {
-        $licenseContainer.html(response.data);
+        $('.mepr-notice-dismiss-24hour').hide();
+        if(response.data === true) {
+          window.location.reload();
+        } else {
+          $licenseContainer.html(response.data);
+        }
       }
     })
     .fail(function () {
@@ -613,5 +681,50 @@ jQuery(document).ready(function($) {
         $detected_ip_address.text(response.data);
       }
     });
+  });
+
+  $('body').on('click', '#mepr-install-license-edition', function (e) {
+    e.preventDefault();
+
+    $('#mepr-install-license-edition-loading').show();
+
+    $.ajax({
+      url: ajaxurl,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        action: 'mepr_install_license_edition',
+        _ajax_nonce: MeprOptions.install_license_edition_nonce
+      }
+    })
+    .done(function (response) {
+      if(response && typeof response.success === 'boolean') {
+        alert(response.data);
+
+        if(response.success) {
+          window.location.reload();
+        }
+      }
+      else {
+        alert(MeprOptions.invalid_response);
+      }
+    })
+    .fail(function () {
+      alert(MeprOptions.ajax_error);
+    })
+    .always(function () {
+      $('#mepr-install-license-edition-loading').hide();
+    });
+  });
+
+  $('body').on('click', '#mepr-activate-new-license', function (e) {
+    e.preventDefault();
+
+    var license_key = $(this).data('license-key');
+
+    setTimeout(function () {
+      $('#mepr-license-key').val(license_key);
+      $('#mepr-activate-license-key').trigger('click');
+    }, 250);
   });
 });

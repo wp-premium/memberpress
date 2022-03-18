@@ -458,7 +458,7 @@ class MeprRemindersCtrl extends MeprCptCtrl {
           if($reminder->trigger_timing == 'after') {
             $sub = $txn->subscription();
             $txn_count = (isset($sub->txn_count) && $sub->txn_count) ? $sub->txn_count : 0;
-            if($txn_count < 2 && ($sub->trial == false || ($sub->trial && $sub->trail_amount > 0.00))) {
+            if($txn_count < 2 && ($sub->trial == false || ($sub->trial && $sub->trial_amount > 0.00))) {
               $disable_email = true;
             }
           }

@@ -662,8 +662,8 @@ class MeprRule extends MeprCptModel {
 
     foreach($rules as $rule) {
       if($user->has_access_from_rule($rule->ID)) {
-        if($rule->has_dripped()) {
-          if(!$rule->has_expired()) {
+        if($rule->has_dripped($user->ID)) {
+          if(!$rule->has_expired($user->ID)) {
             return false;
           }
         }
@@ -799,11 +799,15 @@ class MeprRule extends MeprCptModel {
     return $unauth_message;
   }
 
-  public function has_dripped() {
+  public function has_dripped($user_id = false) {
+    if(!$user_id) {
+      $user_id = get_current_user_id();
+    }
+
     if(!$this->drip_enabled) { return true; } //If the drip is disabled, then let's kill this thing
 
     if($this->drip_after == 'registers') {
-      $registered_ts = MeprUtils::db_date_to_ts(MeprUser::get_current_user_registration_date());
+      $registered_ts = MeprUtils::db_date_to_ts(MeprUser::get_user_registration_date($user_id));
 
       return $this->has_time_passed($registered_ts, $this->drip_unit, $this->drip_amount);
     }
@@ -831,9 +835,9 @@ class MeprRule extends MeprCptModel {
     foreach($products as $product) {
       if(!isset($product->ID) || (int)$product->ID <= 0) { continue; } //The membership doesn't exist anymore, so let's ignore this rule
 
-      if(!($current_user = MeprUtils::get_currentuserinfo())) { continue; } //Not logged in
+      if (!$user_id) { continue; } //Not logged in
 
-      $purchased_ts = MeprUtils::db_date_to_ts(MeprUser::get_user_product_signup_date($current_user->ID, $product->ID));
+      $purchased_ts = MeprUtils::db_date_to_ts(MeprUser::get_user_product_signup_date($user_id, $product->ID));
 
       if(!$purchased_ts) { continue; } //User hasn't purchased this membership
 
@@ -864,11 +868,15 @@ class MeprRule extends MeprCptModel {
     }
   }
 
-  public function has_expired() {
+  public function has_expired($user_id = false) {
+    if(!$user_id) {
+      $user_id = get_current_user_id();
+    }
+
     if(!$this->expires_enabled) { return false; } //If the expiration is disabled, then let's kill this thing
 
     if($this->expires_after == 'registers') {
-      $registered_ts = MeprUtils::db_date_to_ts(MeprUser::get_current_user_registration_date());
+      $registered_ts = MeprUtils::db_date_to_ts(MeprUser::get_user_registration_date($user_id));
 
       return $this->has_time_passed($registered_ts, $this->expires_unit, $this->expires_amount);
     }
@@ -895,9 +903,9 @@ class MeprRule extends MeprCptModel {
     foreach($products as $product) {
       if(!isset($product->ID) || (int)$product->ID <= 0) { continue; } //The membership doesn't exist anymore, so let's ignore this rule
 
-      if(!($current_user = MeprUtils::get_currentuserinfo())) { continue; }
+      if(!$user_id) { continue; }
 
-      $purchased_ts = MeprUtils::db_date_to_ts(MeprUser::get_user_product_signup_date($current_user->ID, $product->ID));
+      $purchased_ts = MeprUtils::db_date_to_ts(MeprUser::get_user_product_signup_date($user_id, $product->ID));
 
       if(!$purchased_ts) { continue; } //User hasn't purchased this
 

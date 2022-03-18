@@ -7,6 +7,8 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     add_filter( 'auto_update_plugin', 'MeprUpdateCtrl::automatic_updates', 10, 2 );
     add_filter('pre_set_site_transient_update_plugins', 'MeprUpdateCtrl::queue_update');
     add_filter('plugins_api', 'MeprUpdateCtrl::plugin_info', 11, 3);
+    add_action('in_plugin_update_message-memberpress/memberpress.php', 'MeprUpdateCtrl::check_incorrect_edition');
+    add_action('mepr_plugin_edition_changed', 'MeprUpdateCtrl::clear_update_transients');
     add_action('admin_enqueue_scripts', 'MeprUpdateCtrl::enqueue_scripts');
     add_action('admin_notices', 'MeprUpdateCtrl::activation_warning');
     add_action('admin_notices', 'MeprUpdateCtrl::promo_upgrade_notices');
@@ -377,13 +379,20 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     $mepr_options = MeprOptions::fetch();
 
     $args = array(
-      'domain' => urlencode(MeprUtils::site_domain())
+      'domain' => urlencode(MeprUtils::site_domain()),
+      'product' => MEPR_EDITION,
     );
 
     $act = self::send_mothership_request("/license_keys/activate/{$license_key}", $args, 'post');
 
     $mepr_options->mothership_license = $license_key;
     $mepr_options->store(false);
+
+    $option_key = "mepr_license_check_{$license_key}";
+    delete_site_transient($option_key);
+    delete_option($option_key);
+
+    do_action('mepr_license_activated_before_queue_update');
 
     self::manually_queue_update();
 
@@ -403,6 +412,7 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
    */
   public static function deactivate_license() {
     $mepr_options = MeprOptions::fetch();
+    $license_key = $mepr_options->mothership_license;
 
     try {
       $args = array(
@@ -419,12 +429,19 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     $mepr_options->mothership_license = '';
     $mepr_options->store(false);
 
+    $option_key = "mepr_license_check_{$license_key}";
+    delete_site_transient($option_key);
+    delete_option($option_key);
+
+    do_action('mepr_license_deactivated_before_queue_update');
+
     self::manually_queue_update();
 
     // Don't need to check the mothership for this one ... we just deactivated
     update_option('mepr_activated', false);
 
-    // Clear the cache of add-ons
+    // Clear the cache of the license and add-ons
+    delete_site_transient('mepr_license_info');
     delete_site_transient('mepr_addons');
     delete_site_transient('mepr_all_addons');
 
@@ -474,6 +491,10 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
           $download_url = $license_info['url'];
 
           set_site_transient('mepr_license_info', $license_info, MeprUtils::hours(24));
+
+          if(MeprUtils::is_incorrect_edition_installed()) {
+            $download_url = '';
+          }
         }
         catch(Exception $e) {
           try {
@@ -794,5 +815,23 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     }
 
     return $addons;
+  }
+
+  public static function check_incorrect_edition() {
+    if(MeprUtils::is_incorrect_edition_installed()) {
+      printf(
+        /* translators: %1$s: open link tag, %2$s: close link tag */
+        ' <strong>' . esc_html__('To restore automatic updates, %1$sinstall the correct edition%2$s of MemberPress.', 'memberpress') . '</strong>',
+        sprintf('<a href="%s">', esc_url(admin_url('admin.php?page=memberpress-options#mepr-license'))),
+        '</a>'
+      );
+    }
+  }
+
+  public static function clear_update_transients() {
+    delete_site_transient('update_plugins');
+    delete_site_transient('mepr_update_info');
+    delete_site_transient('mepr_addons');
+    delete_site_transient('mepr_all_addons');
   }
 } //End class
