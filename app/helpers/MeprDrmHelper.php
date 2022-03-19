@@ -263,7 +263,7 @@ class MeprDrmHelper {
           $simple_message,
           __( 'Grab your key from your <a href="' . esc_url( $account_link ) . '">Account Page</a>.', 'memberpress' ),
           __( '<a href="' . esc_url( $activation_link ) . '">Click here</a> to enter and activate it.', 'memberpress' ),
-          __( 'That’s it!', 'memberpress' ),
+          __( 'That’s it!', 'memberpress' )
         );
         break;
       case self::DRM_LOCKED:
@@ -279,7 +279,7 @@ class MeprDrmHelper {
           $simple_message,
           __( 'Grab your key from your <a href="' . esc_url( $account_link ) . '">Account Page</a>.', 'memberpress' ),
           __( '<a href="' . esc_url( $activation_link ) . '">Click here</a> to enter and activate it.', 'memberpress' ),
-          __( 'That’s it!', 'memberpress' ),
+          __( 'That’s it!', 'memberpress' )
         );
         break;
       default:
