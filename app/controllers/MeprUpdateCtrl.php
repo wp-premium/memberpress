@@ -41,12 +41,12 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
 
   public static function promo_upgrade_notices() {
 
-    if ( ! MeprUtils::is_memberpress_admin_page() ) {
+    if ( ! MeprUtils::is_memberpress_admin_page() || ! MeprUtils::is_promo_time() ) {
       return;
     }
 
     // Set an identifier for this notice
-    $notice_id = 'mp_quizzes_0222';
+    $notice_id = 'mp_spring_22';
     $dismissed_admin_notices = get_option( 'mp_dismissed_admin_notices', array() );
 
     // This notice has already been dismissed
@@ -66,45 +66,50 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     }
 
     // Default
-    $link = 'https://memberpress.com/quizzes/qz-alert/all';
-    $heading = '💥 NEW FEATURE: Course Quizzes';
-    $message = "MemberPress Courses now includes built-in quizzes – attract & keep more students!";
-    $button_text = '👉 LEARN MORE 👈';
+    $link = 'https://memberpress.com/sp2022/sp-alert/lic-no';
+    $heading = 'Monetize & Save!';
+    $message = "Buy MemberPress NOW & You'll 👉 Save Up To  $250 👈 Here comes the BLOOM! It’s Spring Savings Time 🌼 Use Code SPRING22 Thru 4/4";
+    $button_text = '👉 GET MEMBERPRESS 👈';
 
-    /*if ( ! empty( $li['license_key']['expires_at'] ) && strtotime( $li['license_key']['expires_at'] ) < time() ) {
+    if ( ! empty( $li['license_key']['expires_at'] ) && strtotime( $li['license_key']['expires_at'] ) < time() ) {
       // Expired
-      $message = "NOW's the Time to RENEW Your License 👉 We'll Plant a Tree + You'll Save Up To $300 🌲 Happy GREEN MONDAY 🌲 Use Code GREEN21 Thru Dec 18";
+      $heading = 'It’s Time To Renew!';
+      $message = "Renew Your License NOW & You'll 👉 Save Up To  $250 👈 Here comes the BLOOM! It’s Spring Savings Time 🌼 Use Code SPRING22 Thru 4/4";
       $button_text = '👉 RENEW NOW 👈';
-      $link = 'https://memberpress.com/gm2021/gm-alert/lic-exp';
+      $link = 'https://memberpress.com/sp2022/sp-alert/lic-exp';
     } else {
       // Active
       switch ( $li['product_slug'] ) {
         case 'memberpress-basic':
         case 'business':
-          $message = "UPGRADE to Plus or Pro NOW 👉We'll Plant a Tree & You'll Pay LESS than Your Basic Renewal 🌲 It's GREEN MONDAY! Use Code GREEN21 Thru Dec 18";
+          $heading = 'Upgrade Now & Save!';
+          $message = "UPGRADE to Plus or Pro NOW & You'll 👉 Save Up To  $250 👈 Here comes the BLOOM! It’s Spring Savings Time 🌼 Use Code SPRING22 Thru 4/4";
           $button_text = '👉 UPGRADE NOW 👈';
-          $link = 'https://memberpress.com/gm2021/gm-alert/lic-basic';
+          $link = 'https://memberpress.com/sp2022/sp-alert/lic-basic';
           break;
 
         case 'memberpress-plus':
         case 'memberpress-plus-2':
-          $message = "UPGRADE to PRO Now 👉 We'll Plant a Tree & You'll Pay LESS than Renewal for Basic 🌲GREEN MONDAY🌳 Use Code GREEN21 Thru Dec 18";
+          $heading = 'Upgrade Now & Save!';
+          $message = "UPGRADE to Pro NOW & You'll 👉 Save Up To  $250 👈 Here comes the BLOOM! It’s Spring Savings Time 🌼 Use Code SPRING22 Thru 4/4";
           $button_text = '👉 UPGRADE NOW 👈';
-          $link = 'https://memberpress.com/gm2021/gm-alert/lic-plus';
+          $link = 'https://memberpress.com/sp2022/sp-alert/lic-plus';
           break;
 
         case 'memberpress-pro':
         case 'memberpress-pro-5':
         case 'developer':
-          $message = "Buy a MemberPress Gift Certificate 👉 We'll Plant a Tree & You'll Save Up To $300 🌲Happy Green Monday🌲 Use Code GREEN21 Thru Dec 18";
-          $button_text = '👉 GIVE THE GIFT OF MEMBERPRESS 👈';
-          $link = 'https://memberpress.com/gm2021/gm-alert/lic-pro';
+          $link = '';
           break;
 
         default:
           break;
       }
-    }*/
+    }
+
+    if ( empty( $link ) ) {
+      return;
+    }
 
     MeprView::render('/admin/admin-notification', get_defined_vars());
   }
@@ -392,6 +397,8 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     delete_site_transient($option_key);
     delete_option($option_key);
 
+    delete_site_transient('mepr_update_info');
+
     do_action('mepr_license_activated_before_queue_update');
 
     self::manually_queue_update();
@@ -413,17 +420,19 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
   public static function deactivate_license() {
     $mepr_options = MeprOptions::fetch();
     $license_key = $mepr_options->mothership_license;
+    $act = array('message' => __('License key deactivated', 'memberpress'));
 
-    try {
-      $args = array(
-        'domain' => urlencode(MeprUtils::site_domain())
-      );
+    if(!empty($mepr_options->mothership_license)) {
+      try {
+        $args = array(
+          'domain' => urlencode(MeprUtils::site_domain())
+        );
 
-      $act = self::send_mothership_request("/license_keys/deactivate/{$mepr_options->mothership_license}", $args, 'post');
-    }
-    catch(Exception $e) {
-      // Catching here to allow invalid license keys to be deactivated
-      $act = array('message' => __('License key deactivated', 'memberpress'));
+        $act = self::send_mothership_request("/license_keys/deactivate/{$mepr_options->mothership_license}", $args, 'post');
+      }
+      catch(Exception $e) {
+        // Catching here to allow invalid license keys to be deactivated
+      }
     }
 
     $mepr_options->mothership_license = '';
@@ -432,6 +441,8 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     $option_key = "mepr_license_check_{$license_key}";
     delete_site_transient($option_key);
     delete_option($option_key);
+
+    delete_site_transient('mepr_update_info');
 
     do_action('mepr_license_deactivated_before_queue_update');
 

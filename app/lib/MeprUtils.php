@@ -2262,9 +2262,9 @@ class MeprUtils {
    *
    * @return boolean
    */
-  public static function is_green_monday_time() {
-    // Currently runs between December 13 and December 18, 2021
-    return time() > strtotime( '2021-12-13 00:00:00 America/Denver' ) && time() < strtotime( '2021-12-19 00:00:00 America/Denver' );
+  public static function is_promo_time() {
+    // Start date - end date
+    return time() > strtotime( '2022-03-28 00:00:00 America/Denver' ) && time() < strtotime( '2022-04-05 00:00:00 America/Denver' );
   }
 
   /**
