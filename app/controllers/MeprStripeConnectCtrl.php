@@ -22,9 +22,6 @@ class MeprStripeConnectCtrl extends MeprBaseCtrl {
     add_action( 'admin_notices', array( $this, 'admin_notices' ) );
     add_filter( 'site_status_tests', array( $this, 'add_site_health_test' ) );
     add_action( 'mepr-weekly-summary-email-inner-table-top-tr', array( $this, 'maybe_add_notice_to_weekly_summary_email' ) );
-
-    /*add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );*/
-
     add_action( 'wp_ajax_mepr_stripe_connect_update_creds', array( $this, 'process_update_creds' ) );
     add_action( 'wp_ajax_mepr_stripe_connect_refresh', array( $this, 'process_refresh_tokens' ) );
     add_action( 'wp_ajax_mepr_stripe_connect_disconnect', array( $this, 'process_disconnect' ) );
@@ -282,25 +279,6 @@ class MeprStripeConnectCtrl extends MeprBaseCtrl {
           </td>
         </tr>
       <?php
-    }
-  }
-
-  /**
-   * Enqueue admin scripts
-   *
-   * @return void
-   */
-  public function admin_enqueue_scripts( $hook ) {
-
-    if ( class_exists( 'MeprStripeGateway' ) && MeprStripeGateway::has_method_with_connect_status( 'not-connected' ) ) {
-      $admin_url = admin_url( 'admin.php?page=memberpress-options#mepr-integration' );
-      $l10n = array(
-        'tooltip_title'   => __( 'MemberPress Security Notice', 'memberpress' ),
-        'tooltip_body'    => __( 'Your current Stripe payment connection is out of date and may become insecure. Please click the button below to re-connect your Stripe payment method now.', 'memberpress' ),
-        'tooltip_button'  => '<p><a href="' . $admin_url . '" class="button button-primary" target="_blank">' . __('Re-connect Stripe Payment Method', 'memberpress') . '</a></p>'
-      );
-      wp_enqueue_script('mepr-shake-js', MEPR_JS_URL.'/admin_shake.js', array('jquery'), MEPR_VERSION);
-      wp_localize_script('mepr-shake-js', 'MeprShake', $l10n);
     }
   }
 

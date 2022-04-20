@@ -112,16 +112,20 @@ class MeprOptionsHelper {
 
     //Move Stripe Gateway to the top of the list
     if(isset($gateways['MeprStripeGateway'])) {
+      $gateways = array_merge(array('MeprPayPalCommerceGateway' => $gateways['MeprPayPalCommerceGateway']), $gateways);
       $gateways = array_merge(array('MeprStripeGateway' => $gateways['MeprStripeGateway']), $gateways);
     }
-
     ?>
       <select name="<?php echo $field_name; ?>" id="<?php echo $field_name; ?>" data-id="<?php echo $obj_id; ?>" class="mepr-dropdown mepr-gateways-dropdown">
       <?php
         foreach($gateways as $gateway => $gateway_name) {
           if($gateway == 'MeprPayPalProGateway') { continue; } //Don't show PayPal Pro any more to new users
 
+          if($gateway == 'MeprPayPalGateway') { continue; }
+
           if($gateway == 'MeprStripeGateway') { $gateway_name = __('Stripe (Recommended)', 'memberpress'); }
+
+          if($gateway == 'MeprPayPalCommerceGateway') { $gateway_name = __('PayPal (Recommended)', 'memberpress'); }
 
           $obj = MeprGatewayFactory::fetch($gateway);
 

@@ -651,7 +651,7 @@ class MeprAppCtrl extends MeprBaseCtrl {
       $is_login_page ||
       has_shortcode(get_the_content(null, false, $post) , 'mepr-login-form') ||
       is_active_widget(false, false, 'mepr_login_widget') ||
-      (!$mepr_options->redirect_on_unauthorized && $mepr_options->unauth_show_login && (MeprRule::is_locked($post) || MeprRule::is_uri_locked(esc_url($_SERVER['REQUEST_URI']))))) {
+      (!$mepr_options->redirect_on_unauthorized && $mepr_options->unauth_show_login && (isset($post) && is_a($post, 'WP_Post') && MeprRule::is_locked($post) || MeprRule::is_uri_locked(esc_url($_SERVER['REQUEST_URI']))))) {
       wp_enqueue_style( 'dashicons' );
       wp_enqueue_style( 'mp-login-css', MEPR_CSS_URL.'/ui/login.css', null, MEPR_VERSION);
 

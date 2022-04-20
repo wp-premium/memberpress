@@ -126,6 +126,10 @@ jQuery(document).ready(function($) {
     Cookies.set('mepr_stripe_connect_upgrade_dismissed', '1', { expires: 1, path: '/' });
   });
 
+  $('body').on('click', '#mepr_paypal_connect_upgrade_notice button.notice-dismiss', function(e){
+    Cookies.set('mepr_paypal_connect_upgrade_dismissed', '1', { expires: 1, path: '/' });
+  });
+
   $('body').on('click', '.mepr-notice-dismiss-permanently button.notice-dismiss', function () {
     $.ajax({
       url: MeprAdminShared.ajax_url,

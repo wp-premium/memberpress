@@ -101,7 +101,7 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
     return false;
   }
 
-  private function process_ipn() {
+  public function process_ipn() {
     $recurring_payment_txn_types  = array('recurring_payment', 'subscr_payment', 'recurring_payment_outstanding_payment');
     $failed_txn_types             = array('recurring_payment_skipped', 'subscr_failed');
     $payment_status_types         = array('denied','expired','failed');
@@ -159,7 +159,7 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
         $sub = $txn->subscription();
       }
 
-      if($sub !== false) {
+      if($sub !== false && $sub->gateway == $this->id) {
         //The subscription hasn't been setup yet so let's set it up first
         if(strpos($sub->subscr_id, 'S-') === false && strpos($sub->subscr_id, 'I-') === false) {
           $this->record_create_subscription();
@@ -201,10 +201,10 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   }
 
   /** Used to record a successful recurring payment by the given gateway. It
-    * should have the ability to record a successful payment or a failure. It is
-    * this method that should be used when receiving an IPN from PayPal or a
-    * Silent Post from Authorize.net.
-    */
+   * should have the ability to record a successful payment or a failure. It is
+   * this method that should be used when receiving an IPN from PayPal or a
+   * Silent Post from Authorize.net.
+   */
   public function record_subscription_payment() {
     if(!isset($_POST['recurring_payment_id']) && !isset($_POST['subscr_id'])) {
       return;
@@ -332,17 +332,17 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   }
 
   /** Used to send data to a given payment gateway. In gateways which redirect
-    * before this step is necessary this method should just be left blank.
-    */
+   * before this step is necessary this method should just be left blank.
+   */
   public function process_payment($txn) {
     //Handled in the IPN, only record_payment is needed here
   }
 
   /** Used to record a successful payment by the given gateway. It should have
-    * the ability to record a successful payment or a failure. It is this method
-    * that should be used when receiving an IPN from PayPal or a Silent Post
-    * from Authorize.net.
-    */
+   * the ability to record a successful payment or a failure. It is this method
+   * that should be used when receiving an IPN from PayPal or a Silent Post
+   * from Authorize.net.
+   */
   public function record_payment() {
     if(!isset($_POST['item_number']) || empty($_POST['item_number'])) { return false; }
 
@@ -407,8 +407,8 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   }
 
   /** This method should be used by the class to record a successful refund from
-    * the gateway. This method should also be used by any IPN requests or Silent Posts.
-    */
+   * the gateway. This method should also be used by any IPN requests or Silent Posts.
+   */
   public function process_refund(MeprTransaction $txn) {
     $mepr_options = MeprOptions::fetch();
 
@@ -430,8 +430,8 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   }
 
   /** This method should be used by the class to record a successful refund from
-    * the gateway. This method should also be used by any IPN requests or Silent Posts.
-    */
+   * the gateway. This method should also be used by any IPN requests or Silent Posts.
+   */
   public function record_refund() {
     $obj = MeprTransaction::get_one_by_trans_num($_POST['parent_txn_id']);
 
@@ -461,18 +461,18 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   public function record_trial_payment($transaction) { }
 
   /** Used to send subscription data to a given payment gateway. In gateways
-    * which redirect before this step is necessary this method should just be
-    * left blank.
-    */
+   * which redirect before this step is necessary this method should just be
+   * left blank.
+   */
   public function process_create_subscription($txn) {
     //This all happens in the IPN so record_created_subscription is all that's needed
   }
 
   /** Used to record a successful subscription by the given gateway. It should have
-    * the ability to record a successful subscription or a failure. It is this method
-    * that should be used when receiving an IPN from PayPal or a Silent Post
-    * from Authorize.net.
-    */
+   * the ability to record a successful subscription or a failure. It is this method
+   * that should be used when receiving an IPN from PayPal or a Silent Post
+   * from Authorize.net.
+   */
   public function record_create_subscription() {
     $mepr_options = MeprOptions::fetch();
 
@@ -549,26 +549,26 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   }
 
   /** Used to cancel a subscription by the given gateway. This method should be used
-    * by the class to record a successful cancellation from the gateway. This method
-    * should also be used by any IPN requests or Silent Posts.
-    *
-    * With PayPal, we bill the outstanding amount of the previous subscription,
-    * cancel the previous subscription and create a new subscription
-    */
+   * by the class to record a successful cancellation from the gateway. This method
+   * should also be used by any IPN requests or Silent Posts.
+   *
+   * With PayPal, we bill the outstanding amount of the previous subscription,
+   * cancel the previous subscription and create a new subscription
+   */
   public function process_update_subscription($sub_id) {
     // Account info updated on PayPal.com
   }
 
   /** This method should be used by the class to record a successful cancellation
-    * from the gateway. This method should also be used by any IPN requests or
-    * Silent Posts.
-    */
+   * from the gateway. This method should also be used by any IPN requests or
+   * Silent Posts.
+   */
   public function record_update_subscription() {
     // Account info updated on PayPal.com
   }
 
   /** Used to suspend a subscription by the given gateway.
-    */
+   */
   public function process_suspend_subscription($sub_id) {
     $sub = new MeprSubscription($sub_id);
 
@@ -587,8 +587,8 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   }
 
   /** This method should be used by the class to record a successful suspension
-    * from the gateway.
-    */
+   * from the gateway.
+   */
   public function record_suspend_subscription() {
     $subscr_id = $_REQUEST['recurring_payment_id'];
     $sub = MeprSubscription::get_one_by_subscr_id($subscr_id);
@@ -607,7 +607,7 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   }
 
   /** Used to suspend a subscription by the given gateway.
-    */
+   */
   public function process_resume_subscription($sub_id) {
     $sub = new MeprSubscription($sub_id);
     $this->update_paypal_payment_profile($sub_id, 'Reactivate');
@@ -617,8 +617,8 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   }
 
   /** This method should be used by the class to record a successful resuming of
-    * as subscription from the gateway.
-    */
+   * as subscription from the gateway.
+   */
   public function record_resume_subscription() {
     //APPARENTLY PAYPAL DOES NOT SEND OUT AN IPN FOR THIS -- SO WE CAN'T ACTUALLY RECORD THIS HERE UGH
     //BUT WE DO SET THE SUBSCR STATUS BACK TO ACTIVE WHEN THE NEXT PAYMENT CLEARS
@@ -652,9 +652,9 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   }
 
   /** Used to cancel a subscription by the given gateway. This method should be used
-    * by the class to record a successful cancellation from the gateway. This method
-    * should also be used by any IPN requests or Silent Posts.
-    */
+   * by the class to record a successful cancellation from the gateway. This method
+   * should also be used by any IPN requests or Silent Posts.
+   */
   public function process_cancel_subscription($sub_id) {
     $sub = new MeprSubscription($sub_id);
 
@@ -668,9 +668,9 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   }
 
   /** This method should be used by the class to record a successful cancellation
-    * from the gateway. This method should also be used by any IPN requests or
-    * Silent Posts.
-    */
+   * from the gateway. This method should also be used by any IPN requests or
+   * Silent Posts.
+   */
   public function record_cancel_subscription() {
     // Not sure how/why this would happen but fail silently if it does
     if(!isset($_REQUEST['subscr_id']) && !isset($_REQUEST['recurring_payment_id'])) { return false; }
@@ -700,9 +700,9 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   }
 
   /** This gets called on the 'init' hook when the signup form is processed ...
-    * this is in place so that payment solutions like paypal can redirect
-    * before any content is rendered.
-  */
+   * this is in place so that payment solutions like paypal can redirect
+   * before any content is rendered.
+   */
   public function display_payment_page($txn) {
     $mepr_options = MeprOptions::fetch();
 
@@ -759,23 +759,23 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   }
 
   /** This gets called on wp_enqueue_script and enqueues a set of
-    * scripts for use on the page containing the payment form
-    */
+   * scripts for use on the page containing the payment form
+   */
   public function enqueue_payment_form_scripts() {
     // No need, handled on the PayPal side
   }
 
   /**
-  * Returs the payment form and required fields for the gateway
-  */
+   * Returs the payment form and required fields for the gateway
+   */
   public function spc_payment_fields() {
     return $this->settings->desc;
   }
 
   /**
-  * This gets called on the_content and just renders the payment form
-  * For PayPal Standard we're loading up a hidden form and submitting it with JS
-  */
+   * This gets called on the_content and just renders the payment form
+   * For PayPal Standard we're loading up a hidden form and submitting it with JS
+   */
   public function display_payment_form($amount, $user, $product_id, $transaction_id) {
     $payment_vars = isset($_REQUEST['pp_standard_payment_vars'])?$_REQUEST['pp_standard_payment_vars']:array();
 
@@ -787,7 +787,7 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
 
     //Show a message?
     ?>
-      <p id="pp_standard_redirecting_message"><img src="<?php echo includes_url('js/thickbox/loadingAnimation.gif'); ?>" alt="<?php _e('Loading...', 'memberpress'); ?>" width="250" />
+    <p id="pp_standard_redirecting_message"><img src="<?php echo includes_url('js/thickbox/loadingAnimation.gif'); ?>" alt="<?php _e('Loading...', 'memberpress'); ?>" width="250" />
       <br/>
       <?php _ex('You are being redirected to PayPal now. Please wait...', 'ui', 'memberpress'); ?></p>
     <?php
@@ -797,12 +797,12 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
     foreach($payment_vars as $key => $val) {
       if($key == 'custom'):
         ?>
-          <textarea name="<?php echo $key; ?>" style="display:none;"><?php echo esc_textarea($val); ?></textarea>
-        <?php
+        <textarea name="<?php echo $key; ?>" style="display:none;"><?php echo esc_textarea($val); ?></textarea>
+      <?php
       else:
         ?>
-          <input type="hidden" name="<?php echo $key; ?>" value="<?php echo esc_attr($val); ?>" />
-        <?php
+        <input type="hidden" name="<?php echo $key; ?>" value="<?php echo esc_attr($val); ?>" />
+      <?php
       endif;
     }
     echo '</form>';
@@ -810,9 +810,9 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
     //Javascript to force the form to submit
     ?>
     <script type="text/javascript">
-      setTimeout(function() {
-        document.getElementById("mepr_pp_standard_form").submit();
-      }, 1000); //Let's wait one second to let some stuff load up
+        setTimeout(function() {
+            document.getElementById("mepr_pp_standard_form").submit();
+        }, 1000); //Let's wait one second to let some stuff load up
     </script>
     <?php
   }
@@ -824,9 +824,9 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
 
 
   /**
-  * Redirects the user to Paypal checkout
-  * @param object MeprTransaction
-  */
+   * Redirects the user to Paypal checkout
+   * @param object MeprTransaction
+   */
   public function process_payment_form($txn) {
     if($txn->amount > 0.00) {
       $gateway_payment_args = http_build_query($this->get_gateway_payment_args($txn));
@@ -934,7 +934,24 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
     $debug        = ($this->settings->debug == 'on' or $this->settings->debug == true);
 
     ?>
-    <table>
+    <?php if ( ! empty( $paypal_email ) && class_exists( 'MeprPayPalCommerceGateway' ) ) { ?>
+      <div class="mepr-paypal-standard-upgrade-box"><img width="200px" src="<?php echo MEPR_IMAGES_URL . '/PayPal_with_Tagline.svg'; ?>" alt="PayPal logo"/>
+                <p style="color: red"><?php _e('Your PayPal payment connection is out of date, and may become insecure. Use the upgrade button below to fix this.', 'memberpress'); ?></p>
+    <button
+                type="button"
+                data-mepr-upgrade-paypal="1"
+                data-disconnect-confirm-msg="<?php echo esc_attr(__('Are you sure?', 'memberpress')); ?>"
+                data-method-id="<?php echo esc_attr($this->id); ?>"
+                class="button-primary"> <img class="mepr-pp-icon" src="<?php echo MEPR_IMAGES_URL . '/PayPal_Icon_For_Button.svg'; ?>"/><?php _e( 'Upgrade to new PayPal Commerce Platform', 'memberpress' ); ?></button>
+      </div>
+      <div x-data="{ open: false }">
+      <button type="button" x-on:click="open =! open"><?php _e('PayPal standard Settings', 'memberpress'); ?></button>
+    <?php } else { ?>
+      <div x-data="{ open: true }">
+    <?php } ?>
+
+
+    <table x-show="open">
       <tr>
         <td><?php _e('Primary PayPal Email*:', 'memberpress'); ?></td>
         <td><input type="text" class="mepr-auto-trim" name="<?php echo $mepr_options->integrations_str; ?>[<?php echo $this->id;?>][paypal_email]" value="<?php echo $paypal_email; ?>" /></td>
@@ -974,6 +991,7 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
       </tr>
       <?php MeprHooks::do_action('mepr-paypal-standard-options-form', $this); ?>
     </table>
+      </div>
     <?php
   }
 
@@ -1228,8 +1246,8 @@ class MeprPayPalStandardGateway extends MeprBasePayPalGateway {
   public function cancel_message() {
     $mepr_options = MeprOptions::fetch();
     ?>
-      <h4><?php _e('Your payment at PayPal was cancelled.', 'memberpress'); ?></h4>
-      <p><?php echo MeprHooks::apply_filters('mepr_paypal_cancel_message', sprintf(__('You can retry your purchase by %1$sclicking here%2$s.', 'memberpress'), '<a href="'.MeprUtils::get_permalink().'">', '</a>')); ?><br/></p>
+    <h4><?php _e('Your payment at PayPal was cancelled.', 'memberpress'); ?></h4>
+    <p><?php echo MeprHooks::apply_filters('mepr_paypal_cancel_message', sprintf(__('You can retry your purchase by %1$sclicking here%2$s.', 'memberpress'), '<a href="'.MeprUtils::get_permalink().'">', '</a>')); ?><br/></p>
     <?php
   }
 }

@@ -13,7 +13,7 @@
       <?php
         MeprAppHelper::info_tooltip('mepr-product-tax-exempt',
           __('This Membership is Tax Exempt', 'memberpress'),
-          __('If this option is checked then taxes won\'t be calcluated for this Membership.', 'memberpress'));
+          __('If this option is checked then taxes won\'t be calculated for this Membership.', 'memberpress'));
       ?>
 
       <div id="mepr-product-tax-class-fields" class="mepr-options-pane">

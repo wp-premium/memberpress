@@ -2452,8 +2452,14 @@ class MeprUser extends MeprBaseModel {
     }
 
 
-    $active_memberships = explode(',', str_replace('|', ',', $data->memberships));
-    $inactive_memberships = explode(',', str_replace('|', ',', $data->inactive_memberships));
+    $active_memberships = array();
+    if(isset($data->memberships)) {
+      $active_memberships = explode(',', str_replace('|', ',', $data->memberships));
+    }
+    $inactive_memberships = array();
+    if(isset($data->inactive_memberships)) {
+      $inactive_memberships = explode( ',', str_replace( '|', ',', $data->inactive_memberships ) );
+    }
 
     if(!empty($active_memberships) && !empty($inactive_memberships)) {
       foreach($inactive_memberships as $key => $id) {
@@ -2462,7 +2468,11 @@ class MeprUser extends MeprBaseModel {
         }
       }
 
-      $data->inactive_memberships = implode(",", $inactive_memberships);
+      if(empty($inactive_memberships)) {
+        $data->inactive_memberships = '';
+      } else {
+        $data->inactive_memberships = implode(",", $inactive_memberships);
+      }
     }
 
     return $data;

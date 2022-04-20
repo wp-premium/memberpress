@@ -688,7 +688,7 @@ class MeprReminder extends MeprCptModel {
     $mepr_db = new MeprDb();
 
     $unit = $this->db_trigger_interval();
-    $op = ( $this->trigger_timing=='before' ? 'DATE_SUB' : 'DATE_ADD' );
+    $op = ( $this->trigger_timing =='before' ? 'DATE_SUB' : 'DATE_ADD' );
 
     //Make sure we're only grabbing from valid product ID's for this reminder yo
     //If $this->products is empty, then we should send for all product_id's
@@ -730,7 +730,7 @@ class MeprReminder extends MeprCptModel {
          "{$and_products} " .
 
          // Just trials subs
-         "AND sub.trial = 1 AND sub.trial_days > 0 " .
+         "AND sub.trial = 1 AND sub.trial_days > 0 AND sub.prorated_trial = 0 " .
 
        // Get the *oldest* valid trial subs first
        "ORDER BY sub.created_at ASC

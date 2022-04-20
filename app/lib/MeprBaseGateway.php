@@ -460,7 +460,7 @@ abstract class MeprBaseGateway {
 
   protected function email_status($message, $debug)
   {
-    if($debug) {
+    if ( $debug ) {
       // Send notification email to admin user (to and from the admin user)
       /* translators: In this string, %1$s is the Blog Name/Title and %2$s is the Name of the Payment Method */
       $subject = sprintf(__('[%1$s] %2$s Debug Email', 'memberpress'), MeprUtils::blogname(), $this->name );

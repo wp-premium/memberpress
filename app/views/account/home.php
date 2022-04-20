@@ -22,14 +22,14 @@
     <?php MeprHooks::do_action('mepr-account-home-before-name', $mepr_current_user); ?>
 
     <?php if($mepr_options->show_fname_lname): ?>
-      <div class="mp-form-row mepr_first_name">
+      <div class="mp-form-row mepr_first_name<?php echo ($mepr_options->require_fname_lname) ? ' mepr-field-required' : ''; ?>">
         <div class="mp-form-label">
           <label for="user_first_name"><?php _ex('First Name:', 'ui', 'memberpress'); echo ($mepr_options->require_fname_lname)?'*':''; ?></label>
           <span class="cc-error"><?php _ex('First Name Required', 'ui', 'memberpress'); ?></span>
         </div>
         <input type="text" name="user_first_name" id="user_first_name" class="mepr-form-input" value="<?php echo $mepr_current_user->first_name; ?>" <?php echo ($mepr_options->require_fname_lname)?'required':''; ?> />
       </div>
-      <div class="mp-form-row mepr_last_name">
+      <div class="mp-form-row mepr_last_name<?php echo ($mepr_options->require_fname_lname) ? ' mepr-field-required' : ''; ?>">
         <div class="mp-form-label">
           <label for="user_last_name"><?php _ex('Last Name:', 'ui', 'memberpress'); echo ($mepr_options->require_fname_lname)?'*':''; ?></label>
           <span class="cc-error"><?php _ex('Last Name Required', 'ui', 'memberpress'); ?></span>
@@ -40,7 +40,7 @@
       <input type="hidden" name="user_first_name" value="<?php echo $mepr_current_user->first_name; ?>" />
       <input type="hidden" name="user_last_name" value="<?php echo $mepr_current_user->last_name; ?>" />
     <?php endif; ?>
-    <div class="mp-form-row mepr_email">
+    <div class="mp-form-row mepr_email mepr-field-required">
       <div class="mp-form-label">
         <label for="user_email"><?php _ex('Email:*', 'ui', 'memberpress');  ?></label>
         <span class="cc-error"><?php _ex('Invalid Email', 'ui', 'memberpress'); ?></span>

@@ -463,16 +463,24 @@ table.mepr-addons-table tr th {
   font-size: 15px;
 }
 
+.mepr-payment-option-prompt img.mepr-pp-icon {
+  margin-right: 5px;
+  position: relative;
+  top: 3px;
+}
+
 .mepr-integration-gateway-form .stripe-feature-list {
   margin: auto;
 }
 
-.mepr-integration-gateway-form .stripe-features li {
+.mepr-integration-gateway-form .stripe-features li,
+.mepr-integration-gateway-form .paypal-features li {
   margin: 0;
   text-align: left;
 }
 
-.mepr-integration-gateway-form .stripe-features li img {
+.mepr-integration-gateway-form .stripe-features li img,
+.mepr-integration-gateway-form .paypal-features li img {
   padding-right: 3px;
 }
 
@@ -506,6 +514,16 @@ table.mepr-addons-table tr th {
 }
 .mepr-integration-gateway-form .mepr-stripe-method {
   position: relative;
+}
+.mepr-integration-gateway-form .mepr-paypal-onboarding-button {
+  line-height: 3.5em;
+}
+.mepr-integration-gateway-form .mepr-paypal-onboarding-button  {
+  line-height: 3.5em;
+}
+.mepr-integration-gateway-form .mepr-paypal-onboarding-button {
+  line-height: 3.5em;
+  margin: 5px 10px;
 }
 .mepr-stripe-method .stripe-features {
   padding: 0px 40px;

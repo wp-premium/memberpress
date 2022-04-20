@@ -157,6 +157,8 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
       );
 
       wp_register_script('memberpress-i18n', MEPR_JS_URL.'/i18n.js', array('jquery'), MEPR_VERSION);
+      wp_enqueue_script('paypal-partner-sdk', 'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js', array('jquery'), null, true);
+      wp_enqueue_script('alpinejs', 'https://unpkg.com/alpinejs@3.9.3/dist/cdn.min.js', array(), MEPR_VERSION, true);
       wp_localize_script('memberpress-i18n', 'MeprI18n', array('states' => MeprUtils::states()));
 
       wp_register_script( 'mepr-clipboard-js', MEPR_JS_URL . '/clipboard.min.js', array(), MEPR_VERSION );
@@ -175,6 +177,7 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
           'mepr-settings-table-js',
           'mepr-admin-shared-js',
           'jquery-ui-sortable',
+          'paypal-partner-sdk',
           'memberpress-i18n'
         ),
         MEPR_VERSION

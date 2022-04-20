@@ -2264,7 +2264,7 @@ class MeprUtils {
    */
   public static function is_promo_time() {
     // Start date - end date
-    return time() > strtotime( '2022-03-28 00:00:00 America/Denver' ) && time() < strtotime( '2022-04-05 00:00:00 America/Denver' );
+    return time() > strtotime( '2022-04-17 00:00:00 America/Denver' ) && time() < strtotime( '2022-04-26 00:00:00 America/Denver' );
   }
 
   /**

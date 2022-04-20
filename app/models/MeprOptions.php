@@ -88,6 +88,10 @@ class MeprOptions {
   public function set_defaults() {
     $mepr_blogname = MeprUtils::blogname();
 
+    if(!isset($this->legacy_integrations)) {
+      $this->legacy_integrations = [];
+    }
+
     if(!isset($this->account_page_id))
       $this->account_page_id = 0;
 
@@ -729,7 +733,7 @@ class MeprOptions {
         $type = $params[$this->custom_fields_str][$i]['type'];
         $default = isset($params[$this->custom_fields_str][$i]['default'])?$params[$this->custom_fields_str][$i]['default']:'';
         $signup = (isset($params[$this->custom_fields_str][$i]['signup']) || isset($params[$this->custom_fields_str][$i]['required']));
-        $show_in_account = (isset($params[$this->custom_fields_str][$i]['show_in_account']) || isset($params[$this->custom_fields_str][$i]['required']));
+        $show_in_account = isset($params[$this->custom_fields_str][$i]['show_in_account']);
         $required = isset($params[$this->custom_fields_str][$i]['required']);
         $dropdown_ops = array();
 

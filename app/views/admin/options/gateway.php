@@ -1,5 +1,5 @@
 <?php if(!defined('ABSPATH')) {die('You are not allowed to call this page directly.');} ?>
-<div id="mepr-integration-<?php echo $obj->id; ?>" class="mepr-integration" data-id="<?php echo $obj->id; ?>">
+<div id="mepr-integration-<?php echo $obj->id; ?>" class="mepr-integration" data-id="<?php echo $obj->id; ?>" data-gateway="<?php echo get_class($obj); ?>">
   <div class="mepr-integration-delete">
     <a href=""><i class="mp-icon mp-icon-cancel-circled mp-16"></i></a>
   </div>

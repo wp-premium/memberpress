@@ -160,6 +160,11 @@ class MeprTransaction extends MeprBaseMetaModel implements MeprProductInterface,
     return $mepr_db->get_one_record($mepr_db->transactions, $args, $return_type);
   }
 
+  /**
+   * @param $trans_num
+   *
+   * @return this
+   */
   public static function get_one_by_trans_num($trans_num) {
     $mepr_db = new MeprDb();
     $args = compact('trans_num');
@@ -583,6 +588,9 @@ class MeprTransaction extends MeprBaseMetaModel implements MeprProductInterface,
     return ($this->status == 'complete' && $expires_ts < $todays_ts);
   }
 
+  /**
+   * @return MeprProduct
+   */
   public function product() {
     //Don't do static caching stuff here
 

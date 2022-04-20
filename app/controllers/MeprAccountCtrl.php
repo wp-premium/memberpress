@@ -48,11 +48,11 @@ class MeprAccountCtrl extends MeprBaseCtrl {
           MeprView::render('/shared/errors', get_defined_vars());
           ?>
           <!-- Hidden signup form -->
-          <style>
-            form.mepr-signup-form {
-              display:none;
-            }
-          </style>
+          <script>
+            jQuery(document).ready(function($) {
+              $('input[value="' + <?php echo (int) $prd_id; ?> +'"]').closest('form').hide();
+            });
+          </script>
           <?php
         }
       }

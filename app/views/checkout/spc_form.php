@@ -29,14 +29,14 @@
     <?php if((!MeprUtils::is_user_logged_in() ||
               (MeprUtils::is_user_logged_in() && $mepr_options->show_fields_logged_in_purchases)) &&
              $mepr_options->show_fname_lname): ?>
-      <div class="mp-form-row mepr_first_name">
+      <div class="mp-form-row mepr_first_name<?php echo ($mepr_options->require_fname_lname) ? ' mepr-field-required' : ''; ?>">
         <div class="mp-form-label">
           <label for="user_first_name<?php echo $unique_suffix; ?>"><?php _ex('First Name:', 'ui', 'memberpress'); echo ($mepr_options->require_fname_lname)?'*':''; ?></label>
           <span class="cc-error"><?php _ex('First Name Required', 'ui', 'memberpress'); ?></span>
         </div>
         <input type="text" name="user_first_name" id="user_first_name<?php echo $unique_suffix; ?>" class="mepr-form-input" value="<?php echo esc_attr($first_name_value); ?>" <?php echo ($mepr_options->require_fname_lname)?'required':''; ?> />
       </div>
-      <div class="mp-form-row mepr_last_name">
+      <div class="mp-form-row mepr_last_name<?php echo ($mepr_options->require_fname_lname) ? ' mepr-field-required' : ''; ?>">
         <div class="mp-form-label">
           <label for="user_last_name<?php echo $unique_suffix; ?>"><?php _ex('Last Name:', 'ui', 'memberpress'); echo ($mepr_options->require_fname_lname)?'*':''; ?></label>
           <span class="cc-error"><?php _ex('Last Name Required', 'ui', 'memberpress'); ?></span>
@@ -64,7 +64,7 @@
       <input type="hidden" class="mepr-geo-country" name="mepr-geo-country" value="" />
 
       <?php if(!$mepr_options->username_is_email): ?>
-        <div class="mp-form-row mepr_username">
+        <div class="mp-form-row mepr_username mepr-field-required">
           <div class="mp-form-label">
             <label for="user_login<?php echo $unique_suffix; ?>"><?php _ex('Username:*', 'ui', 'memberpress'); ?></label>
             <span class="cc-error"><?php _ex('Invalid Username', 'ui', 'memberpress'); ?></span>
@@ -72,7 +72,7 @@
           <input type="text" name="user_login" id="user_login<?php echo $unique_suffix; ?>" class="mepr-form-input" value="<?php echo (isset($user_login))?esc_attr(stripslashes($user_login)):''; ?>" required />
         </div>
       <?php endif; ?>
-      <div class="mp-form-row mepr_email">
+      <div class="mp-form-row mepr_email mepr-field-required">
         <div class="mp-form-label">
           <label for="user_email<?php echo $unique_suffix; ?>"><?php _ex('Email:*', 'ui', 'memberpress'); ?></label>
           <span class="cc-error"><?php _ex('Invalid Email', 'ui', 'memberpress'); ?></span>
@@ -82,7 +82,7 @@
       <?php MeprHooks::do_action('mepr-after-email-field'); //Deprecated ?>
       <?php MeprHooks::do_action('mepr-checkout-after-email-field', $product->ID); ?>
       <?php if($mepr_options->disable_checkout_password_fields === false): ?>
-        <div class="mp-form-row mepr_password">
+        <div class="mp-form-row mepr_password mepr-field-required">
           <div class="mp-form-label">
             <label for="mepr_user_password<?php echo $unique_suffix; ?>"><?php _ex('Password:*', 'ui', 'memberpress'); ?></label>
             <span class="cc-error"><?php _ex('Invalid Password', 'ui', 'memberpress'); ?></span>
@@ -94,7 +94,7 @@
             </button>
           </div>
         </div>
-        <div class="mp-form-row mepr_password_confirm">
+        <div class="mp-form-row mepr_password_confirm mepr-field-required">
           <div class="mp-form-label">
             <label for="mepr_user_password_confirm<?php echo $unique_suffix; ?>"><?php _ex('Password Confirmation:*', 'ui', 'memberpress'); ?></label>
             <span class="cc-error"><?php _ex('Password Confirmation Doesn\'t Match', 'ui', 'memberpress'); ?></span>

@@ -1,6 +1,6 @@
 <?php if(!defined('ABSPATH')) {die('You are not allowed to call this page directly.');} ?>
 
-<div class="mp-form-row mepr_custom_field mepr_<?php echo $line->field_key; ?>">
+<div class="mp-form-row mepr_custom_field mepr_<?php echo $line->field_key; ?><?php echo ($line->required) ? ' mepr-field-required' : ''; ?>">
   <?php if($line->field_type != 'checkbox'): ?>
     <div class="mp-form-label">
       <label for="<?php echo $line->field_key . $unique_suffix; ?>"><?php printf( '%1$s:%2$s', _x(stripslashes($line->field_name), 'ui', 'memberpress'), $required ); ?></label>

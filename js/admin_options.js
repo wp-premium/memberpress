@@ -1,4 +1,37 @@
 jQuery(document).ready(function($) {
+  $.getScript( "https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/signup.js", function( data, textStatus, jqxhr ) {
+    "embedded" === PAYPAL.apps.experience ? PAYPAL.apps.Signup.Embedded.render() : "embeddedmini" === PAYPAL.apps.experience ? "true" === queryString.parse(location.search).showMB && PAYPAL.apps.Signup.MiniBrowser.init() : PAYPAL.apps.Signup.MiniBrowser.init()
+  });
+
+  $('.mepr-paypal-onboarding-button').tooltipster({
+    maxWidth: 300
+  });
+
+  $('[data-mepr-disconnect-paypal]').on('click', function () {
+    let methodId = $(this).data('method-id');
+    let sandbox = $(this).data('paypal-sandbox');
+    let disconnectConfirmMessage = $(this).data('disconnect-confirm-msg');
+
+    if (sandbox == true) {
+      if (window.confirm(disconnectConfirmMessage)) {
+        window.location.href = ajaxurl + '?action=mepr_paypal_connect_disconnect&sandbox=1&method-id=' + methodId;
+      }
+    } else {
+      if (window.confirm(disconnectConfirmMessage)) {
+        window.location.href = ajaxurl + '?action=mepr_paypal_connect_disconnect&method-id=' + methodId;
+      }
+    }
+  });
+
+  $('[data-mepr-upgrade-paypal]').on('click', function () {
+    let methodId = $(this).data('method-id');
+    let disconnectConfirmMessage = $(this).data('disconnect-confirm-msg');
+
+    if (window.confirm(disconnectConfirmMessage)) {
+      window.location.href = ajaxurl + '?action=mepr_paypal_connect_upgrade_standard_gateway&method-id=' + methodId;
+    }
+  });
+
   //Set the correct tab to display
   var hash = location.hash.replace('#','');
 
@@ -401,8 +434,6 @@ jQuery(document).ready(function($) {
     if($('#mepr-custom-fields-required-' + field_id).is(':checked')) {
       $('#mepr-custom-fields-signup-' + field_id).prop('checked', true);
       $('#mepr-custom-fields-signup-' + field_id).prop('disabled', true);
-      $('#mepr-custom-fields-account-' + field_id).prop('checked', true);
-      $('#mepr-custom-fields-account-' + field_id).prop('disabled', true);
     }
   });
 
@@ -425,16 +456,22 @@ jQuery(document).ready(function($) {
   });
 
   $('#custom_profile_fields').on('change', function(e) {
-    // If this is a text or select field, then let's bail.
-    if($(e.target).is('input[type="text"]') || $(e.target).is('select')) {
+    // If this is a text, select field, or the "Show in Account" checkbox, then let's bail.
+    if($(e.target).is('input[type="text"]') || $(e.target).is('select') || e.target.id.indexOf('account') >= 0) {
+      return;
+    }
+
+    var field_id = e.target.id.split('-').pop();
+
+    if(!field_id) {
       return;
     }
 
     if(e.target.id.indexOf('required') >= 0 && $(e.target).is('input[type="checkbox"]') && $(e.target).is(':checked')) {
-      $(e.target).siblings('input[type="checkbox"]').prop('checked', true);
-      $(e.target).siblings('input[type="checkbox"]').prop('disabled', true);
+      $('#mepr-custom-fields-signup-' + field_id).prop('checked', true);
+      $('#mepr-custom-fields-signup-' + field_id).prop('disabled', true);
     } else {
-      $(e.target).siblings('input[type="checkbox"]').prop('disabled', false);
+      $('#mepr-custom-fields-signup-' + field_id).prop('disabled', false);
     }
   });
 

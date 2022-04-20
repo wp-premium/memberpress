@@ -23,3 +23,8 @@ if(isset($expired_subs) and !empty($expired_subs) && (empty($_GET['action']) || 
   $errors = array(sprintf(_x('You have a problem with one or more of your %1$s. To prevent any lapses in your %1$s please visit your %2$s%3$s%4$s page to update them.', 'ui', 'memberpress'),strtolower($sub_label),'<a href="'.$account_url.$delim.'action=subscriptions">',$sub_label,'</a>'));
   MeprView::render('/shared/errors', get_defined_vars());
 }
+
+if ( isset( $_REQUEST['errors'] ) ) {
+  $errors = [ esc_html( $_REQUEST['errors'] ) ];
+  MeprView::render( '/shared/errors', get_defined_vars() );
+}

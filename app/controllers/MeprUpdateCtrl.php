@@ -46,7 +46,7 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     }
 
     // Set an identifier for this notice
-    $notice_id = 'mp_spring_22';
+    $notice_id = 'mp_ed_22';
     $dismissed_admin_notices = get_option( 'mp_dismissed_admin_notices', array() );
 
     // This notice has already been dismissed
@@ -66,34 +66,34 @@ class MeprUpdateCtrl extends MeprBaseCtrl {
     }
 
     // Default
-    $link = 'https://memberpress.com/sp2022/sp-alert/lic-no';
-    $heading = 'Monetize & Save!';
-    $message = "Buy MemberPress NOW & You'll 👉 Save Up To  $250 👈 Here comes the BLOOM! It’s Spring Savings Time 🌼 Use Code SPRING22 Thru 4/4";
-    $button_text = '👉 GET MEMBERPRESS 👈';
+    $link = 'https://memberpress.com/ed2022/ed-alert';
+    $heading = 'WANTED: Eco-Minded Entrepreneurs 🌏 ';
+    $message = "Buy MemberPress NOW & We’ll Plant a Tree 🌳 It’s Our Earth Day Celebration 2022 🌲 Use Code TREES22 Thru 4/26";
+    $button_text = '👉 PLANT MY TREE 👈';
 
     if ( ! empty( $li['license_key']['expires_at'] ) && strtotime( $li['license_key']['expires_at'] ) < time() ) {
       // Expired
-      $heading = 'It’s Time To Renew!';
-      $message = "Renew Your License NOW & You'll 👉 Save Up To  $250 👈 Here comes the BLOOM! It’s Spring Savings Time 🌼 Use Code SPRING22 Thru 4/4";
-      $button_text = '👉 RENEW NOW 👈';
-      $link = 'https://memberpress.com/sp2022/sp-alert/lic-exp';
-    } else {
+      // $heading = 'It’s Time To Renew!';
+      $message = "Renew MemberPress NOW & We’ll Plant a Tree 🌳 It’s Our Earth Day Celebration 2022 🌲 Use Code TREES22 Thru 4/26";
+      // $button_text = '👉 RENEW NOW 👈';
+      // $link = 'https://memberpress.com/sp2022/sp-alert/lic-exp';
+    } elseif ( ! empty( $li['product_slug'] ) ) {
       // Active
       switch ( $li['product_slug'] ) {
         case 'memberpress-basic':
         case 'business':
-          $heading = 'Upgrade Now & Save!';
-          $message = "UPGRADE to Plus or Pro NOW & You'll 👉 Save Up To  $250 👈 Here comes the BLOOM! It’s Spring Savings Time 🌼 Use Code SPRING22 Thru 4/4";
-          $button_text = '👉 UPGRADE NOW 👈';
-          $link = 'https://memberpress.com/sp2022/sp-alert/lic-basic';
+          // $heading = 'Upgrade Now & Save!';
+          $message = "Upgrade to Plus or Pro NOW & We’ll Plant a Tree 🌳 It’s Our Earth Day Celebration 2022 🌲 Use Code TREES22 Thru 4/26";
+          // $button_text = '👉 UPGRADE NOW 👈';
+          // $link = 'https://memberpress.com/sp2022/sp-alert/lic-basic';
           break;
 
         case 'memberpress-plus':
         case 'memberpress-plus-2':
-          $heading = 'Upgrade Now & Save!';
-          $message = "UPGRADE to Pro NOW & You'll 👉 Save Up To  $250 👈 Here comes the BLOOM! It’s Spring Savings Time 🌼 Use Code SPRING22 Thru 4/4";
-          $button_text = '👉 UPGRADE NOW 👈';
-          $link = 'https://memberpress.com/sp2022/sp-alert/lic-plus';
+          // $heading = 'Upgrade Now & Save!';
+          $message = "Upgrade to Pro NOW & We’ll Plant a Tree 🌳 It’s Our Earth Day Celebration 2022 🌲 Use Code TREES22 Thru 4/26";
+          // $button_text = '👉 UPGRADE NOW 👈';
+          // $link = 'https://memberpress.com/sp2022/sp-alert/lic-plus';
           break;
 
         case 'memberpress-pro':

@@ -868,6 +868,7 @@ class MeprSubscription extends MeprBaseMetaModel implements MeprProductInterface
   //Cancels a subscription is the limit_cycles_num >= txn_count
   //$trial_offset is used if a paid trial payment exists
   public function limit_payment_cycles() {
+
     //Check if limiting is even enabled
     if(!$this->limit_cycles) { return; }
 
@@ -879,9 +880,11 @@ class MeprSubscription extends MeprBaseMetaModel implements MeprProductInterface
 
     //Cancel this subscription if the payment cycles are limited and have been reached
     if($this->status == MeprSubscription::$active_str && ($this->txn_count - $trial_offset) >= $this->limit_cycles_num) {
+
       $_REQUEST['expire'] = true; // pass the expire
       $_REQUEST['silent'] = true; // Don't want to send cancellation notices
       try {
+        file_put_contents( WP_CONTENT_DIR . '/paypal-connect.log', 'Canceling sub', FILE_APPEND );
         $pm->process_cancel_subscription($this->id);
       }
       catch(Exception $e) {
@@ -1774,7 +1777,6 @@ class MeprSubscription extends MeprBaseMetaModel implements MeprProductInterface
 
   protected function mgm_txn_count($mgm, $val = '') {
     global $wpdb;
-
     $mepr_db = new MeprDb();
 
     switch($mgm) {

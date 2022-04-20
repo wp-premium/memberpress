@@ -39,4 +39,3 @@ var mpToggleFieldValidation = function(field, valid) {
     form.find('.mepr-form-has-errors').css('display','none');
   }
 };
-

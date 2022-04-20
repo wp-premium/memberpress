@@ -3,6 +3,7 @@ if(!defined('ABSPATH')) {die('You are not allowed to call this page directly.');
 
 class MeprAuthenticatorCtrl extends MeprBaseCtrl
 {
+  const LIVE_AUTHENTICATOR_ENDPOINT = 'https://auth.caseproof.com';
   public function load_hooks() {
     if(!defined('MEPR_AUTH_SERVICE_DOMAIN')) {
       define('MEPR_AUTH_SERVICE_DOMAIN', 'auth.caseproof.com');
@@ -194,10 +195,11 @@ class MeprAuthenticatorCtrl extends MeprBaseCtrl
    * Assembles a URL for connecting to our Authentication service
    *
    * @param boolean   $stripe_connect   Will add a query string that is used to redirect to Stripe Connect after returning from Auth service
+   * @param array   $additional_params
    *
    * @return string
    */
-  public static function get_auth_connect_url( $stripe_connect = false, $payment_method_id = false ) {
+  public static function get_auth_connect_url( $stripe_connect = false, $payment_method_id = false, $additional_params = [] ) {
     $return_url = admin_url( 'admin.php?page=memberpress-account-login', false );
 
     $connect_params = array(
@@ -214,9 +216,16 @@ class MeprAuthenticatorCtrl extends MeprBaseCtrl
     if ( true === $stripe_connect && ! empty( $payment_method_id ) ) {
       $connect_params['stripe_connect'] = 'true';
       $connect_params['method_id'] = $payment_method_id;
+      $endpoint = MEPR_AUTH_SERVICE_URL;
+    } else {
+      $endpoint = self::LIVE_AUTHENTICATOR_ENDPOINT;
     }
 
-    return add_query_arg( $connect_params, MEPR_AUTH_SERVICE_URL . '/connect/memberpress' );
+    if ( ! empty( $additional_params ) ) {
+      $connect_params = array_merge($connect_params, $additional_params);
+    }
+
+    return add_query_arg( $connect_params, $endpoint . '/connect/memberpress' );
   }
 }
 

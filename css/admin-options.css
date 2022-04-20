@@ -294,6 +294,24 @@ ul.custom_options_list {
   left: -7px;
   width: 80px;
 }
+
+#integration .mepr-paypal-standard-upgrade-box {
+  text-align: center;
+  max-width: 500px;
+  background: #f3f3f4;
+  padding: 2em;
+}
+
+#integration .mepr-paypal-standard-upgrade-box > button {
+  height: 4em;
+}
+
+#integration .mepr-paypal-standard-upgrade-box button img {
+  position: relative;
+  top: 3px;
+  padding-right: 0.5em;
+}
+
 #mepr-install-license-edition-loading {
   margin-left: 10px;
 }

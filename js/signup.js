@@ -259,12 +259,22 @@
         form.find('.mepr-payment-method-desc-text.mepr-close').slideUp({
           duration: 200,
           complete: function() {
+            // Clear validation errors on fields now hidden
+            form.find('.mepr-payment-methods-wrapper .mepr-form-input').each(function () {
+              meprValidateInput(this);
+            });
+
             if(pmid_exists) {
               form.find(pmid).slideDown(200);
             }
           }
         });
       } else {
+        // Clear validation errors on fields now hidden
+        form.find('.mepr-payment-methods-wrapper .mepr-form-input').each(function () {
+          meprValidateInput(this);
+        });
+
         if(pmid_exists) {
           form.find(pmid).slideDown(200);
         }

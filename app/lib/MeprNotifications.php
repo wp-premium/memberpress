@@ -159,13 +159,13 @@ class MeprNotifications {
 
     foreach ( $notifications as $id => $notification ) {
 
-      // The message and license should never be empty, if they are, ignore.
-      if ( empty( $notification['content'] ) || empty( $notification['plans'] ) ) {
+      // The message should never be empty - if it is, ignore.
+      if ( empty( $notification['content'] ) ) {
         continue;
       }
 
       // Ignore if license type does not match.
-      if ( ! in_array( MEPR_EDITION, $notification['plans'], true ) ) {
+      if ( ! empty( $notification['plans'] ) && ! in_array( MEPR_EDITION, $notification['plans'], true ) ) {
         continue;
       }
 
@@ -509,7 +509,6 @@ class MeprNotifications {
           } else {
             $time_diff_string = sprintf( _n( '%s year ago', '%s years ago', ceil( ( $time_diff / YEAR_IN_SECONDS ) ), 'memberpress' ), ceil( ( $time_diff / YEAR_IN_SECONDS ) ) );
           }
-
           // Notification HTML.
           $notifications_html .= sprintf(
             '<div id="mepr-notifications-message-%4$s" class="mepr-notifications-message" data-message-id="%4$s">
