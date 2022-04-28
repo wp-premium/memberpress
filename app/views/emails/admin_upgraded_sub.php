@@ -12,7 +12,6 @@
     <tr><th style="text-align: left;"><?php _ex('Subscription:', 'ui', 'memberpress'); ?></th><td>{$subscr_num}</td></tr>
     <tr><th style="text-align: left;"><?php _ex('Terms:', 'ui', 'memberpress'); ?></th><td>{$subscr_terms}</td></tr>
     <tr><th style="text-align: left;"><?php _ex('Started:', 'ui', 'memberpress'); ?></th><td>{$subscr_date}</td></tr>
-    <tr><th style="text-align: left;"><?php _ex('Auto-Rebilling:', 'ui', 'memberpress'); ?></th><td><?php _ex('Enabled', 'ui', 'memberpress'); ?></td></tr>
     <tr><th style="text-align: left;"><?php _ex('Payment System:', 'ui', 'memberpress'); ?></th><td>{$subscr_gateway}</td></tr>
   </table>
 </div>

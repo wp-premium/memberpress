@@ -1,8 +1,4 @@
 jQuery(document).ready(function($) {
-  $.getScript( "https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/signup.js", function( data, textStatus, jqxhr ) {
-    "embedded" === PAYPAL.apps.experience ? PAYPAL.apps.Signup.Embedded.render() : "embeddedmini" === PAYPAL.apps.experience ? "true" === queryString.parse(location.search).showMB && PAYPAL.apps.Signup.MiniBrowser.init() : PAYPAL.apps.Signup.MiniBrowser.init()
-  });
-
   $('.mepr-paypal-onboarding-button').tooltipster({
     maxWidth: 300
   });
@@ -134,6 +130,8 @@ jQuery(document).ready(function($) {
         }
 
         mepr_toggle_boxes();
+        $('#mepr-integration-'+response.id+ ' .mepr-paypal-onboarding-button').hide();
+        $('#mepr-integration-'+response.id+ ' .mepr-paypal-save-option').show();
       }
       else {
         alert('Error');

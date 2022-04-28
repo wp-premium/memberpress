@@ -1285,8 +1285,19 @@ class MeprPayPalCommerceGateway extends MeprBasePayPalGateway {
       $upgraded_from_standard = true;
     }
 
-    $debug                    = defined( 'WP_MEPR_DEBUG' ) && WP_MEPR_DEBUG === true;
-    $settings                 = $this->settings;
+    $debug           = defined( 'WP_MEPR_DEBUG' ) && WP_MEPR_DEBUG === true;
+    $settings        = $this->settings;
+    $buffer_settings = get_option( 'mepr_buff_integrations', [] );
+
+    if ( isset( $buffer_settings[ $this->id ] ) ) {
+      foreach ( [ 'test_merchant_id', 'live_merchant_id', 'test_email_confirmed', 'live_email_confirmed' ] as $key ) {
+        if ( isset( $buffer_settings[ $this->id ][ $key ] ) ) {
+          $settings->{$key}                                = $buffer_settings[ $this->id ][ $key ];
+          $mepr_options->integrations[ $this->id ][ $key ] = $buffer_settings[ $this->id ][ $key ];
+        }
+      }
+    }
+
     $test_client_id_str       = "{$mepr_options->integrations_str}[{$this->id}][test_client_id]";
     $test_client_secret_str   = "{$mepr_options->integrations_str}[{$this->id}][test_client_secret]";
     $live_client_id_str       = "{$mepr_options->integrations_str}[{$this->id}][live_client_id]";

@@ -8,6 +8,7 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
     add_action('wp_ajax_mepr_install_license_edition', 'MeprOptionsCtrl::ajax_install_license_edition');
     add_action('wp_ajax_mepr_gateway_form', 'MeprOptionsCtrl::gateway_form');
     add_action('admin_enqueue_scripts', 'MeprOptionsCtrl::enqueue_scripts');
+    add_action('admin_print_footer_scripts', 'MeprOptionsCtrl::enqueue_footer_scripts');
     add_action('admin_notices', 'MeprOptionsCtrl::maybe_show_stripe_checkout_warning');
   }
 
@@ -107,6 +108,15 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
     }
   }
 
+  public static function enqueue_footer_scripts() {
+    global $hook_suffix;
+    if ( $hook_suffix == 'memberpress_page_memberpress-options' ) {
+      ?>
+      <script id="paypal-sdk-js" src="https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js"></script>
+      <?php
+    }
+  }
+
   public static function enqueue_scripts($hook) {
     if($hook == 'memberpress_page_memberpress-options') {
       $mepr_options = MeprOptions::fetch();
@@ -157,7 +167,6 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
       );
 
       wp_register_script('memberpress-i18n', MEPR_JS_URL.'/i18n.js', array('jquery'), MEPR_VERSION);
-      wp_enqueue_script('paypal-partner-sdk', 'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js', array('jquery'), null, true);
       wp_enqueue_script('alpinejs', 'https://unpkg.com/alpinejs@3.9.3/dist/cdn.min.js', array(), MEPR_VERSION, true);
       wp_localize_script('memberpress-i18n', 'MeprI18n', array('states' => MeprUtils::states()));
 
@@ -177,7 +186,6 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
           'mepr-settings-table-js',
           'mepr-admin-shared-js',
           'jquery-ui-sortable',
-          'paypal-partner-sdk',
           'memberpress-i18n'
         ),
         MEPR_VERSION
@@ -190,7 +198,6 @@ class MeprOptionsCtrl extends MeprBaseCtrl {
       );
       wp_enqueue_script('mepr-emails-js', MEPR_JS_URL.'/admin_emails.js', array('mepr-options-js'), MEPR_VERSION);
       wp_localize_script('mepr-emails-js', 'MeprEmail', $email_locals);
-
       MeprHooks::do_action('mepr-options-admin-enqueue-script', $hook);
     }
   }

@@ -99,7 +99,9 @@ class MeprRulesCtrl extends MeprCptCtrl {
       "title" => __("Title", 'memberpress'),
       "rule-type" => __("Type", 'memberpress'),
       "rule-content" => __("Content", 'memberpress'),
-      "rule-products" => __("Access", 'memberpress')
+      "rule-products" => __("Access", 'memberpress'),
+      "rule-drip" => __("Drip time", 'memberpress'),
+      "rule-expiration" => __("Expiration time", 'memberpress')
     );
 
     return $columns;
@@ -133,6 +135,30 @@ class MeprRulesCtrl extends MeprCptCtrl {
       }
       elseif("rule-products" == $column) {
         echo implode(', ', $rule->get_formatted_accesses());
+      }
+      elseif("rule-drip" == $column) {
+        if($rule->drip_enabled) {
+          $time = array_keys(MeprRule::get_time_units(), $rule->drip_unit);
+          printf(__('%s %s after %s', 'memberpress'),
+            $rule->drip_amount,
+            $time[0],
+            MeprRule::get_expires_after($rule->drip_after, $rule->drip_after_fixed)
+          );
+        } else {
+          echo __('--', 'memberpress');
+        }
+      }
+      elseif("rule-expiration" == $column) {
+        if($rule->expires_enabled) {
+          $time = array_keys(MeprRule::get_time_units(), $rule->expires_unit);
+          printf(__('%s %s after %s', 'memberpress'),
+            $rule->expires_amount,
+            $time[0],
+            MeprRule::get_expires_after($rule->expires_after, $rule->expires_after_fixed)
+          );
+        } else {
+          echo __('--', 'memberpress');
+        }
       }
     }
   }

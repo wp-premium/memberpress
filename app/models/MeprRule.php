@@ -987,6 +987,33 @@ class MeprRule extends MeprCptModel {
     return $mepr_db->delete_records($mepr_db->rule_access_conditions, array('rule_id' => $this->ID));
   }
 
+  public static function get_time_units() {
+    return array(
+      __('day(s)', 'memberpress') => 'days',
+      __('week(s)', 'memberpress') => 'weeks',
+      __('month(s)', 'memberpress') => 'months',
+      __('year(s)', 'memberpress') => 'years'
+    );
+  }
+
+  public static function get_expires_after($type, $fixed_date = null) {
+    switch ($type) {
+      case 'registers':
+        return __('member registers', 'memberpress');
+        break;
+      case 'fixed':
+        return MeprAppHelper::format_date($fixed_date);
+        break;
+      case 'rule-products':
+        return __('member purchases any membership for this rule', 'memberpress');
+        break;
+      default:
+        $product = new MeprProduct($type);
+        return sprintf(__('member purchases %s', 'memberpress'), $product->post_title);
+        break;
+    }
+  }
+
   public function store_meta() {
     update_post_meta($this->ID, self::$mepr_type_str, $this->mepr_type);
     update_post_meta($this->ID, self::$mepr_content_str, $this->mepr_content);

@@ -254,10 +254,7 @@ class MeprRulesHelper
 
   public static function time_units_dropdown($rule, $type)
   {
-    $values = array(__('day(s)', 'memberpress') => 'days',
-                    __('week(s)', 'memberpress') => 'weeks',
-                    __('month(s)', 'memberpress') => 'months',
-                    __('year(s)', 'memberpress') => 'years');
+    $values = MeprRule::get_time_units();
     ?>
     <select name="<?php echo $type; ?>">
       <?php foreach($values as $name => $value): ?>

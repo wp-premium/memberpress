@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the MemberPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MemberPress 1.9.35\n"
+"Project-Id-Version: MemberPress 1.9.36\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/memberpress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-04-20T05:16:23+00:00\n"
+"POT-Creation-Date: 2022-04-27T15:25:50+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: memberpress\n"
@@ -139,9 +139,9 @@ msgstr ""
 #: app/controllers/MeprAddonsCtrl.php:88
 #: app/controllers/MeprAddonsCtrl.php:111
 #: app/controllers/MeprDrmCtrl.php:136
-#: app/controllers/MeprOptionsCtrl.php:237
-#: app/controllers/MeprOptionsCtrl.php:328
-#: app/controllers/MeprOptionsCtrl.php:363
+#: app/controllers/MeprOptionsCtrl.php:244
+#: app/controllers/MeprOptionsCtrl.php:335
+#: app/controllers/MeprOptionsCtrl.php:370
 msgid "Bad request."
 msgstr ""
 
@@ -150,9 +150,9 @@ msgstr ""
 #: app/controllers/MeprAddonsCtrl.php:115
 #: app/controllers/MeprCoursesCtrl.php:64
 #: app/controllers/MeprDrmCtrl.php:140
-#: app/controllers/MeprOptionsCtrl.php:241
-#: app/controllers/MeprOptionsCtrl.php:332
-#: app/controllers/MeprOptionsCtrl.php:367
+#: app/controllers/MeprOptionsCtrl.php:248
+#: app/controllers/MeprOptionsCtrl.php:339
+#: app/controllers/MeprOptionsCtrl.php:374
 #: app/controllers/MeprStripeConnectCtrl.php:309
 #: app/controllers/MeprStripeConnectCtrl.php:355
 #: app/controllers/MeprStripeConnectCtrl.php:428
@@ -163,9 +163,9 @@ msgstr ""
 #: app/controllers/MeprAddonsCtrl.php:96
 #: app/controllers/MeprAddonsCtrl.php:119
 #: app/controllers/MeprDrmCtrl.php:144
-#: app/controllers/MeprOptionsCtrl.php:245
-#: app/controllers/MeprOptionsCtrl.php:336
-#: app/controllers/MeprOptionsCtrl.php:371
+#: app/controllers/MeprOptionsCtrl.php:252
+#: app/controllers/MeprOptionsCtrl.php:343
+#: app/controllers/MeprOptionsCtrl.php:378
 #: app/controllers/MeprStripeCtrl.php:452
 #: app/controllers/MeprSubscriptionsCtrl.php:325
 #: app/controllers/MeprSubscriptionsCtrl.php:365
@@ -780,7 +780,7 @@ msgid "Coupon Options"
 msgstr ""
 
 #: app/controllers/MeprCouponsCtrl.php:288
-#: app/controllers/MeprRulesCtrl.php:530
+#: app/controllers/MeprRulesCtrl.php:556
 msgid "Please select at least one Membership before saving."
 msgstr ""
 
@@ -866,9 +866,9 @@ msgstr ""
 
 #: app/controllers/MeprDrmCtrl.php:136
 #: app/controllers/MeprDrmCtrl.php:144
-#: app/controllers/MeprOptionsCtrl.php:150
-#: app/controllers/MeprOptionsCtrl.php:237
-#: app/controllers/MeprOptionsCtrl.php:245
+#: app/controllers/MeprOptionsCtrl.php:160
+#: app/controllers/MeprOptionsCtrl.php:244
+#: app/controllers/MeprOptionsCtrl.php:252
 msgid "An error occurred during activation: %s"
 msgstr ""
 
@@ -1035,7 +1035,7 @@ msgid "Group Title"
 msgstr ""
 
 #: app/controllers/MeprGroupsCtrl.php:113
-#: app/controllers/MeprOptionsCtrl.php:132
+#: app/controllers/MeprOptionsCtrl.php:142
 #: app/controllers/MeprProductsCtrl.php:72
 #: app/views/admin/options/custom_fields_row.php:11
 #: app/views/admin/products/advanced.php:68
@@ -1069,8 +1069,8 @@ msgid "Logout"
 msgstr ""
 
 #: app/controllers/MeprLoginCtrl.php:37
-#: app/controllers/MeprRulesCtrl.php:360
-#: app/controllers/MeprRulesCtrl.php:693
+#: app/controllers/MeprRulesCtrl.php:386
+#: app/controllers/MeprRulesCtrl.php:719
 #: app/lib/activation.php:16
 #: app/lib/MeprLoginWidget.php:74
 #: app/lib/MeprLoginWidget.php:88
@@ -1102,7 +1102,7 @@ msgid "Username"
 msgstr ""
 
 #: app/controllers/MeprMembersCtrl.php:110
-#: app/controllers/MeprOptionsCtrl.php:131
+#: app/controllers/MeprOptionsCtrl.php:141
 #: app/lib/MeprMembersTable.php:30
 #: app/views/admin/members/new_member.php:22
 #: app/views/admin/options/custom_fields_row.php:10
@@ -1184,96 +1184,96 @@ msgstr ""
 msgid "The Transaction Number is required, and must contain only letters, numbers, underscores and hyphens."
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:43
+#: app/controllers/MeprOptionsCtrl.php:44
 msgid "Database Was Upgraded"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:53
+#: app/controllers/MeprOptionsCtrl.php:54
 msgid "Tax rates have been cleared"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:94
+#: app/controllers/MeprOptionsCtrl.php:95
 #: app/views/admin/options/options_saved.php:2
 msgid "Options saved."
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:120
+#: app/controllers/MeprOptionsCtrl.php:130
 #: app/views/admin/options/custom_fields_row.php:4
 #: app/views/admin/options/gateway.php:11
 msgid "Name:"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:121
+#: app/controllers/MeprOptionsCtrl.php:131
 #: app/views/admin/options/custom_fields_row.php:7
 msgid "Type:"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:122
+#: app/controllers/MeprOptionsCtrl.php:132
 #: app/views/admin/options/custom_fields_row.php:23
 msgid "Default Value(s):"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:123
+#: app/controllers/MeprOptionsCtrl.php:133
 #: app/views/admin/options/custom_fields_row.php:27
 msgid "Show at Signup"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:124
+#: app/controllers/MeprOptionsCtrl.php:134
 #: app/views/admin/options/custom_fields_row.php:30
 msgid "Show in Account"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:125
+#: app/controllers/MeprOptionsCtrl.php:135
 #: app/views/admin/options/custom_fields_row.php:33
 msgid "Required"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:126
+#: app/controllers/MeprOptionsCtrl.php:136
 #: app/views/admin/options/custom_fields_row.php:9
 msgid "Text"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:127
+#: app/controllers/MeprOptionsCtrl.php:137
 #: app/views/admin/options/custom_fields_row.php:14
 msgid "Textarea"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:128
+#: app/controllers/MeprOptionsCtrl.php:138
 #: app/views/admin/options/custom_fields_row.php:15
 msgid "Checkbox"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:129
+#: app/controllers/MeprOptionsCtrl.php:139
 #: app/views/admin/options/custom_fields_row.php:16
 msgid "Dropdown"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:130
+#: app/controllers/MeprOptionsCtrl.php:140
 #: app/views/admin/options/custom_fields_row.php:17
 msgid "Multi-Select"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:133
+#: app/controllers/MeprOptionsCtrl.php:143
 #: app/views/admin/options/custom_fields_row.php:12
 msgid "Phone"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:134
+#: app/controllers/MeprOptionsCtrl.php:144
 #: app/views/admin/options/custom_fields_row.php:18
 msgid "Radio Buttons"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:135
+#: app/controllers/MeprOptionsCtrl.php:145
 #: app/views/admin/options/custom_fields_row.php:19
 msgid "Checkboxes"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:136
+#: app/controllers/MeprOptionsCtrl.php:146
 #: app/views/admin/options/custom_fields_row.php:20
 msgid "File Upload"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:137
+#: app/controllers/MeprOptionsCtrl.php:147
 #: app/controllers/MeprReportsCtrl.php:74
 #: app/views/admin/options/custom_fields_row.php:13
 #: app/views/admin/reports/month_table.php:6
@@ -1281,177 +1281,178 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:138
+#: app/controllers/MeprOptionsCtrl.php:148
 #: app/views/admin/options/custom_fields_row.php:49
 #: app/views/admin/options/custom_fields_row.php:63
 msgid "Option Name:"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:139
+#: app/controllers/MeprOptionsCtrl.php:149
 #: app/views/admin/options/custom_fields_row.php:52
 #: app/views/admin/options/custom_fields_row.php:66
 msgid "Option Value:"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:140
+#: app/controllers/MeprOptionsCtrl.php:150
 msgid "Add Option"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:144
+#: app/controllers/MeprOptionsCtrl.php:154
 msgid "Are you sure you want to delete this Tax Rate?"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:145
+#: app/controllers/MeprOptionsCtrl.php:155
 msgid "WARNING: Do not remove this Payment Method if you have active subscriptions using it. Doing so will prevent you from being notified of recurring payments for those subscriptions, which means your members will lose access to their paid content. Are you sure you want to delete this Payment Method?"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:151
+#: app/controllers/MeprOptionsCtrl.php:161
 #: app/views/admin/drm/modal.php:56
 msgid "Invalid response."
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:152
+#: app/controllers/MeprOptionsCtrl.php:162
 #: app/views/admin/drm/modal.php:71
 msgid "Ajax error."
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:154
+#: app/controllers/MeprOptionsCtrl.php:164
 msgid "Are you sure? MemberPress will not be functional on %s if this License Key is deactivated."
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:155
-#: app/controllers/MeprOptionsCtrl.php:328
-#: app/controllers/MeprOptionsCtrl.php:336
+#: app/controllers/MeprOptionsCtrl.php:165
+#: app/controllers/MeprOptionsCtrl.php:335
+#: app/controllers/MeprOptionsCtrl.php:343
 msgid "An error occurred during deactivation: %s"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:168
+#: app/controllers/MeprOptionsCtrl.php:177
 msgid "Copy to Clipboard"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:169
+#: app/controllers/MeprOptionsCtrl.php:178
 msgid "Copied!"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:170
+#: app/controllers/MeprOptionsCtrl.php:179
 msgid "Oops, Copy Failed!"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:202
+#: app/controllers/MeprOptionsCtrl.php:209
 msgid "Unauthorized"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:211
+#: app/controllers/MeprOptionsCtrl.php:218
 msgid "No gateways were found"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:275
+#: app/controllers/MeprOptionsCtrl.php:282
 msgid "The license information is not available, try refreshing the page."
 msgstr ""
 
 #. translators: %1$s: the product name, %2$s: open link tag, %3$s: close link tag
-#: app/controllers/MeprOptionsCtrl.php:307
+#: app/controllers/MeprOptionsCtrl.php:314
 msgid "This License Key has expired, but you have an active license for %1$s, %2$sclick here%3$s to activate using this license instead."
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:355
+#: app/controllers/MeprOptionsCtrl.php:362
 msgid "Failed to get filesystem access"
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:384
+#: app/controllers/MeprOptionsCtrl.php:391
 msgid "The correct edition of MemberPress has been installed successfully."
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:387
+#: app/controllers/MeprOptionsCtrl.php:394
 msgid "Failed to install the correct edition of MemberPress, please download it from memberpress.com and install it manually."
 msgstr ""
 
-#: app/controllers/MeprOptionsCtrl.php:391
+#: app/controllers/MeprOptionsCtrl.php:398
 msgid "License data not found"
 msgstr ""
 
-#: app/controllers/MeprPayPalConnectCtrl.php:41
-msgid "MemberPress - PayPal Connect Security"
-msgstr ""
-
-#: app/controllers/MeprPayPalConnectCtrl.php:82
-#: app/controllers/MeprStripeConnectCtrl.php:145
-#: app/controllers/MeprStripeConnectCtrl.php:273
-msgid "MemberPress Security Notice"
-msgstr ""
-
-#: app/controllers/MeprPayPalConnectCtrl.php:83
-msgid "Your current PayPal payment connection is out of date and may become insecure. Please click the button below to upgrade your PayPal payment method now."
-msgstr ""
-
-#: app/controllers/MeprPayPalConnectCtrl.php:84
-msgid "Upgrade PayPal Standard to Fix this Error Now"
-msgstr ""
-
-#: app/controllers/MeprPayPalConnectCtrl.php:107
-msgid "Your MemberPress PayPal Connection is incomplete"
-msgstr ""
-
-#: app/controllers/MeprPayPalConnectCtrl.php:108
-msgid "Your PayPal connection in MemberPress must be connected in order to accept PayPal payments. Please click the button below to finish connecting your PayPal payment method now."
-msgstr ""
-
-#: app/controllers/MeprPayPalConnectCtrl.php:109
-msgid "Connect PayPal Payment Method"
-msgstr ""
-
-#: app/controllers/MeprPayPalConnectCtrl.php:381
-#: app/controllers/MeprPayPalConnectCtrl.php:434
-msgid "You have disconnected your PayPal. You should login to your PayPal account and go to Developer settings to delete the app created by this gateway"
-msgstr ""
-
-#: app/controllers/MeprPayPalConnectCtrl.php:439
-msgid "Something could not be executed"
-msgstr ""
-
-#: app/controllers/MeprPayPalConnectCtrl.php:453
-#: app/controllers/MeprStripeConnectCtrl.php:294
-msgid "Sorry, updating your credentials failed. (security)"
-msgstr ""
-
-#: app/controllers/MeprPayPalConnectCtrl.php:457
-msgid "You do not have sufficient permission to perform this operation"
-msgstr ""
-
-#: app/controllers/MeprPayPalConnectCtrl.php:472
+#: app/controllers/MeprPayPalConnectCtrl.php:50
+#: app/controllers/MeprPayPalConnectCtrl.php:520
 #: app/gateways/MeprPayPalCommerceGateway.php:9
 #: app/helpers/MeprOptionsHelper.php:40
 msgid "PayPal"
 msgstr ""
 
-#: app/controllers/MeprPayPalConnectCtrl.php:577
+#: app/controllers/MeprPayPalConnectCtrl.php:69
+msgid "MemberPress - PayPal Connect Security"
+msgstr ""
+
+#: app/controllers/MeprPayPalConnectCtrl.php:110
+#: app/controllers/MeprStripeConnectCtrl.php:145
+#: app/controllers/MeprStripeConnectCtrl.php:273
+msgid "MemberPress Security Notice"
+msgstr ""
+
+#: app/controllers/MeprPayPalConnectCtrl.php:111
+msgid "Your current PayPal payment connection is out of date and may become insecure. Please click the button below to upgrade your PayPal payment method now."
+msgstr ""
+
+#: app/controllers/MeprPayPalConnectCtrl.php:112
+msgid "Upgrade PayPal Standard to Fix this Error Now"
+msgstr ""
+
+#: app/controllers/MeprPayPalConnectCtrl.php:135
+msgid "Your MemberPress PayPal Connection is incomplete"
+msgstr ""
+
+#: app/controllers/MeprPayPalConnectCtrl.php:136
+msgid "Your PayPal connection in MemberPress must be connected in order to accept PayPal payments. Please click the button below to finish connecting your PayPal payment method now."
+msgstr ""
+
+#: app/controllers/MeprPayPalConnectCtrl.php:137
+msgid "Connect PayPal Payment Method"
+msgstr ""
+
+#: app/controllers/MeprPayPalConnectCtrl.php:430
+#: app/controllers/MeprPayPalConnectCtrl.php:483
+msgid "You have disconnected your PayPal. You should login to your PayPal account and go to Developer settings to delete the app created by this gateway"
+msgstr ""
+
+#: app/controllers/MeprPayPalConnectCtrl.php:488
+msgid "Something could not be executed"
+msgstr ""
+
+#: app/controllers/MeprPayPalConnectCtrl.php:502
+#: app/controllers/MeprStripeConnectCtrl.php:294
+msgid "Sorry, updating your credentials failed. (security)"
+msgstr ""
+
+#: app/controllers/MeprPayPalConnectCtrl.php:506
+msgid "You do not have sufficient permission to perform this operation"
+msgstr ""
+
+#: app/controllers/MeprPayPalConnectCtrl.php:633
 msgid "You have reverted PayPal to legacy gateway"
 msgstr ""
 
-#: app/controllers/MeprPayPalConnectCtrl.php:589
+#: app/controllers/MeprPayPalConnectCtrl.php:645
 msgid "MemberPress is securely connected to PayPal"
 msgstr ""
 
-#: app/controllers/MeprPayPalConnectCtrl.php:592
-#: app/controllers/MeprPayPalConnectCtrl.php:608
+#: app/controllers/MeprPayPalConnectCtrl.php:648
+#: app/controllers/MeprPayPalConnectCtrl.php:664
 #: app/controllers/MeprStripeConnectCtrl.php:231
 #: app/controllers/MeprStripeConnectCtrl.php:247
 msgid "Security"
 msgstr ""
 
-#: app/controllers/MeprPayPalConnectCtrl.php:597
+#: app/controllers/MeprPayPalConnectCtrl.php:653
 msgid "Your MemberPress PayPal connection is complete and secure."
 msgstr ""
 
-#: app/controllers/MeprPayPalConnectCtrl.php:605
+#: app/controllers/MeprPayPalConnectCtrl.php:661
 msgid "MemberPress is not securely connected to PayPal"
 msgstr ""
 
-#: app/controllers/MeprPayPalConnectCtrl.php:613
+#: app/controllers/MeprPayPalConnectCtrl.php:669
 msgid "Your current PayPal payment connection is out of date and may become insecure or stop working. Please click the button below to re-connect your PayPal payment method now."
 msgstr ""
 
-#: app/controllers/MeprPayPalConnectCtrl.php:615
+#: app/controllers/MeprPayPalConnectCtrl.php:671
 msgid "Re-connect PayPal Payments to Fix this Error Now"
 msgstr ""
 
@@ -1761,27 +1762,45 @@ msgstr ""
 msgid "Content"
 msgstr ""
 
-#: app/controllers/MeprRulesCtrl.php:132
+#: app/controllers/MeprRulesCtrl.php:103
+msgid "Drip time"
+msgstr ""
+
+#: app/controllers/MeprRulesCtrl.php:104
+msgid "Expiration time"
+msgstr ""
+
+#: app/controllers/MeprRulesCtrl.php:134
 #: app/helpers/MeprRulesHelper.php:189
 msgid "Except"
 msgstr ""
 
-#: app/controllers/MeprRulesCtrl.php:372
+#: app/controllers/MeprRulesCtrl.php:142
+#: app/controllers/MeprRulesCtrl.php:154
+msgid "%s %s after %s"
+msgstr ""
+
+#: app/controllers/MeprRulesCtrl.php:148
+#: app/controllers/MeprRulesCtrl.php:160
+msgid "--"
+msgstr ""
+
+#: app/controllers/MeprRulesCtrl.php:398
 msgid "Content & Access"
 msgstr ""
 
-#: app/controllers/MeprRulesCtrl.php:373
+#: app/controllers/MeprRulesCtrl.php:399
 msgid "Drip / Expiration"
 msgstr ""
 
-#: app/controllers/MeprRulesCtrl.php:374
+#: app/controllers/MeprRulesCtrl.php:400
 #: app/views/admin/options/form.php:94
 #: js/blocks/protected-content/index.js:91
 msgid "Unauthorized Access"
 msgstr ""
 
-#: app/controllers/MeprRulesCtrl.php:478
-#: app/controllers/MeprRulesCtrl.php:492
+#: app/controllers/MeprRulesCtrl.php:504
+#: app/controllers/MeprRulesCtrl.php:518
 msgid "Error"
 msgstr ""
 
@@ -3390,34 +3409,34 @@ msgstr ""
 msgid "Could not create Plan"
 msgstr ""
 
-#: app/gateways/MeprPayPalCommerceGateway.php:1344
+#: app/gateways/MeprPayPalCommerceGateway.php:1355
 #: app/gateways/MeprPayPalGateway.php:974
 #: app/gateways/MeprPayPalStandardGateway.php:1014
 msgid "Updating your PayPal Account Information"
 msgstr ""
 
-#: app/gateways/MeprPayPalCommerceGateway.php:1345
+#: app/gateways/MeprPayPalCommerceGateway.php:1356
 #: app/gateways/MeprPayPalGateway.php:975
 #: app/gateways/MeprPayPalStandardGateway.php:1015
 msgid "To update your PayPal Account Information, please go to %sPayPal.com%s, login and edit your account information there."
 msgstr ""
 
-#: app/gateways/MeprPayPalCommerceGateway.php:1532
+#: app/gateways/MeprPayPalCommerceGateway.php:1543
 msgid "On request"
 msgstr ""
 
-#: app/gateways/MeprPayPalCommerceGateway.php:1550
+#: app/gateways/MeprPayPalCommerceGateway.php:1561
 msgid "There was a problem, try logging in directly at PayPal to update the status of your recurring profile."
 msgstr ""
 
-#: app/gateways/MeprPayPalCommerceGateway.php:1644
+#: app/gateways/MeprPayPalCommerceGateway.php:1655
 #: app/gateways/MeprPayPalGateway.php:1105
 #: app/gateways/MeprPayPalProGateway.php:1245
 #: app/gateways/MeprPayPalStandardGateway.php:1249
 msgid "Your payment at PayPal was cancelled."
 msgstr ""
 
-#: app/gateways/MeprPayPalCommerceGateway.php:1645
+#: app/gateways/MeprPayPalCommerceGateway.php:1656
 #: app/gateways/MeprPayPalGateway.php:1106
 #: app/gateways/MeprPayPalProGateway.php:1246
 #: app/gateways/MeprPayPalStandardGateway.php:1250
@@ -3611,7 +3630,7 @@ msgid "Your PayPal payment connection is out of date, and may become insecure. U
 msgstr ""
 
 #: app/gateways/MeprPayPalStandardGateway.php:943
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:225
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:261
 msgid "Are you sure?"
 msgstr ""
 
@@ -4471,36 +4490,22 @@ msgstr ""
 msgid "Begin Typing Title"
 msgstr ""
 
-#: app/helpers/MeprRulesHelper.php:257
-msgid "day(s)"
-msgstr ""
-
-#: app/helpers/MeprRulesHelper.php:258
-msgid "week(s)"
-msgstr ""
-
-#: app/helpers/MeprRulesHelper.php:259
-msgid "month(s)"
-msgstr ""
-
-#: app/helpers/MeprRulesHelper.php:260
-msgid "year(s)"
-msgstr ""
-
-#: app/helpers/MeprRulesHelper.php:281
+#: app/helpers/MeprRulesHelper.php:278
+#: app/models/MeprRule.php:1002
 msgid "member registers"
 msgstr ""
 
-#: app/helpers/MeprRulesHelper.php:282
+#: app/helpers/MeprRulesHelper.php:279
 msgid "fixed date"
 msgstr ""
 
-#: app/helpers/MeprRulesHelper.php:283
+#: app/helpers/MeprRulesHelper.php:280
+#: app/models/MeprRule.php:1008
 msgid "member purchases any membership for this rule"
 msgstr ""
 
-#: app/helpers/MeprRulesHelper.php:286
-#: app/helpers/MeprRulesHelper.php:290
+#: app/helpers/MeprRulesHelper.php:283
+#: app/helpers/MeprRulesHelper.php:287
 msgid "member purchases"
 msgstr ""
 
@@ -5336,6 +5341,26 @@ msgstr ""
 msgid "Custom URI"
 msgstr ""
 
+#: app/models/MeprRule.php:992
+msgid "day(s)"
+msgstr ""
+
+#: app/models/MeprRule.php:993
+msgid "week(s)"
+msgstr ""
+
+#: app/models/MeprRule.php:994
+msgid "month(s)"
+msgstr ""
+
+#: app/models/MeprRule.php:995
+msgid "year(s)"
+msgstr ""
+
+#: app/models/MeprRule.php:1012
+msgid "member purchases %s"
+msgstr ""
+
 #: app/models/MeprSubscription.php:2048
 msgid "MemberPress database migration failed: %1$s %2$s"
 msgstr ""
@@ -5678,10 +5703,8 @@ msgid "Sub Account"
 msgstr ""
 
 #: app/views/account/subscriptions.php:85
-#: app/views/emails/admin_downgraded_sub.php:15
 #: app/views/emails/admin_new_sub.php:15
 #: app/views/emails/admin_resumed_sub.php:15
-#: app/views/emails/admin_upgraded_sub.php:15
 msgctxt "ui"
 msgid "Enabled"
 msgstr ""
@@ -6415,104 +6438,112 @@ msgid "Connected to PayPal Commerce Platform - Sandbox mode"
 msgstr ""
 
 #: app/views/admin/gateways/paypal/connect-migrate-prompt.php:24
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:42
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:59
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:49
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:74
 msgid "PayPal Merchant ID: %s"
 msgstr ""
 
 #: app/views/admin/gateways/paypal/connect-migrate-prompt.php:30
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:48
-msgid "You need to confirm your email to accept payments - Sandbox mode"
-msgstr ""
-
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:32
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:50
-msgid "Click here if you did"
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:55
+msgid "You need to confirm your email to accept payments"
 msgstr ""
 
 #: app/views/admin/gateways/paypal/connect-migrate-prompt.php:39
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:65
+msgid "My email is verified"
+msgstr ""
+
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:46
 msgid "Connected to PayPal Commerce Platform - Live mode"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:56
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:71
 #: app/views/admin/gateways/stripe/connect-migrate-prompt.php:34
 #: app/views/admin/gateways/stripe/connect-migrate-prompt.php:101
 msgid "Connect with the world's most powerful and easy to use Payment Gateway"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:68
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:83
 msgid "Pay Securely"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:72
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:87
 msgid "Pay with PayPal"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:76
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:91
 msgid "Pay with PayPal Credit"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:80
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:95
 msgid "Global reach"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:88
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:103
 msgid "Automatic configuration"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:92
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:107
 msgid "Recurring subscription billing"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:96
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:111
 msgid "Non-recurring payments"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:104
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:119
 msgid "If you refresh the page and see this message for more than 5 minutes, disconnect and try again."
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:114
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:129
 msgid "Disconnect and Retry"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:118
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:133
 msgid "IPN URL: "
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:165
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:180
 msgid "Connect MemberPress"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:169
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:196
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:184
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:223
 msgid "Are you sure you want to disconnect? Your future renewing payments will not track properly..."
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:175
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:203
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:190
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:230
 #: app/views/admin/gateways/stripe/connect-migrate-prompt.php:28
 msgid "Disconnect"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:177
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:192
 msgid "Going live will stop your Sandbox connection. Any subscriptions on your site connected to Sandbox will no longer track their renewals. Are you sure you're ready to Go Live?"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:189
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:214
 msgid "Connect Live"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:211
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:247
 msgid "Connect Sandbox"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:219
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:255
 msgid "Enable Smart Payment Buttons"
 msgstr ""
 
-#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:236
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:272
 msgid "Rollback to PayPal standard"
+msgstr ""
+
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:283
+msgid "Save settings & Connect"
+msgstr ""
+
+#: app/views/admin/gateways/paypal/connect-migrate-prompt.php:284
+msgid "Processing"
 msgstr ""
 
 #: app/views/admin/gateways/stripe/checkboxes.php:15
@@ -9751,7 +9782,7 @@ msgstr ""
 
 #: app/views/emails/admin_cancelled_sub.php:16
 #: app/views/emails/admin_cc_expiring.php:15
-#: app/views/emails/admin_downgraded_sub.php:16
+#: app/views/emails/admin_downgraded_sub.php:15
 #: app/views/emails/admin_failed_txn.php:13
 #: app/views/emails/admin_new_one_off.php:14
 #: app/views/emails/admin_new_sub.php:16
@@ -9759,7 +9790,7 @@ msgstr ""
 #: app/views/emails/admin_refunded_txn.php:13
 #: app/views/emails/admin_resumed_sub.php:16
 #: app/views/emails/admin_suspended_sub.php:16
-#: app/views/emails/admin_upgraded_sub.php:16
+#: app/views/emails/admin_upgraded_sub.php:15
 msgctxt "ui"
 msgid "Payment System:"
 msgstr ""
@@ -9890,15 +9921,6 @@ msgctxt "ui"
 msgid "A user downgraded their subscription on {$blog_name}:"
 msgstr ""
 
-#: app/views/emails/admin_downgraded_sub.php:15
-#: app/views/emails/admin_new_sub.php:15
-#: app/views/emails/admin_resumed_sub.php:15
-#: app/views/emails/admin_suspended_sub.php:15
-#: app/views/emails/admin_upgraded_sub.php:15
-msgctxt "ui"
-msgid "Auto-Rebilling:"
-msgstr ""
-
 #: app/views/emails/admin_failed_txn.php:3
 msgctxt "ui"
 msgid "Transaction Failed"
@@ -9983,6 +10005,13 @@ msgstr ""
 #: app/views/emails/admin_new_sub.php:7
 msgctxt "ui"
 msgid "A subscription was just created on {$blog_name}:"
+msgstr ""
+
+#: app/views/emails/admin_new_sub.php:15
+#: app/views/emails/admin_resumed_sub.php:15
+#: app/views/emails/admin_suspended_sub.php:15
+msgctxt "ui"
+msgid "Auto-Rebilling:"
 msgstr ""
 
 #: app/views/emails/admin_password_reset.php:4

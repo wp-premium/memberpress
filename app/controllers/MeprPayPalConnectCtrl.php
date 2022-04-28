@@ -17,16 +17,44 @@ class MeprPayPalConnectCtrl extends MeprBaseCtrl {
       define( 'MEPR_PAYPAL_SERVICE_URL', 'https://' . MEPR_PAYPAL_SERVICE_DOMAIN );
     }
 
-    if ( defined( 'MEPR_DISABLE_PAYPAL_CONNECT' ) ) {
-      return;
-    }
-
     //add_filter( 'site_status_tests', array( $this, 'add_site_health_test' ) );
     add_filter( 'http_request_timeout', function ( $seconds ) {
       return $seconds + 15;
     } );
 
+    add_action( 'admin_init', [ $this, 'admin_init' ] );
     $this->add_ajax_endpoints();
+  }
+
+  public function admin_init() {
+    if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'memberpress-options' ) {
+      return;
+    }
+
+    if ( ! isset( $_GET['paypal'] ) || ! isset( $_GET['method-id'] ) ) {
+      return;
+    }
+
+    if ( isset( $_GET['sandbox'] ) & ! empty( $_GET['sandbox'] ) ) {
+      $sandbox = true;
+    } else {
+      $sandbox = false;
+    }
+
+    $methodId = filter_input(INPUT_GET, 'method-id');
+    $mepr_options = MeprOptions::fetch();
+    $integrations = $mepr_options->integrations;
+
+    if ( ! isset( $integrations[ $methodId ] ) ) {
+      $integrations[ $methodId ] = [
+        'label'   => esc_html( __( 'PayPal', 'memberpress' ) ),
+        'id'      => $methodId,
+        'gateway' => 'MeprPayPalCommerceGateway',
+        'saved'   => true,
+      ];
+      $mepr_options->integrations = $integrations;
+      $mepr_options->store( false );
+    }
   }
 
   /**
@@ -178,22 +206,35 @@ class MeprPayPalConnectCtrl extends MeprBaseCtrl {
       $integrations = $mepr_options->integrations;
       $methodId     = filter_var( $_GET['method-id'] );
       $site_uuid    = get_option( 'mepr_authenticator_site_uuid' );
+      $buffer_settings = get_option( 'mepr_buff_integrations', [] );
 
-      $payload = array(
-        'site_uuid' => $site_uuid
-      );
+      if ( isset( $buffer_settings[ $methodId ] ) ) {
+        foreach ( [ 'test_merchant_id', 'live_merchant_id', 'test_email_confirmed', 'live_email_confirmed' ] as $key ) {
+          if ( isset( $buffer_settings[ $methodId ][ $key ] ) ) {
+            $mepr_options->integrations[ $methodId ][ $key ] = $buffer_settings[ $methodId ][ $key ];
+          }
+        }
+      }
+
+      if ( $sandbox ) {
+        $endpoint = MEPR_PAYPAL_SERVICE_URL . "/sandbox/credentials/{$methodId}";
+        $payload  = array(
+          'site_uuid'   => $site_uuid,
+          'merchant_id' => $integrations[ $methodId ]['test_merchant_id'],
+        );
+      } else {
+        $endpoint = MEPR_PAYPAL_SERVICE_URL . "/credentials/{$methodId}";
+        $payload  = array(
+          'site_uuid'   => $site_uuid,
+          'merchant_id' => $integrations[ $methodId ]['live_merchant_id'],
+        );
+      }
 
       $jwt = MeprAuthenticatorCtrl::generate_jwt( $payload );
 
       $options = array(
         'headers' => MeprUtils::jwt_header( $jwt, MEPR_PAYPAL_SERVICE_DOMAIN )
       );
-
-      if ( $sandbox ) {
-        $endpoint = MEPR_PAYPAL_SERVICE_URL . "/sandbox/credentials/{$methodId}";
-      } else {
-        $endpoint = MEPR_PAYPAL_SERVICE_URL . "/credentials/{$methodId}";
-      }
 
       $response = wp_remote_get( $endpoint, $options );
       $creds    = wp_remote_retrieve_body( $response );
@@ -236,6 +277,14 @@ class MeprPayPalConnectCtrl extends MeprBaseCtrl {
       }
       self::debug_log( $integrations );
       $mepr_options->integrations = $integrations;
+      $buffer = get_option( 'mepr_buff_integrations' );
+
+      if (empty($buffer)) {
+        $buffer = [];
+      }
+
+      $buffer[ $methodId ] = $integrations[ $methodId ];
+      update_option( 'mepr_buff_integrations', $buffer );
 
       $mepr_options->store( false );
       MeprUtils::wp_redirect( admin_url( 'admin.php?page=memberpress-options#mepr-integration' ) );
@@ -465,7 +514,6 @@ class MeprPayPalConnectCtrl extends MeprBaseCtrl {
     $pm           = new MeprPayPalCommerceGateway();
     $mepr_options = MeprOptions::fetch();
     $integrations = $mepr_options->integrations;
-    $pm->load( array( 'id' => $methodId ) );
 
     if ( ! isset( $integrations[ $methodId ] ) ) {
       $integrations[ $methodId ] = [
@@ -481,11 +529,19 @@ class MeprPayPalConnectCtrl extends MeprBaseCtrl {
       $pm->id = $methodId;
     }
 
+    $pm->load( $integrations[ $methodId ] );
+
     if ( $sandbox ) {
+      if ( isset( $integrations[ $methodId ]['test_auth_code'] ) && ! empty( $integrations[ $methodId ]['test_auth_code'] ) ) {
+        die('An auth code is being processed');
+      }
       $integrations[ $methodId ]['test_auth_code'] = $authCode;
       $mepr_options->integrations = $integrations;
       $mepr_options->store( false );
     } else {
+      if ( isset( $integrations[ $methodId ]['live_auth_code'] ) && ! empty( $integrations[ $methodId ]['live_auth_code'] ) ) {
+        die('An auth code is being processed');
+      }
       $integrations[ $methodId ]['live_auth_code'] = $authCode;
       $mepr_options->integrations = $integrations;
       $mepr_options->store( false );

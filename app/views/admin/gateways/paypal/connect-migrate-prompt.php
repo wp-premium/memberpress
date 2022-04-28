@@ -27,9 +27,16 @@ $classes = '';
 
       <?php if ( ! $pm->is_paypal_email_confirmed() ) { ?>
         <p class="mepr-paypal-setting-promo">
-          <b><?php _e( "You need to confirm your email to accept payments - Sandbox mode", 'memberpress' ); ?></b>
-          <button type="button"
-                  onclick="window.location.href='<?php echo esc_url_raw( admin_url( 'admin.php?mepr-paypal-commerce-confirm-email=1&sandbox=1&method-id=' . $payment_id . '&page=memberpress-options#mepr-integration' ) ); ?>'"><?php _e( "Click here if you did", 'memberpress' ); ?></button>
+          <b><?php _e( "You need to confirm your email to accept payments", 'memberpress' ); ?></b>
+          <button
+              x-data="{
+                verifyEmail() {
+                  window.location.href = $el.getAttribute('data-verify-url')
+                }
+              }"
+              type="button"
+              data-verify-url="<?php echo esc_url_raw( admin_url( 'admin.php?mepr-paypal-commerce-confirm-email=1&sandbox=1&method-id=' . $payment_id . '&page=memberpress-options#mepr-integration' ) ); ?>"
+              x-on:click="verifyEmail"><?php _e( "My email is verified", 'memberpress' ); ?></button>
         </p>
       <?php } ?>
     <?php } ?>
@@ -45,9 +52,17 @@ $classes = '';
 
       <?php if ( ! $pm->is_paypal_email_confirmed_live() ) { ?>
         <p class="mepr-paypal-setting-promo">
-          <b><?php _e( "You need to confirm your email to accept payments - Sandbox mode", 'memberpress' ); ?></b>
-          <button type="button"
-                  onclick="window.location.href='<?php echo esc_url_raw( admin_url( 'admin.php?mepr-paypal-commerce-confirm-email=1&method-id=' . $payment_id . '&page=memberpress-options#mepr-integration' ) ); ?>'"><?php _e( "Click here if you did", 'memberpress' ); ?></button>
+          <b><?php _e( "You need to confirm your email to accept payments", 'memberpress' ); ?></b>
+          <button
+              x-data="{
+                verifyEmail() {
+                  window.location.href = $el.getAttribute('data-verify-url')
+                }
+              }"
+              x-on:click="verifyEmail"
+              type="button"
+              data-verify-url="<?php echo esc_url_raw( admin_url( 'admin.php?mepr-paypal-commerce-confirm-email=1&method-id=' . $payment_id . '&page=memberpress-options#mepr-integration' ) ); ?>"
+          ><?php _e( "My email is verified", 'memberpress' ); ?></button>
         </p>
       <?php } ?>
     <?php } ?>
@@ -177,17 +192,29 @@ $classes = '';
       $connect_confirm_msg = __( 'Going live will stop your Sandbox connection. Any subscriptions on your site connected to Sandbox will no longer track their renewals. Are you sure you\'re ready to Go Live?', 'memberpress' );
       ?>
       <?php if ( ! isset( $memberpress_connect_url ) || empty( $memberpress_connect_url ) ) { ?>
-      <a target="_blank" class="tooltip button button-primary mepr-paypal-onboarding-button"
-         data-paypal-onboard-complete="onboardedCallback<?php echo esc_js( md5( $payment_id ) ); ?>"
-         title="<?php echo esc_attr( $connect_confirm_msg ); ?>"
-         data-paypal-connect-live="true"
-         data-connect-confirm-msg="<?php echo esc_attr( $connect_confirm_msg ); ?>"
-         href="<?php echo $paypal_connect_url; ?>&displayMode=embedded"
-         data-paypal-button="true">
-
-        <img class="mepr-pp-icon" src="<?php echo MEPR_IMAGES_URL . '/PayPal_Icon_For_Button.svg'; ?>"/>
-        <?php _e( 'Connect Live', 'memberpress' ); ?>
+        <span
+            x-data="{
+          loaded: false
+          }"
+        >
+        <a
+            x-init="jQuery(window).on('load',function () {
+          loaded = true;
+          });"
+            x-show="loaded"
+            target="_blank" class="tooltip button button-primary mepr-paypal-onboarding-button"
+            data-paypal-onboard-complete="onboardedCallback<?php echo esc_js( md5( $payment_id ) ); ?>"
+            title="<?php echo esc_attr( $connect_confirm_msg ); ?>"
+            data-paypal-connect-live="true"
+            data-save-url="<?php echo esc_url_raw( admin_url( 'admin.php?page=memberpress-options&paypal=1&method-id=' . $payment_id . '#mepr-integration' ) ); ?>"
+            data-connect-confirm-msg="<?php echo esc_attr( $connect_confirm_msg ); ?>"
+            href="<?php echo $paypal_connect_url; ?>&displayMode=embedded"
+            data-paypal-button="true">
+          <img class="mepr-pp-icon" src="<?php echo MEPR_IMAGES_URL . '/PayPal_Icon_For_Button.svg'; ?>"/>
+          <?php _e( 'Connect Live', 'memberpress' ); ?>
       </a>
+        <i x-show="!loaded" class="mp-icon-spinner"></i>
+        </span>
           <?php } else { ?>
           <?php } ?>
     <?php } ?>
@@ -203,12 +230,21 @@ $classes = '';
               data-mepr-disconnect-paypal="1"><?php _e( 'Disconnect', 'memberpress' ); ?></button>
     <?php } else { ?>
     <?php if ( ! isset( $memberpress_connect_url ) || empty( $memberpress_connect_url ) ) { ?>
-      <a target="_blank" class="mepr-paypal-onboarding-button"
-         data-paypal-sandbox="true"
-         data-paypal-onboard-complete="onboardedCallbackSandbox<?php echo esc_js( md5( $payment_id ) ); ?>"
-         href="<?php echo $paypal_connect_url_sandbox; ?>&displayMode=embedded"
-         data-paypal-button="true">
-        <?php _e( 'Connect Sandbox', 'memberpress' ); ?>
+      <a
+          x-data="{
+          loaded: false
+          }"
+          x-init="jQuery(window).on('load',function () {
+          loaded = true;
+          });"
+          x-show="loaded"
+          target="_blank" class="mepr-paypal-onboarding-button"
+          data-paypal-sandbox="true"
+          data-save-url="<?php echo esc_url_raw( admin_url( 'admin.php?page=memberpress-options&sandbox=1&paypal=1&method-id=' . $payment_id . '#mepr-integration' ) ); ?>"
+          data-paypal-onboard-complete="onboardedCallbackSandbox<?php echo esc_js( md5( $payment_id ) ); ?>"
+          href="<?php echo $paypal_connect_url_sandbox; ?>&displayMode=embedded"
+          data-paypal-button="true">
+      <?php _e( 'Connect Sandbox', 'memberpress' ); ?>
       </a>
     <?php } else { ?>
     <?php } ?>
@@ -235,10 +271,16 @@ $classes = '';
         class="button mepr-paypal-rollback-button"
     ><?php esc_html_e('Rollback to PayPal standard', 'memberpress'); ?></button>
   <?php } ?>
-  <script src="<?php echo esc_url_raw( $paypal_js_url ); ?>"></script>
-  <script>
-      jQuery.getScript( "https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/signup.js", function( data, textStatus, jqxhr ) {
-          "embedded" === PAYPAL.apps.experience ? PAYPAL.apps.Signup.Embedded.render() : "embeddedmini" === PAYPAL.apps.experience ? "true" === queryString.parse(location.search).showMB && PAYPAL.apps.Signup.MiniBrowser.init() : PAYPAL.apps.Signup.MiniBrowser.init()
-      });
-  </script>
+  <div class="mepr-paypal-save-option" style="display: none" x-data="{
+  loading: false,
+  confirmation(url) {
+   $data.loading = true;
+   setTimeout(function () {
+       window.location.href = url;
+    }, 2500);
+    }
+  }">
+    <button data-save-url="<?php echo  esc_url_raw(admin_url( 'admin.php?page=memberpress-options&paypal=1&method-id=' . $payment_id . '#mepr-integration' )); ?>"  class="button button-primary" x-show="!loading" type="button" @click="confirmation($event.target.getAttribute('data-save-url'))"><?php esc_html_e('Save settings & Connect', 'memberpress'); ?></button>
+    <i x-show="loading" class="mp-icon-spinner"></i><span x-show="loading" style="color: red"><?php esc_html_e('Processing', 'memberpress'); ?></span>
+  </div>
 </div>
