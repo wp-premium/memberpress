@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the MemberPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MemberPress 1.9.36\n"
+"Project-Id-Version: MemberPress 1.9.37\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/memberpress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-04-27T15:25:50+00:00\n"
+"POT-Creation-Date: 2022-04-28T15:31:20+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: memberpress\n"
@@ -4117,9 +4117,9 @@ msgid "None / Custom"
 msgstr ""
 
 #: app/helpers/MeprGroupsHelper.php:66
-#: app/helpers/MeprOptionsHelper.php:402
-#: app/helpers/MeprOptionsHelper.php:437
-#: app/helpers/MeprOptionsHelper.php:457
+#: app/helpers/MeprOptionsHelper.php:404
+#: app/helpers/MeprOptionsHelper.php:439
+#: app/helpers/MeprOptionsHelper.php:459
 #: app/helpers/MeprTransactionsHelper.php:417
 #: app/views/admin/products/advanced.php:18
 msgid "Default"
@@ -4158,64 +4158,64 @@ msgstr ""
 msgid "Manual"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:126
+#: app/helpers/MeprOptionsHelper.php:128
 msgid "Stripe (Recommended)"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:128
+#: app/helpers/MeprOptionsHelper.php:130
 msgid "PayPal (Recommended)"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:391
+#: app/helpers/MeprOptionsHelper.php:393
 msgid "Choose the excerpt type:"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:393
+#: app/helpers/MeprOptionsHelper.php:395
 msgid "Excerpts:"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:403
-#: app/helpers/MeprOptionsHelper.php:438
-#: app/helpers/MeprOptionsHelper.php:459
+#: app/helpers/MeprOptionsHelper.php:405
+#: app/helpers/MeprOptionsHelper.php:440
+#: app/helpers/MeprOptionsHelper.php:461
 #: app/views/admin/members/new_member.php:57
 #: app/views/admin/options/form.php:208
 #: js/blocks/protected-content/index.js:80
 msgid "Hide"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:405
+#: app/helpers/MeprOptionsHelper.php:407
 msgid "More Tag"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:406
+#: app/helpers/MeprOptionsHelper.php:408
 msgid "Post Excerpt"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:407
-#: app/helpers/MeprOptionsHelper.php:439
+#: app/helpers/MeprOptionsHelper.php:409
+#: app/helpers/MeprOptionsHelper.php:441
 #: app/helpers/MeprProductsHelper.php:26
 #: app/views/admin/products/advanced.php:19
 #: app/views/admin/products/price_box.php:36
 msgid "Custom"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:420
+#: app/helpers/MeprOptionsHelper.php:422
 msgid "Show the first %s characters of your content"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:434
+#: app/helpers/MeprOptionsHelper.php:436
 msgid "Unauthorized Message:"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:443
+#: app/helpers/MeprOptionsHelper.php:445
 msgid "Enter your custom unauthorized message here:"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:454
+#: app/helpers/MeprOptionsHelper.php:456
 msgid "Login Form:"
 msgstr ""
 
-#: app/helpers/MeprOptionsHelper.php:458
+#: app/helpers/MeprOptionsHelper.php:460
 #: app/views/admin/members/new_member.php:57
 #: app/views/admin/options/form.php:209
 #: app/views/admin/options/form.php:400

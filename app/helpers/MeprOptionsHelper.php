@@ -123,6 +123,8 @@ class MeprOptionsHelper {
 
           if($gateway == 'MeprPayPalGateway') { continue; }
 
+          if($gateway == 'MeprPayPalCommerceGateway') { continue; }
+
           if($gateway == 'MeprStripeGateway') { $gateway_name = __('Stripe (Recommended)', 'memberpress'); }
 
           if($gateway == 'MeprPayPalCommerceGateway') { $gateway_name = __('PayPal (Recommended)', 'memberpress'); }
